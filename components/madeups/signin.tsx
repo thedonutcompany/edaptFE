@@ -45,19 +45,19 @@ const SignIn = (props: Props) => {
   };
 
   return (
-    <div className="flex justify-center h-screen w-screen">
-      <div className="flex-1 flex flex-col gap-10 justify-center align-middle items-center">
+    <div className="flex flex-col md:flex-row h-screen w-screen">
+      <div className="flex-1 flex flex-col gap-10 justify-center items-center px-4 md:px-0">
         <div className="flex flex-col items-center gap-5">
           <h1 className="font-bold text-3xl">Welcome to Edapt</h1>
-          <p className="font-normal">
+          <p className="font-normal text-center md:text-left">
             Seamless learning with Edapt's intuitive platform
           </p>
         </div>
-        <div className="w-[400px]">
+        <div className="w-full sm:w-[400px]">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className=" space-y-6 w-full"
+              className="space-y-6 w-full"
             >
               <FormField
                 control={form.control}
@@ -83,13 +83,13 @@ const SignIn = (props: Props) => {
           </Form>
         </div>
       </div>
-      <div className="flex-1 flex justify-end">
+      <div className="flex-1 hidden md:flex justify-end">
         <Image
           src="/assets/images/signin.png"
           alt="Sign in"
           width={500}
           height={500}
-          className="w-fit h-full object-contain"
+          className="w-fit h-full sm:object-cover md:object-contain"
         />
       </div>
     </div>

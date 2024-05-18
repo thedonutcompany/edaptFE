@@ -162,7 +162,7 @@ const Profile = (props: Props) => {
           </div>
           <div className="bg-white rounded-2xl p-4">
             <div className="flex justify-center overflow-scroll bg-white rounded-lg no-scrollbar">
-              <HeatmapComponent data={[]} year={2023} />
+              <HeatmapComponent data={[]} year={2021} />
             </div>
           </div>
         </div>

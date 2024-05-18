@@ -80,16 +80,6 @@ const HeatmapComponent = ({ data, year: initialYear }: Props) => {
           )}`
         : "";
       content.push(
-        // <Tooltip
-        //   key={i}
-        //   hasArrow
-        //   placement="top"
-        //   fontSize="12px"
-        //   label={tooltipContent}
-        //   aria-label="A tooltip"
-        // >
-
-        // </Tooltip>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>

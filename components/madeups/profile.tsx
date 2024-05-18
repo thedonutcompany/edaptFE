@@ -79,7 +79,7 @@ const Profile = (props: Props) => {
                     </p>
                   </div>
                 </div>
-                <div className="relative flex gap-4 list-none h-8 justify-start mt-[-1rem] px-4 overflow-scroll">
+                <div className="relative flex gap-4 list-none h-8 justify-start mt-[-1rem] px-4 overflow-scroll no-scrollbar">
                   <p
                     className={`absolute bottom-0 h-1 bg-blue-600 transition-all ${
                       profileList === "basic-details"

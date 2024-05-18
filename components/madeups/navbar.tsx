@@ -144,62 +144,18 @@ const NavBar = (props: Props) => {
       >
         <div className="flex flex-col h-full px-3 pb-4 overflow-y-auto">
           <ul className="space-y-2">
-            <li>
-              <a
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-[#6648D6] dark:hover:bg-[#6648D6] group"
-                href="#"
-              >
-                <i className="fi fi-rr-home"></i>
-                <span className="ml-3">Homepage</span>
-              </a>
-            </li>
-            <li>
-              <a
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-[#6648D6] dark:hover:bg-[#6648D6] group"
-                href="#"
-              >
-                <i className="fi fi-rr-document"></i>
-                <span className="ml-3">Portfolio</span>
-              </a>
-            </li>
-            <li>
-              <a
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-[#6648D6] dark:hover:bg-[#6648D6] group"
-                href="#"
-              >
-                <i className="fi fi-rs-users"></i>
-                <span className="ml-3">Referrals</span>
-              </a>
-            </li>
-            <li>
-              <a
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-[#6648D6] dark:hover:bg-[#6648D6] group"
-                href="#"
-              >
-                <i className="fi fi-rr-book-alt"></i>
-                <span className="ml-3">Courses</span>
-              </a>
-            </li>
-            <li>
-              <a
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-[#6648D6] dark:hover:bg-[#6648D6] group"
-                href="#"
-              >
-                <i className="fi fi-rr-settings"></i>{" "}
-                <span className="ml-3">Settings</span>
-              </a>
-            </li>
-            <li>
-              <a
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-[#6648D6] dark:hover:bg-[#6648D6] group"
-                href="#"
-              >
-                <i className="fi fi-br-sign-out-alt"></i>{" "}
-                <span className="ml-3">Logout</span>
-              </a>
-            </li>
+            <NavList label="Homepage" icon="fi fi-rr-home" />
+            <NavList label="Portfolio" icon="fi fi-rr-document" />
+            <NavList label="Referrals" icon="fi fi-rs-users" />
+            <hr />
+            <NavList label="Courses" icon="fi fi-rr-book-alt" />
           </ul>
-          <div className="mt-auto text-xs text-center text-gray-400">
+          <ul className="space-y-2 mt-auto mb-0">
+            <hr />
+            <NavList label="Settings" icon="fi fi-rr-settings" />
+            <NavList label="Logout" icon="fi fi-br-sign-out-alt" />
+          </ul>
+          <div className="mt-10 text-xs text-center text-gray-400">
             All rights reserved to Edapt © 2024.
           </div>
         </div>
@@ -209,3 +165,22 @@ const NavBar = (props: Props) => {
 };
 
 export default NavBar;
+
+interface NavProps {
+  label: string;
+  icon: string;
+}
+
+const NavList: React.FC<NavProps> = ({ label, icon }) => {
+  return (
+    <li>
+      <a
+        className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-[#6648D6] hover:text-white dark:hover:bg-[#6648D6] group"
+        href="#"
+      >
+        <i className={icon}></i>
+        <span className="ml-3">{label}</span>
+      </a>
+    </li>
+  );
+};

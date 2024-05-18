@@ -22,7 +22,7 @@ const CustomCard: React.FC<CardProps> = ({
         <h1>{value}</h1>
       </div>
       <div
-        className={`p-3 h-12 w-12 rounded-xl flex items-center justify-center ${iconBgColor} ${iconTextColor}`}
+        className={`p-3 h-12 w-12 rounded-xl  items-center justify-center hidden md:flex ${iconBgColor} ${iconTextColor}`}
       >
         <i className={icon}></i>
       </div>

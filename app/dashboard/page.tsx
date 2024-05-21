@@ -2,7 +2,7 @@
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
-const pages = () => {
+const page = () => {
   const token = Cookies.get("token");
   const router = useRouter();
   if (!token) {
@@ -17,4 +17,4 @@ const pages = () => {
   );
 };
 
-export default pages;
+export default page;

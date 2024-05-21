@@ -15,9 +15,9 @@ const Profile = (props: Props) => {
   console.log(data);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* <!-- Left side (2 boxes) --> */}
-      <div className="col-span-1 md:col-span-2">
+      <div className="col-span-1 lg:col-span-2">
         <div className="grid grid-cols-1 gap-4">
           <div className="p-0">
             <div className=" flex flex-col gap-5">
@@ -30,8 +30,8 @@ const Profile = (props: Props) => {
                     </p>
                   </div>
                 </div>
-                <div className="relative h-52 flex justify-between items-center -mt-14">
-                  <div className="flex items-center gap-4 mt-4">
+                <div className="relative h-72 sm:h-52 flex justify-center sm:justify-between items-center -mt-14">
+                  <div className="flex flex-col sm:flex-row items-center gap-4 mt-4">
                     <div className="relative flex justify-end items-end">
                       <Image
                         src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg"
@@ -54,7 +54,7 @@ const Profile = (props: Props) => {
                         />
                       </span>
                     </div>
-                    <div className="">
+                    <div className="text-center sm:text-left">
                       <h1>Full name (sjc)</h1>
                       <p className="mt-[-5px] text-[#7A7A7A]">fullname@edapt</p>
                       <p className="text-blue-600">LEVEL 1</p>
@@ -174,7 +174,7 @@ const Profile = (props: Props) => {
       {/* <!-- Right side (3 boxes) --> */}
       <div className="col-span-1">
         <div className="grid grid-cols-1 gap-4">
-          <div className="bg-white rounded-2xl p-4 mb-4 md:mb-0">
+          <div className="bg-white rounded-2xl p-4 mb-4 lg:mb-0">
             <div className="p-0">
               <h2>Connect your Socials</h2>
             </div>
@@ -196,7 +196,7 @@ const Profile = (props: Props) => {
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-2xl p-4 mb-4 md:mb-0">
+          <div className="bg-white rounded-2xl p-4 mb-4 lg:mb-0">
             <div className="p-0">
               <h2>Karma Distribution</h2>
             </div>

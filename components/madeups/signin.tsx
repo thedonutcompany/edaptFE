@@ -5,7 +5,7 @@ import React, { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -28,19 +28,19 @@ const otpSchema = z.object({
   email: z.string().email().nonempty("Email is required"),
   otp: z
     .string()
-    .min(6, "OTP must be 6 characters")
-    .max(6, "OTP must be 6 characters")
+    .length(6, "OTP must be 6 characters")
     .nonempty("OTP is required"),
 });
 
-type Props = {};
+type EmailFormData = z.infer<typeof emailSchema>;
+type OtpFormData = z.infer<typeof otpSchema>;
 
-const SignIn = (props: Props) => {
+const SignIn = () => {
   const router = useRouter();
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [email, setEmail] = useState("");
 
-  const form = useForm<z.infer<typeof emailSchema | typeof otpSchema>>({
+  const form = useForm<EmailFormData | OtpFormData>({
     resolver: zodResolver(isOtpSent ? otpSchema : emailSchema),
     defaultValues: {
       email: "",
@@ -48,18 +48,18 @@ const SignIn = (props: Props) => {
     },
   });
 
-  const onSubmit = async (
-    data: z.infer<typeof emailSchema | typeof otpSchema>
-  ) => {
+  const onSubmit: SubmitHandler<EmailFormData | OtpFormData> = async (data) => {
     try {
       if (isOtpSent) {
+        const { email, otp } = data as OtpFormData;
         // Verify OTP
-        await verifyOtp(data.email, data.otp);
+        await verifyOtp(email, otp);
         router.push("/dashboard/profile");
       } else {
+        const { email } = data as EmailFormData;
         // Send OTP
-        setEmail(data.email);
-        await sendOtp(data.email);
+        setEmail(email);
+        await sendOtp(email);
         setIsOtpSent(true);
       }
     } catch (error: any) {

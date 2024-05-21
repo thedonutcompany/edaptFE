@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { login, verifyOtp } from "@/lib/auth";
+import { sendOtp, verifyOtp } from "@/lib/auth";
 
 const emailSchema = z.object({
   email: z.string().email().nonempty("Email is required"),
@@ -59,7 +59,7 @@ const SignIn = (props: Props) => {
       } else {
         // Send OTP
         setEmail(data.email);
-        await login(data.email);
+        await sendOtp(data.email);
         setIsOtpSent(true);
       }
     } catch (error: any) {

@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import api from "./api";
 
-export const login = async (email: string) => {
+export const sendOtp = async (email: string) => {
   try {
     const response = await api.post("/authentication/generate-otp/", {
       email,

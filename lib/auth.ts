@@ -19,9 +19,9 @@ export const verifyOtp = async (email: string, otp: string) => {
       email,
       otp,
     });
-    console.log(response.data);
+    console.log(response.data.data);
 
-    const { token } = response.data;
+    const { token } = response.data.data;
     Cookies.set("token", token, { expires: 7 });
     return response.data;
   } catch (error) {

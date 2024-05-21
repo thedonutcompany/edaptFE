@@ -5,11 +5,15 @@ import CustomCard from "../ui/custom-card";
 import { PieChart } from "@mui/x-charts/PieChart";
 import KarmaRecent from "@/public/assets/svgs/karma-recent";
 import HeatmapComponent from "../ui/heatmap";
+import { ProfileData } from "@/lib/dasboard";
 
 type Props = {};
 
 const Profile = (props: Props) => {
   const [profileList, setProfileList] = useState("basic-details");
+  const data = ProfileData();
+  console.log(data);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {/* <!-- Left side (2 boxes) --> */}

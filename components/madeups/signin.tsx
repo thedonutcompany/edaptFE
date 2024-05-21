@@ -133,7 +133,7 @@ const SignIn = () => {
           alt="Sign in"
           width={500}
           height={500}
-          className="w-fit h-full sm:object-cover lg:object-contain"
+          className="w-fit h-full sm:object-cover xl:object-contain"
         />
       </div>
     </div>

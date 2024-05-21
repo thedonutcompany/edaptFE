@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -17,27 +17,51 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-// import { toast } from "@/components/ui/use-toast";
-const FormSchema = z.object({
+import { useRouter } from "next/navigation";
+import { login, verifyOtp } from "@/lib/auth";
+
+const emailSchema = z.object({
   email: z.string().email().nonempty("Email is required"),
 });
+
+const otpSchema = z.object({
+  email: z.string().email().nonempty("Email is required"),
+  otp: z
+    .string()
+    .min(6, "OTP must be 6 characters")
+    .max(6, "OTP must be 6 characters")
+    .nonempty("OTP is required"),
+});
+
 type Props = {};
 
 const SignIn = (props: Props) => {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const router = useRouter();
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const form = useForm<z.infer<typeof emailSchema | typeof otpSchema>>({
+    resolver: zodResolver(isOtpSent ? otpSchema : emailSchema),
     defaultValues: {
       email: "",
+      otp: "",
     },
   });
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+
+  const onSubmit = async (
+    data: z.infer<typeof emailSchema | typeof otpSchema>
+  ) => {
     try {
-      console.log(data);
-
-      //   console.log("Signing up user:", user);
-
-      //   await api.signup(user);
-      // router.push("/auth/signin");
+      if (isOtpSent) {
+        // Verify OTP
+        await verifyOtp(data.email, data.otp);
+        router.push("/dashboard/profile");
+      } else {
+        // Send OTP
+        setEmail(data.email);
+        await login(data.email);
+        setIsOtpSent(true);
+      }
     } catch (error: any) {
       console.error(error);
       return;
@@ -70,14 +94,34 @@ const SignIn = (props: Props) => {
                         className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus:ring-none focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
                         placeholder="Type your mail"
                         {...field}
+                        disabled={isOtpSent}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              {isOtpSent && (
+                <FormField
+                  control={form.control}
+                  name="otp"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>OTP</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus:ring-none focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
+                          placeholder="Enter OTP"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               <Button type="submit" className="w-full bg-[#456FF6] px-6 py-6">
-                Send OTP
+                {isOtpSent ? "Verify OTP" : "Send OTP"}
               </Button>
             </form>
           </Form>
@@ -89,7 +133,7 @@ const SignIn = (props: Props) => {
           alt="Sign in"
           width={500}
           height={500}
-          className="w-fit h-full sm:object-cover md:object-contain"
+          className="w-fit h-full sm:object-cover lg:object-contain"
         />
       </div>
     </div>

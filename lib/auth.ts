@@ -7,12 +7,25 @@ export const login = async (email: string) => {
       email,
     });
     console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to generate OTP");
+  }
+};
+
+export const verifyOtp = async (email: string, otp: string) => {
+  try {
+    const response = await api.post("/authentication/verify-otp/", {
+      email,
+      otp,
+    });
+    console.log(response.data);
 
     const { token } = response.data;
     Cookies.set("token", token, { expires: 7 });
     return response.data;
   } catch (error) {
-    throw new Error("Failed to login");
+    throw new Error("Failed to verify OTP");
   }
 };
 

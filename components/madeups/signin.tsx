@@ -20,6 +20,8 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { sendOtp, verifyOtp } from "@/lib/auth";
 
+import { useToast } from "@/components/ui/use-toast";
+
 const emailSchema = z.object({
   email: z.string().email().nonempty("Email is required"),
 });
@@ -36,6 +38,7 @@ type EmailFormData = z.infer<typeof emailSchema>;
 type OtpFormData = z.infer<typeof otpSchema>;
 
 const SignIn = () => {
+  const { toast } = useToast();
   const router = useRouter();
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [email, setEmail] = useState("");
@@ -52,22 +55,50 @@ const SignIn = () => {
     try {
       if (isOtpSent) {
         const { email, otp } = data as OtpFormData;
-        // Verify OTP
         await verifyOtp(email, otp);
+        toast({
+          variant: "default",
+          title: "OTP verified successfully",
+          description: "You are now logged in. Redirecting to your profile.",
+        });
         router.push("/dashboard/profile");
       } else {
         const { email } = data as EmailFormData;
-        // Send OTP
         setEmail(email);
         await sendOtp(email);
+        toast({
+          variant: "default",
+          title: "OTP sent successfully",
+          description: "Please check your email for the OTP.",
+        });
         setIsOtpSent(true);
       }
     } catch (error: any) {
       console.error(error);
-      return;
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error.message,
+      });
     }
   };
-
+  const resendOtp = async () => {
+    try {
+      await sendOtp(email);
+      toast({
+        variant: "default",
+        title: "OTP resent successfully",
+        description: "Please check your email for the OTP.",
+      });
+    } catch (error: any) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Failed to resend OTP",
+        description: error.message,
+      });
+    }
+  };
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen">
       <div className="flex-1 flex flex-col gap-10 justify-center items-center px-4 md:px-0">
@@ -83,42 +114,54 @@ const SignIn = () => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-6 w-full"
             >
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus:ring-none focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
-                        placeholder="Type your mail"
-                        {...field}
-                        disabled={isOtpSent}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {isOtpSent && (
+              {!isOtpSent && (
                 <FormField
                   control={form.control}
-                  name="otp"
+                  name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>OTP</FormLabel>
+                      <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
                           className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus:ring-none focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
-                          placeholder="Enter OTP"
+                          placeholder="Type your mail"
                           {...field}
+                          disabled={isOtpSent}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              )}
+              {isOtpSent && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="otp"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>OTP</FormLabel>
+                        <FormControl>
+                          <Input
+                            className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus:ring-none focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
+                            placeholder="Enter OTP"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button
+                    type="button"
+                    variant="link"
+                    onClick={resendOtp}
+                    className="w-full text-[#456FF6] text-sm text-right mt-0 space-y-0"
+                  >
+                    Resend OTP
+                  </Button>
+                </>
               )}
               <Button type="submit" className="w-full bg-[#456FF6] px-6 py-6">
                 {isOtpSent ? "Verify OTP" : "Send OTP"}

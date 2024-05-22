@@ -20,12 +20,11 @@ export const verifyOtp = async (email: string, otp: string) => {
       otp,
     });
     console.log(response.data.data);
-
     const { token } = response.data.data;
     Cookies.set("token", token, { expires: 7 });
     return response.data;
-  } catch (error) {
-    throw new Error("Failed to verify OTP");
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
   }
 };
 

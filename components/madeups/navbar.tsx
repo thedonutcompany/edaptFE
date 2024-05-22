@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
+import Cookies from "js-cookie";
 type Props = {};
 
 const NavBar = (props: Props) => {
@@ -64,7 +65,7 @@ const NavBar = (props: Props) => {
                   >
                     <span className="sr-only">Open user menu</span>
                     <Image
-                      src="/dp.png"
+                      src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg"
                       alt="user photo"
                       width={32}
                       height={32}
@@ -91,33 +92,6 @@ const NavBar = (props: Props) => {
                     </p>
                   </div>
                   <ul className="py-1" role="none">
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        Dashboard
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        Settings
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        Earnings
-                      </a>
-                    </li>
                     <li>
                       <a
                         href="#"
@@ -153,7 +127,14 @@ const NavBar = (props: Props) => {
           <ul className="space-y-2 mt-auto mb-0">
             <hr />
             <NavList label="Settings" icon="fi fi-rr-settings" />
-            <NavList label="Logout" icon="fi fi-br-sign-out-alt" />
+            <NavList
+              label="Logout"
+              icon="fi fi-br-sign-out-alt"
+              href="/signin"
+              onClick={() => {
+                Cookies.remove("token");
+              }}
+            />
           </ul>
           <div className="mt-10 text-xs text-center text-gray-400">
             All rights reserved to Edapt © 2024.
@@ -169,14 +150,16 @@ export default NavBar;
 interface NavProps {
   label: string;
   icon: string;
+  href?: string;
+  onClick?: () => void;
 }
 
-const NavList: React.FC<NavProps> = ({ label, icon }) => {
+const NavList: React.FC<NavProps> = ({ label, icon, href, onClick }) => {
   return (
-    <li>
+    <li onClick={onClick}>
       <a
         className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-[#6648D6] hover:text-white dark:hover:bg-[#6648D6] group"
-        href="#"
+        href={href}
       >
         <i className={icon}></i>
         <span className="ml-3">{label}</span>

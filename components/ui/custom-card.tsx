@@ -18,7 +18,9 @@ const CustomCard: React.FC<CardProps> = ({
   return (
     <div className="flex justify-between bg-white shadow-[6px_6px_54px_rgba(0,0,0,0.05)] rounded-2xl p-5">
       <div>
-        <span className="text-[#202224]/70 font-medium">{label}</span>
+        <span className="text-[#202224]/70 text-sm sm:text-base font-medium">
+          {label}
+        </span>
         <h1>{value}</h1>
       </div>
       <div

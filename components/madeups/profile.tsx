@@ -1,18 +1,38 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CustomCard from "../ui/custom-card";
 import { PieChart } from "@mui/x-charts/PieChart";
 import KarmaRecent from "@/public/assets/svgs/karma-recent";
 import HeatmapComponent from "../ui/heatmap";
 import { ProfileData } from "@/lib/dasboard";
 
-type Props = {};
+type profileDataType = {
+  data: {
+    email: string;
+  };
+};
 
-const Profile = (props: Props) => {
+const Profile = () => {
   const [profileList, setProfileList] = useState("basic-details");
-  const data = ProfileData();
-  console.log(data);
+  const [profileData, setProfileData] = useState<profileDataType>({
+    data: { email: "" },
+  }); // Assuming profileData is an array
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const data = await ProfileData();
+        setProfileData(data);
+      } catch (error) {
+        console.error(error);
+        // Handle error
+      }
+    };
+
+    fetchProfileData();
+  }, []); // Empty dependency array to run the effect only once
+  console.log(profileData);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -23,14 +43,16 @@ const Profile = (props: Props) => {
             <div className=" flex flex-col gap-5">
               <div className="bg-white rounded-2xl p-0">
                 <div className="relative h-40 w-full rounded-t-2xl bg-cover bg-bottom bg-[url('/assets/images/profile_banner.png')]">
-                  <div className="absolute right-0 bottom-2 mr-7 text-right">
-                    <p className="text-white text-sm font-semibold">edapt</p>
-                    <p className="text-white text-sm font-medium">
+                  <div className="absolute right-0 bottom-2 mr-1 sm:mr-7 text-right">
+                    <p className="text-white text-xs sm:text-sm font-semibold">
+                      edapt
+                    </p>
+                    <p className="text-white text-xs sm:text-sm font-medium">
                       Member since 2021
                     </p>
                   </div>
                 </div>
-                <div className="relative h-72 sm:h-52 flex justify-center sm:justify-between items-center -mt-14">
+                <div className="relative h-80 sm:h-52 flex flex-col gap-1 sm:flex-row justify-center sm:justify-between items-center -mt-14">
                   <div className="flex flex-col sm:flex-row items-center gap-4 mt-4">
                     <div className="relative flex justify-end items-end">
                       <Image
@@ -38,7 +60,7 @@ const Profile = (props: Props) => {
                         alt="profile_pic"
                         width={150}
                         height={150}
-                        className="aspect-square rounded-full border-4 border-white ml-8 mt-[-1.5rem] bg-light"
+                        className="aspect-square rounded-full border-4 border-white sm:ml-8 mt-[-1.5rem] bg-light"
                       />
                       <span className="absolute mr-2 mb-2 text-white flex justify-center">
                         {/* <i className="fi fi-sr-shield-check bg-blue-600 p-2 rounded-full"></i>
@@ -56,11 +78,13 @@ const Profile = (props: Props) => {
                     </div>
                     <div className="text-center sm:text-left">
                       <h1>Full name (sjc)</h1>
-                      <p className="mt-[-5px] text-[#7A7A7A]">fullname@edapt</p>
+                      <p className="mt-[-5px] text-[#7A7A7A]">
+                        {profileData.data?.email}
+                      </p>
                       <p className="text-blue-600">LEVEL 1</p>
                     </div>
                   </div>
-                  <div className="flex space-x-4 absolute right-5 top-16">
+                  <div className="flex space-x-4 sm:absolute right-5 top-16">
                     <p className="cursor-pointer p-0 h-8 w-8 flex items-center justify-center bg-[#B9A7FF]/20 text-[#6648D6] rounded-md">
                       <i className="fi fi-bs-pencil"></i>
                     </p>
@@ -133,7 +157,7 @@ const Profile = (props: Props) => {
                     iconTextColor="text-[#3D42DF]"
                   />
                   <CustomCard
-                    label="Avg.Karma/Month"
+                    label="Avg.Karma/Mn"
                     value="10K"
                     icon="fi fi-rr-chart-line-up"
                     iconBgColor="bg-[#4AD991]/20"
@@ -205,11 +229,9 @@ const Profile = (props: Props) => {
                 series={[
                   {
                     data: [
-                      { value: 10, color: "orange", label: "Label 1" },
-                      { value: 20, color: "blue", label: "Label 2" },
-                      { value: 30, color: "green", label: "Label 3" },
-                      { value: 40, color: "red", label: "Label 4" },
-                      { value: 50, color: "yellow", label: "Label 5" },
+                      { value: 50, color: "#8892E8", label: "Label 1" },
+                      { value: 20, color: "#81D4E6", label: "Label 2" },
+                      { value: 30, color: "#FF6D6D", label: "Label 3" },
                     ],
                     // arcLabel: "value",
                     innerRadius: 30,

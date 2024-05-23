@@ -10,13 +10,14 @@ import { ProfileData } from "@/lib/dasboard";
 type profileDataType = {
   data: {
     email: string;
+    name: string;
   };
 };
 
 const Profile = () => {
   const [profileList, setProfileList] = useState("basic-details");
   const [profileData, setProfileData] = useState<profileDataType>({
-    data: { email: "" },
+    data: { email: "", name: "" },
   }); // Assuming profileData is an array
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const Profile = () => {
 
     fetchProfileData();
   }, []); // Empty dependency array to run the effect only once
-  console.log(profileData);
+  // console.log(profileData);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -77,7 +78,7 @@ const Profile = () => {
                       </span>
                     </div>
                     <div className="text-center sm:text-left">
-                      <h1>Full name (sjc)</h1>
+                      <h1>{profileData.data?.name}</h1>
                       <p className="mt-[-5px] text-[#7A7A7A]">
                         {profileData.data?.email}
                       </p>
@@ -266,7 +267,7 @@ const Profile = () => {
                 <div className="flex items-center justify-center h-12 w-12 bg-custom-gradient rounded-full text-[#3B5998] text-3xl leading-none">
                   <KarmaRecent />
                 </div>
-                <div>
+                <div className="flex-1">
                   <p className="text-sm">
                     <span className="text-blue-600 font-semibold">
                       50 Karma
@@ -280,7 +281,7 @@ const Profile = () => {
                 <div className="flex items-center justify-center h-12 w-12 bg-custom-gradient rounded-full text-[#3B5998] text-3xl leading-none">
                   <KarmaRecent />
                 </div>
-                <div>
+                <div className="flex-1">
                   <p className="text-sm">
                     <span className="text-blue-600 font-semibold">
                       50 Karma
@@ -294,7 +295,7 @@ const Profile = () => {
                 <div className="flex items-center justify-center h-12 w-12 bg-custom-gradient rounded-full text-[#3B5998] text-3xl leading-none">
                   <KarmaRecent />
                 </div>
-                <div>
+                <div className="flex-1">
                   <p className="text-sm">
                     <span className="text-blue-600 font-semibold">
                       50 Karma

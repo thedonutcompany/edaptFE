@@ -156,9 +156,9 @@ interface NavProps {
 
 const NavList: React.FC<NavProps> = ({ label, icon, href, onClick }) => {
   return (
-    <li onClick={onClick}>
+    <li onClick={onClick} className="flex flex-row">
       <a
-        className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-[#6648D6] hover:text-white dark:hover:bg-[#6648D6] group"
+        className="flex before:bg-[#6648D6] hover:before:h-10 before:rounded-r-sm before:w-1 before:absolute before:left-0 w-full items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-[#6648D6] hover:text-white dark:hover:bg-[#6648D6] group"
         href={href}
       >
         <i className={icon}></i>

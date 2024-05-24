@@ -53,8 +53,8 @@ const NavBar = (props: Props) => {
               <div className="flex items-center ms-3">
                 <div className="mx-6 flex gap-5">
                   {/* <ModeToggle /> */}
-                  <i className="fi fi-rr-settings"></i>
-                  <i className="fi fi-rs-bell"></i>
+                  <i className="fi fi-rr-settings cursor-not-allowed text-gray-400"></i>
+                  <i className="fi fi-rs-bell cursor-not-allowed text-gray-400"></i>
                 </div>
                 <div>
                   <button
@@ -119,14 +119,14 @@ const NavBar = (props: Props) => {
         <div className="flex flex-col h-full px-3 pb-4 overflow-y-auto">
           <ul className="space-y-2">
             <NavList label="Homepage" icon="fi fi-rr-home" />
-            <NavList label="Portfolio" icon="fi fi-rr-document" />
-            <NavList label="Referrals" icon="fi fi-rs-users" />
-            <hr />
-            <NavList label="Courses" icon="fi fi-rr-book-alt" />
+            {/* <NavList label="Portfolio" icon="fi fi-rr-document" /> */}
+            {/* <NavList label="Referrals" icon="fi fi-rs-users" /> */}
+            {/* <hr /> */}
+            {/* <NavList label="Courses" icon="fi fi-rr-book-alt" /> */}
           </ul>
           <ul className="space-y-2 mt-auto mb-0">
             <hr />
-            <NavList label="Settings" icon="fi fi-rr-settings" />
+            {/* <NavList label="Settings" icon="fi fi-rr-settings" /> */}
             <NavList
               label="Logout"
               icon="fi fi-br-sign-out-alt"

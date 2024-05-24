@@ -8,8 +8,8 @@ export const sendOtp = async (email: string) => {
     });
     console.log(response.data);
     return response.data;
-  } catch (error) {
-    throw new Error("Failed to generate OTP");
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
   }
 };
 

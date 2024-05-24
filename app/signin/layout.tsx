@@ -4,7 +4,7 @@ import Image from "next/image";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Edapt | dashboard",
+  title: "Edapt",
   description:
     "Edapt is a platform for educators to share and discover resources.",
 };

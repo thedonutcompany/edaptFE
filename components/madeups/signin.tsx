@@ -75,6 +75,13 @@ const SignIn = () => {
       }
     } catch (error: any) {
       console.error(error);
+      // update zod error in email
+      if (error.message) {
+        form.setError("email", {
+          type: "manual",
+          message: error.message,
+        });
+      }
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",

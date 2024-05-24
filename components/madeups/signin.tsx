@@ -142,7 +142,7 @@ const SignIn = () => {
                 />
               )}
               {isOtpSent && (
-                <>
+                <div>
                   <FormField
                     control={form.control}
                     name="otp"
@@ -164,11 +164,11 @@ const SignIn = () => {
                     type="button"
                     variant="link"
                     onClick={resendOtp}
-                    className="w-full text-[#456FF6] text-sm text-right mt-0 space-y-0"
+                    className="w-full text-[#456FF6] text-sm place-content-end justify-end text-right mt-1 p-0 space-y-0"
                   >
-                    Resend OTP
+                    Resend OTP ?
                   </Button>
-                </>
+                </div>
               )}
               <Button type="submit" className="w-full bg-[#456FF6] px-6 py-6">
                 {isOtpSent ? "Verify OTP" : "Send OTP"}

@@ -19,7 +19,7 @@ export default function RootLayout({
     <div className="bg-[#F3F5F9] min-h-screen">
       <NavBar />
       <div className="p-4 sm:ml-64">
-        <div className="p-4 mt-14">{children}</div>
+        <div className="px-1 py-4 md:p-4  mt-14">{children}</div>
       </div>
     </div>
   );

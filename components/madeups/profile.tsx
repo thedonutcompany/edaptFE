@@ -138,7 +138,7 @@ const Profile = () => {
                   >
                     Karma History
                   </li>
-                  <li
+                  {/* <li
                     onClick={() => setProfileList("mu-voyage")}
                     className={`cursor-pointer min-w-[110px] ${
                       profileList === "mu-voyage"
@@ -147,7 +147,7 @@ const Profile = () => {
                     }`}
                   >
                     Join Edapt
-                  </li>
+                  </li> */}
                 </div>
                 <div className="grid grid-cols-2 gap-4 m-5">
                   <CustomCard
@@ -236,13 +236,13 @@ const Profile = () => {
                     ],
                     // arcLabel: "value",
                     innerRadius: 30,
-                    outerRadius: 100,
+                    outerRadius: "80%",
                     paddingAngle: 5,
                     cornerRadius: 5,
                     startAngle: 0,
                     endAngle: 360,
-                    cx: 150,
-                    cy: 150,
+                    // cx: 150,
+                    // cy: 150,
                   },
                 ]}
                 slotProps={{
@@ -250,7 +250,7 @@ const Profile = () => {
                     itemMarkHeight: 10,
                     itemMarkWidth: 10,
                     labelStyle: {
-                      fontSize: 10,
+                      fontSize: "14px",
                       borderRadius: "50%",
                     },
                   },

@@ -24,7 +24,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401 || error.response.status === 400) {
+    if (error.response.status === 401) {
       // Handle token expiry or unauthorized access
       Cookies.remove("token");
       window.location.href = "/signin";

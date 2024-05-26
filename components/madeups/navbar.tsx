@@ -6,13 +6,19 @@ type Props = {};
 
 const NavBar = (props: Props) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selected, setSelected] = useState<string | null>("Homepage");
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+  const handleItemClick = (label: string) => {
+    setSelected(label);
+  };
+
   return (
     <div>
-      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav className="fixed top-0 z-50 w-full bg-white dark:bg-gray-800 dark:border-gray-700">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
@@ -39,7 +45,7 @@ const NavBar = (props: Props) => {
                   ></path>
                 </svg>
               </button>
-              <a href="/" className="flex ms-2 md:me-24">
+              <a href="/" className="flex md:ml-16 ms-2 md:me-20">
                 <Image
                   src="/assets/images/logo.png"
                   alt="Logo"
@@ -48,6 +54,9 @@ const NavBar = (props: Props) => {
                   className="object-contain"
                 />
               </a>
+              <h1 className="hidden md:block font-semibold text-gray-900 dark:text-white">
+                Hi! Aditya Raj 👋
+              </h1>
             </div>
             <div className="flex items-center">
               <div className="flex items-center ms-3">
@@ -114,25 +123,47 @@ const NavBar = (props: Props) => {
         aria-label="Sidebar"
         className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700`}
+        } bg-white  sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700`}
       >
         <div className="flex flex-col h-full px-3 pb-4 overflow-y-auto">
           <ul className="space-y-2">
-            <NavList label="Homepage" icon="fi fi-rr-home" />
-            {/* <NavList label="Portfolio" icon="fi fi-rr-document" /> */}
-            {/* <NavList label="Referrals" icon="fi fi-rs-users" /> */}
+            <NavList
+              label="Homepage"
+              icon="fi fi-rr-home"
+              selected={selected}
+              onClick={() => handleItemClick("Homepage")}
+            />
+            {/* <NavList
+              label="Portfolio"
+              icon="fi fi-rr-document"
+              selected={selected}
+              onClick={() => handleItemClick("Portfolio")}
+            /> */}
+            {/* <NavList label="Referrals" icon="fi fi-rs-users" selected={selected} onClick={() => handleItemClick("Referrals")} /> */}
             {/* <hr /> */}
-            {/* <NavList label="Courses" icon="fi fi-rr-book-alt" /> */}
+            {/* <NavList label="Courses" icon="fi fi-rr-book-alt" selected={selected} onClick={() => handleItemClick("Courses")} /> */}
           </ul>
           <ul className="space-y-2 mt-auto mb-0">
             <hr />
-            {/* <NavList label="Settings" icon="fi fi-rr-settings" /> */}
+            {/* <NavList label="Settings" icon="fi fi-rr-settings" selected={selected} onClick={() => handleItemClick("Settings")} /> */}
             <NavList
               label="Logout"
               icon="fi fi-br-sign-out-alt"
-              href="/signin"
+              // href="/signin"
+              selected={selected}
               onClick={() => {
-                Cookies.remove("token");
+                new Promise((resolve) => {
+                  Cookies.remove("token");
+                  resolve("done");
+                })
+                  .then(() => {
+                    window.location.href = "/signin";
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+
+                handleItemClick("Logout");
               }}
             />
           </ul>
@@ -152,13 +183,24 @@ interface NavProps {
   icon: string;
   href?: string;
   onClick?: () => void;
+  selected: string | null;
 }
 
-const NavList: React.FC<NavProps> = ({ label, icon, href, onClick }) => {
+const NavList: React.FC<NavProps> = ({
+  label,
+  icon,
+  href,
+  onClick,
+  selected,
+}) => {
+  const isSelected = selected === label;
+
   return (
-    <li onClick={onClick} className="flex flex-row">
+    <li onClick={onClick} className="flex flex-row cursor-pointer">
       <a
-        className="flex before:bg-[#6648D6] hover:before:h-10 before:rounded-r-sm before:w-1 before:absolute before:left-0 w-full items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-[#6648D6] hover:text-white dark:hover:bg-[#6648D6] group"
+        className={`flex before:bg-[#6648D6] hover:before:h-10 before:rounded-r-sm before:w-1 before:absolute before:left-0 w-full items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-[#6648D6] hover:text-white dark:hover:bg-[#6648D6] group ${
+          isSelected ? "bg-[#6648D6] text-white before:h-10" : ""
+        }`}
         href={href}
       >
         <i className={icon}></i>

@@ -130,7 +130,7 @@ const SignIn = () => {
                       <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input
-                          className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus:ring-none focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
+                          className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
                           placeholder="Type your mail"
                           {...field}
                           disabled={isOtpSent}
@@ -148,11 +148,11 @@ const SignIn = () => {
                     name="otp"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>OTP</FormLabel>
+                        <FormLabel>OTP Verification</FormLabel>
                         <FormControl>
                           <Input
-                            className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus:ring-none focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
-                            placeholder="Enter OTP"
+                            className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
+                            placeholder="Enter the OTP sent to your email"
                             {...field}
                           />
                         </FormControl>
@@ -160,14 +160,17 @@ const SignIn = () => {
                       </FormItem>
                     )}
                   />
-                  <Button
-                    type="button"
-                    variant="link"
-                    onClick={resendOtp}
-                    className="w-full text-[#456FF6] text-sm place-content-end justify-end text-right mt-1 p-0 space-y-0"
-                  >
-                    Resend OTP ?
-                  </Button>
+                  <div className="flex justify-between mt-1 p-0 space-y-0 font-normal items-center">
+                    <p>Didn't receive the OTP?</p>
+                    <Button
+                      type="button"
+                      variant="link"
+                      onClick={resendOtp}
+                      className=" text-[#456FF6] text-sm font-normal place-content-end justify-end text-right p-0 "
+                    >
+                      Resend OTP ?
+                    </Button>
+                  </div>
                 </div>
               )}
               <Button type="submit" className="w-full bg-[#456FF6] px-6 py-6">
@@ -181,8 +184,8 @@ const SignIn = () => {
         <Image
           src="/assets/images/signin.png"
           alt="Sign in"
-          width={500}
-          height={500}
+          width={4000}
+          height={4000}
           className="w-fit h-full sm:object-cover xl:object-contain"
         />
       </div>

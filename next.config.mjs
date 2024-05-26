@@ -3,7 +3,13 @@ const nextConfig = {
   // reactStrictMode: true,
   transpilePackages: ["@mui/x-charts"],
   images: {
-    domains: ["pbs.twimg.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "pbs.twimg.com",
+        pathname: "**",
+      },
+    ],
   },
   // webpack: (config, { isServer }) => {
   //     if (!isServer) {

@@ -62,8 +62,11 @@ export type profileDataType = {
     }[];
   };
 };
-
-const Profile = () => {
+type ProfileProps = {
+  data: profileDataType;
+  isPublic: boolean;
+};
+const Profile = ({ data, isPublic }: ProfileProps) => {
   const { setUserName } = useUserStore();
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
   const closeEditDialog = () => setEditDialogOpen(false);
@@ -75,54 +78,25 @@ const Profile = () => {
       label: string;
     }[]
   >([]);
-  const [profileData, setProfileData] = useState<profileDataType>({
-    data: {
-      email: "",
-      name: "",
-      dob: new Date(),
-      gender: "",
-      image: "",
-      created_at: "",
-      socials: {
-        linkedin: null,
-        instagram: null,
-        github: null,
-        upwork: null,
-        pinterest: null,
-        twitter: null,
-        facebook: null,
-        youtube: null,
-        tiktok: null,
-      },
-      point: {
-        total_points: 0,
-        average_points_this_month: 0,
-        rank: 0,
-        percentile: 0,
-      },
-      point_distribution: [],
-      point_log: [],
-      point_history: [],
-    },
-  });
+  const [profileData, setProfileData] = useState<profileDataType>(data);
+
+  // useEffect(() => {
+  //   const fetchProfileData = async () => {
+  //     try {
+  //       const data = await ProfileData();
+  //       setProfileData(data);
+  //     } catch (error) {
+  //       console.error(error);
+  //       // Handle error
+  //     }
+  //   };
+
+  //   fetchProfileData();
+  // }, []); // Empty dependency array to run the effect only once
 
   useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        const data = await ProfileData();
-        setProfileData(data);
-      } catch (error) {
-        console.error(error);
-        // Handle error
-      }
-    };
-
-    fetchProfileData();
-  }, []); // Empty dependency array to run the effect only once
-
-  useEffect(() => {
-    setUserName(profileData.data.name);
-  }, [profileData.data.name, setUserName]);
+    setUserName(data?.data?.name);
+  }, [data?.data?.name, setUserName]);
   // console.log(profileData);
 
   useEffect(() => {
@@ -192,65 +166,67 @@ const Profile = () => {
                       <p className="text-blue-600">LEVEL 1</p>
                     </div>
                   </div>
-                  <div className="flex space-x-4 sm:absolute right-5 top-16">
-                    <Dialog
-                      open={isEditDialogOpen}
-                      onOpenChange={setEditDialogOpen}
-                    >
-                      <DialogTrigger asChild>
-                        <p
-                          className="cursor-pointer p-0 h-8 w-8 flex items-center justify-center bg-[#B9A7FF]/20 text-[#6648D6] rounded-md"
-                          onClick={() => setEditDialogOpen(true)}
-                        >
-                          <i className="fi fi-bs-pencil"></i>
-                        </p>
-                      </DialogTrigger>
-                      <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
-                        <DialogHeader>
-                          <DialogTitle>Edit profile</DialogTitle>
-                          <DialogDescription>
-                            Make changes to your profile here. Click save when
-                            you're done.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <EditProfile
-                          data={profileData?.data}
-                          updateProfileData={updateProfileData}
-                          closeDialog={closeEditDialog}
-                        />
-                      </DialogContent>
-                    </Dialog>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <p className="cursor-pointer p-0 h-8 w-8 flex items-center justify-center bg-[#B9A7FF]/20 text-[#6648D6] rounded-md">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
+                  {!isPublic && (
+                    <div className="flex space-x-4 sm:absolute right-5 top-16">
+                      <Dialog
+                        open={isEditDialogOpen}
+                        onOpenChange={setEditDialogOpen}
+                      >
+                        <DialogTrigger asChild>
+                          <p
+                            className="cursor-pointer p-0 h-8 w-8 flex items-center justify-center bg-[#B9A7FF]/20 text-[#6648D6] rounded-md"
+                            onClick={() => setEditDialogOpen(true)}
                           >
-                            <path
-                              d="M14.5935 8.45565C14.7766 8.29872 14.8682 8.22025 14.9017 8.12687C14.9311 8.04492 14.9311 7.95527 14.9017 7.87332C14.8682 7.77995 14.7766 7.70148 14.5935 7.54454L8.24047 2.09908C7.9253 1.82893 7.76772 1.69385 7.6343 1.69055C7.51835 1.68767 7.40759 1.73861 7.33432 1.82852C7.25 1.93197 7.25 2.13952 7.25 2.55463V5.77607C5.64899 6.05616 4.1837 6.86741 3.09478 8.0855C1.90762 9.41348 1.25093 11.1321 1.25 12.9133V13.3723C2.03701 12.4242 3.01963 11.6575 4.13057 11.1245C5.11002 10.6547 6.16881 10.3763 7.25 10.303V13.4456C7.25 13.8607 7.25 14.0682 7.33432 14.1717C7.40759 14.2616 7.51835 14.3125 7.6343 14.3096C7.76772 14.3063 7.9253 14.1713 8.24047 13.9011L14.5935 8.45565Z"
-                              stroke="#6648D6"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </p>
-                      </DialogTrigger>
-                      <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
-                        <DialogHeader>
-                          <DialogTitle>Share profile</DialogTitle>
-                          <DialogDescription>
-                            Share your profile with others.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <ShareProfile data={profileData?.data} />
-                      </DialogContent>
-                    </Dialog>
-                  </div>
+                            <i className="fi fi-bs-pencil"></i>
+                          </p>
+                        </DialogTrigger>
+                        <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
+                          <DialogHeader>
+                            <DialogTitle>Edit profile</DialogTitle>
+                            <DialogDescription>
+                              Make changes to your profile here. Click save when
+                              you're done.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <EditProfile
+                            data={profileData?.data}
+                            updateProfileData={updateProfileData}
+                            closeDialog={closeEditDialog}
+                          />
+                        </DialogContent>
+                      </Dialog>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <p className="cursor-pointer p-0 h-8 w-8 flex items-center justify-center bg-[#B9A7FF]/20 text-[#6648D6] rounded-md">
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 16 16"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M14.5935 8.45565C14.7766 8.29872 14.8682 8.22025 14.9017 8.12687C14.9311 8.04492 14.9311 7.95527 14.9017 7.87332C14.8682 7.77995 14.7766 7.70148 14.5935 7.54454L8.24047 2.09908C7.9253 1.82893 7.76772 1.69385 7.6343 1.69055C7.51835 1.68767 7.40759 1.73861 7.33432 1.82852C7.25 1.93197 7.25 2.13952 7.25 2.55463V5.77607C5.64899 6.05616 4.1837 6.86741 3.09478 8.0855C1.90762 9.41348 1.25093 11.1321 1.25 12.9133V13.3723C2.03701 12.4242 3.01963 11.6575 4.13057 11.1245C5.11002 10.6547 6.16881 10.3763 7.25 10.303V13.4456C7.25 13.8607 7.25 14.0682 7.33432 14.1717C7.40759 14.2616 7.51835 14.3125 7.6343 14.3096C7.76772 14.3063 7.9253 14.1713 8.24047 13.9011L14.5935 8.45565Z"
+                                stroke="#6648D6"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </p>
+                        </DialogTrigger>
+                        <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
+                          <DialogHeader>
+                            <DialogTitle>Share profile</DialogTitle>
+                            <DialogDescription>
+                              Share your profile with others.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <ShareProfile data={profileData?.data} />
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                  )}
                 </div>
                 <div className="relative flex gap-4 list-none h-8 justify-start mt-[-1rem] px-4 overflow-scroll no-scrollbar">
                   <p
@@ -392,7 +368,10 @@ const Profile = () => {
       <div className="col-span-1">
         <div className="grid grid-cols-1 gap-4">
           <div className="bg-white rounded-2xl p-4 mb-4 lg:mb-0">
-            <Socials data={profileData?.data.socials ?? {}} />
+            <Socials
+              data={profileData?.data.socials ?? {}}
+              isPublic={isPublic}
+            />
           </div>
           <div className="bg-white rounded-2xl p-4 mb-4 lg:mb-0">
             <KarmaPieChart data={pointFormattedData} />

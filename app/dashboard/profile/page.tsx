@@ -1,10 +1,34 @@
+"use client";
+import React, { useEffect, useState } from "react";
 import Profile from "@/components/madeups/profile";
-import React from "react";
+import { ProfileData } from "@/lib/dasboard";
 
-type Props = {};
+const Pages = () => {
+  const [profileData, setProfileData] = useState(null);
 
-const pages = (props: Props) => {
-  return <Profile />;
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const data = await ProfileData();
+        setProfileData(data);
+      } catch (error) {
+        console.error(error);
+        // Handle error
+      }
+    };
+
+    fetchProfileData();
+  }, []); // Empty dependency array to run the effect only once
+
+  if (!profileData) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <Profile data={profileData} isPublic={false} />
+    </div>
+  );
 };
 
-export default pages;
+export default Pages;

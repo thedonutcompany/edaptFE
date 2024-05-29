@@ -157,7 +157,8 @@ const NavBar = (props: Props) => {
               selected={selected}
               onClick={() => {
                 new Promise((resolve) => {
-                  Cookies.remove("token");
+                  Cookies.remove("access_token");
+                  Cookies.remove("refresh_token");
                   resolve("done");
                 })
                   .then(() => {

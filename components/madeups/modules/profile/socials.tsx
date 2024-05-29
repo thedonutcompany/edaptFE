@@ -13,9 +13,10 @@ type Props = {
   data: {
     [key in SocialPlatforms]: string | null;
   };
+  isPublic: boolean;
 };
 
-const Socials = ({ data }: Props) => {
+const Socials = ({ data, isPublic }: Props) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [socials, setSocials] = useState(data);
 
@@ -36,20 +37,33 @@ const Socials = ({ data }: Props) => {
   const handleSubmit = async (socials: Props["data"]) => {
     // console.log(socials);
     // if the socials is an empty string then pass it as null
-    for (const key in socials) {
-      if (socials[key as SocialPlatforms] === "") {
-        socials[key as SocialPlatforms] = null;
+    if (edit) {
+      for (const key in socials) {
+        if (socials[key as SocialPlatforms] === "") {
+          socials[key as SocialPlatforms] = null;
+        }
       }
-    }
-    try {
-      socialsUpdate(socials);
-    } catch (error: any) {
-      console.log(error);
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: error.message,
-      });
+      new Promise<void>((resolve, reject) => {
+        socialsUpdate(socials)
+          .then(() => resolve())
+          .catch((error) => reject(error));
+      })
+        .then(() => {
+          setEdit(!edit);
+          toast({
+            variant: "default",
+            title: "Socials updated",
+          });
+        })
+        .catch((error) => {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "Invalid url not updated",
+          });
+        });
+    } else {
+      setEdit(!edit);
     }
   };
 
@@ -57,15 +71,16 @@ const Socials = ({ data }: Props) => {
     <>
       <div className="p-0 flex justify-between">
         <h2>Connect your Socials</h2>
-        <p
-          className="cursor-pointer p-0 h-8 w-8 flex items-center justify-center bg-[#B9A7FF]/20 text-[#6648D6] rounded-md"
-          onClick={() => {
-            if (edit) handleSubmit(socials);
-            setEdit(!edit);
-          }}
-        >
-          <i className={`fi ${!edit ? "fi-bs-pencil" : "fi-br-check"}`}></i>
-        </p>
+        {!isPublic && (
+          <p
+            className="cursor-pointer p-0 h-8 w-8 flex items-center justify-center bg-[#B9A7FF]/20 text-[#6648D6] rounded-md"
+            onClick={() => {
+              handleSubmit(socials);
+            }}
+          >
+            <i className={`fi ${!edit ? "fi-bs-pencil" : "fi-br-check"}`}></i>
+          </p>
+        )}
       </div>
       <div className="flex w-full gap-4 mt-4">
         {Object.keys(socials).filter((platform) => socials[platform]).length ===

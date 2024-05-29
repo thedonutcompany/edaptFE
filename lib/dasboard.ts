@@ -6,7 +6,8 @@ export const ProfileData = async () => {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    throw new Error("Failed to fetch profile data");
+    console.error("Failed to fetch profile data:", error);
+    return null; // Return null or an empty object instead of throwing an error
   }
 };
 
@@ -25,6 +26,8 @@ export const socialsUpdate = async (data: any) => {
     console.log(response.data);
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response);
+    console.log(JSON.stringify(error.response.data.data));
+
+    throw new Error(error);
   }
 };

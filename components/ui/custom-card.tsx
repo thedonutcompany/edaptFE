@@ -2,7 +2,7 @@ import React from "react";
 
 interface CardProps {
   label: string;
-  value: string;
+  value: number | string;
   icon: string;
   iconBgColor: string;
   iconTextColor: string;

@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,6 +31,9 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { profileDataType } from "../../profile";
+import { ProfileUpdate } from "@/lib/dasboard";
+import { useToast } from "@/components/ui/use-toast";
 
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -44,30 +48,55 @@ const profileSchema = z.object({
 
 type ProfileFormData = z.infer<typeof profileSchema>;
 
-const EditProfile: React.FC = () => {
-  const [errors, setErrors] = useState<Record<string, string>>({});
+type EditProfileProps = {
+  data: profileDataType["data"];
+};
+
+const EditProfile: React.FC<EditProfileProps> = ({ data }) => {
+  const { toast } = useToast();
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: "",
+      name: data.name,
       surname: "",
-      email: "",
+      email: data.email,
       mobile: "",
       community: "",
-      gender: "Prefer not to say",
-      dateOfBirth: new Date(),
-      image: "",
+      gender: data.gender || "Prefer not to say",
+      dateOfBirth: data.dob ? new Date(data.dob) : undefined,
     },
   });
 
-  const onSubmit: SubmitHandler<ProfileFormData> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<ProfileFormData> = async (formData) => {
+    try {
+      const profileUpdateData = {
+        ...formData,
+        image: formData.image[0], // Only take the first file
+      };
+      await ProfileUpdate(profileUpdateData);
+    } catch (error: any) {
+      console.error(JSON.stringify(error));
+      // update zod error in any field
+      if (error.response && error.response.data) {
+        const serverErrors = error.response.data.data;
+        Object.keys(serverErrors).forEach((field) => {
+          form.setError(field as keyof ProfileFormData, {
+            type: "server",
+            message: serverErrors[field].join(" "),
+          });
+        });
+      }
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error.message,
+      });
+    }
   };
 
   return (
     <div className="flex flex-col gap-4">
-      {/* <h2 className="text-2xl font-bold">Edit Profile</h2> */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -196,9 +225,9 @@ const EditProfile: React.FC = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="M">Male</SelectItem>
+                      <SelectItem value="F">Female</SelectItem>
+                      <SelectItem value="O">Other</SelectItem>
                       <SelectItem value="Prefer not to say">
                         Prefer not to say
                       </SelectItem>
@@ -253,24 +282,18 @@ const EditProfile: React.FC = () => {
             />
           </div>
           <div>
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Image</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      className="block w-full text-sm text-slate-500 file:mr-4 file:py-0 file:px-0 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
-                      placeholder="image"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <FormItem className="flex flex-col">
+              <FormLabel>Image</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  className="block w-full text-sm text-slate-500 file:mr-4 file:py-0 file:px-0 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+                  placeholder="image"
+                  {...form.register("image")}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           </div>
           <div className="col-span-2">
             <Button type="submit" className="w-full">

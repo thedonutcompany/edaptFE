@@ -6,41 +6,78 @@ import CustomCard from "../ui/custom-card";
 import HeatmapComponent from "../ui/heatmap";
 import { ProfileData } from "@/lib/dasboard";
 import Socials from "./modules/profile/socials";
-import KarmaPieChart from "./modules/profile/karma-history";
+import KarmaPieChart from "./modules/profile/point-chart";
 import RecentKarma from "./modules/profile/recent-karma";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "../ui/button";
 import EditProfile from "./modules/profile/edit-profile";
 import ShareProfile from "./modules/profile/share-profile";
+import moment from "moment";
 
-type profileDataType = {
+// profileDataType.ts
+export type profileDataType = {
   data: {
     email: string;
     name: string;
+    dob: Date;
+    gender: string;
+    image: string;
+    created_at?: string;
+    socials: {
+      linkedin: string | null;
+      instagram: string | null;
+      github: string | null;
+      upwork: string | null;
+      pinterest: string | null;
+      twitter: string | null;
+      facebook: string | null;
+      youtube: string | null;
+      tiktok: string | null;
+    };
+    point: {
+      total_points: number;
+      average_points_this_month: number;
+      rank: number;
+      percentile: number;
+    };
+    point_distribution: {
+      title: string;
+      point: number;
+    }[];
+    point_log: {
+      created_at: string;
+      point: number;
+    }[];
+    point_history: {
+      point: number;
+      created_at: string;
+      title: string;
+    }[];
   };
 };
 
 const Profile = () => {
   const [profileList, setProfileList] = useState("basic-details");
-  const [profileData, setProfileData] = useState<profileDataType>({
-    data: { email: "", name: "" },
-  }); // Assuming profileData is an array
+  const [pointFormattedData, setPointFormattedData] = useState<
+    {
+      value: number;
+      color: string;
+      label: string;
+    }[]
+  >([]);
+  const [profileData, setProfileData] = useState<profileDataType>(); // Assuming profileData is an array
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
         const data = await ProfileData();
-        setProfileData(data);
+        // setProfileData(data);
       } catch (error) {
         console.error(error);
         // Handle error
@@ -50,6 +87,81 @@ const Profile = () => {
     fetchProfileData();
   }, []); // Empty dependency array to run the effect only once
   // console.log(profileData);
+
+  useEffect(() => {
+    setProfileData({
+      data: {
+        email: "muhammedzafar.mm@gmail.com",
+        name: "Muhammed Zafar",
+        dob: "2024-05-17T16:39:24Z",
+        gender: "",
+        image: "https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg",
+        created_at: "2024-05-17T16:39:24Z",
+        socials: {
+          linkedin: "https://www.linkedin.com/in/muhammed-zafar-mm/",
+          instagram: "https://www.instagram.com/zxfxr/",
+          github: "https://github.com/MZaFaRM",
+          upwork: null,
+          pinterest: null,
+          twitter: null,
+          facebook: null,
+          youtube: null,
+          tiktok: null,
+        },
+        point: {
+          total_points: 900.0,
+          average_points_this_month: 450.0,
+          rank: 1,
+          percentile: 100.0,
+        },
+        point_distribution: [
+          {
+            title: "Engineering 101",
+            point: 600.0,
+          },
+          {
+            title: "Mathematics 101",
+            point: 300.0,
+          },
+        ],
+        point_log: [
+          {
+            created_at: "2024-05-25T15:55:23Z",
+            point: 600.0,
+          },
+          {
+            created_at: "2024-05-25T15:55:23Z",
+            point: 300.0,
+          },
+        ],
+        point_history: [
+          {
+            point: 600.0,
+            created_at: "2024-05-25T15:55:23Z",
+            title: "Engineering 101",
+          },
+          {
+            point: 300.0,
+            created_at: "2024-05-25T15:55:23Z",
+            title: "Mathematics 101",
+          },
+        ],
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    const colors = ["#8892E8", "#81D4E6", "#FF6D6D", "#f0f"]; // Example color array
+
+    const formattedData = (profileData?.data?.point_distribution ?? []).map(
+      (item) => ({
+        value: item.point,
+        color: colors[Math.floor(Math.random() * colors.length)], // Random color selection
+        label: item.title,
+      })
+    );
+    setPointFormattedData(formattedData);
+  }, [profileData]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -65,7 +177,8 @@ const Profile = () => {
                       edapt
                     </p>
                     <p className="text-white text-xs sm:text-sm font-medium">
-                      Member since 2021
+                      Member since{" "}
+                      {profileData?.data?.created_at?.split("-")[0]}
                     </p>
                   </div>
                 </div>
@@ -94,9 +207,9 @@ const Profile = () => {
                       </span>
                     </div>
                     <div className="text-center sm:text-left">
-                      <h1>{profileData.data?.name}</h1>
+                      <h1>{profileData?.data?.name}</h1>
                       <p className="mt-[-5px] text-[#7A7A7A]">
-                        {profileData.data?.email}
+                        {profileData?.data?.email}
                       </p>
                       <p className="text-blue-600">LEVEL 1</p>
                     </div>
@@ -116,7 +229,7 @@ const Profile = () => {
                             you're done.
                           </DialogDescription>
                         </DialogHeader>
-                        <EditProfile />
+                        <EditProfile data={profileData?.data} />
                         {/* <DialogFooter>
                           <Button type="submit">Save changes</Button>
                         </DialogFooter> */}
@@ -187,43 +300,35 @@ const Profile = () => {
                   >
                     Karma History
                   </li>
-                  {/* <li
-                    onClick={() => setProfileList("mu-voyage")}
-                    className={`cursor-pointer min-w-[110px] ${
-                      profileList === "mu-voyage"
-                        ? "font-semibold text-black"
-                        : "text-gray-700"
-                    }`}
-                  >
-                    Join Edapt
-                  </li> */}
                 </div>
                 <div className="grid grid-cols-2 gap-4 m-5">
                   {[
                     {
                       title: "Karma",
-                      value: "200K",
+                      value: profileData?.data.point?.total_points ?? "0",
                       icon: "fi fi-sr-users",
                       iconBgColor: "bg-[#8280FF]/20",
                       iconTextColor: "text-[#3D42DF]",
                     },
                     {
                       title: "Avg.Karma/Mn",
-                      value: "10K",
+                      value:
+                        profileData?.data.point.average_points_this_month ??
+                        "0",
                       icon: "fi fi-rr-chart-line-up",
                       iconBgColor: "bg-[#4AD991]/20",
                       iconTextColor: "text-[#4AD991]",
                     },
                     {
                       title: "Rank",
-                      value: "45",
+                      value: profileData?.data.point.rank ?? "0",
                       icon: "fi fi-ss-cube",
                       iconBgColor: "bg-[#FEC53D]/20",
                       iconTextColor: "text-[#FEC53D]",
                     },
                     {
                       title: "Percentile",
-                      value: "100K",
+                      value: profileData?.data.point.percentile + "%" || "0%",
                       icon: "fi fi-br-time-past",
                       iconBgColor: "bg-[#FF9066]/20",
                       iconTextColor: "text-[#FF9066]",
@@ -242,41 +347,54 @@ const Profile = () => {
                   })}
                 </div>
               </div>
-              {
-                profileList === "basic-details" ? (
-                  <div className="bg-white rounded-2xl p-4">
-                    <div className="flex justify-center overflow-scroll bg-white rounded-lg no-scrollbar">
-                      <HeatmapComponent data={[]} year={2021} />
-                    </div>
+              {profileList === "basic-details" ? (
+                <div className="bg-white rounded-2xl p-4">
+                  <div className="flex justify-center overflow-scroll bg-white rounded-lg no-scrollbar">
+                    <HeatmapComponent
+                      data={profileData?.data.point_history ?? []}
+                      year={parseInt(
+                        profileData?.data?.created_at?.split("-")[0] ?? ""
+                      )}
+                    />
                   </div>
-                ) : (
-                  profileList === "karma-history" && (
-                    <div className="flex gap-10 max-w-full overflow-scroll no-scrollbar">
-                      {[1, 2, 3, 4].map((i) => {
+                </div>
+              ) : (
+                profileList === "karma-history" && (
+                  <div className="flex gap-10 max-w-full overflow-scroll no-scrollbar">
+                    {profileData?.data?.point_history ? (
+                      profileData?.data?.point_history.map((data, i) => {
                         return (
                           <div
                             key={i}
                             className="bg-white flex flex-col gap-8  justify-center text-center rounded-2xl p-4 border border-[#020897] h-72 w-56 min-w-56"
                           >
                             <h1>
-                              200 X <br />
+                              {data.point} X <br />
                               Karma
                             </h1>
                             <div>
                               <h3>Awarded for</h3>
-                              <p>#Introduction to github pages</p>
+                              <p>#{data.title}</p>
                             </div>
-                            <p>a year ago</p>
+                            <p>
+                              {moment
+                                .utc(data.created_at)
+                                .local()
+                                .startOf("seconds")
+                                .fromNow()}
+                              {/* {new Date(data.created_at).toLocaleDateString()} */}
+                            </p>
                           </div>
                         );
-                      })}
-                    </div>
-                  )
+                      })
+                    ) : (
+                      <div>
+                        <p>There is no recent recent activities</p>
+                      </div>
+                    )}
+                  </div>
                 )
-                //  : (
-                //   profileList === "mu-voyage" && <div></div>
-                // )
-              }
+              )}
             </div>
           </div>
         </div>
@@ -285,13 +403,13 @@ const Profile = () => {
       <div className="col-span-1">
         <div className="grid grid-cols-1 gap-4">
           <div className="bg-white rounded-2xl p-4 mb-4 lg:mb-0">
-            <Socials />
+            <Socials data={profileData?.data.socials ?? {}} />
           </div>
           <div className="bg-white rounded-2xl p-4 mb-4 lg:mb-0">
-            <KarmaPieChart />
+            <KarmaPieChart data={pointFormattedData} />
           </div>
           <div className="bg-white rounded-2xl p-4 mb-4 md:mb-0">
-            <RecentKarma />
+            <RecentKarma data={profileData?.data.point_history ?? []} />
           </div>
         </div>
       </div>

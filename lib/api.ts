@@ -1,18 +1,25 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const api = axios.create({
+export const publicGateway = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // Use environment variables for the API base URL
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-api.interceptors.request.use(
+export const privateGateway = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // Use environment variables for the API base URL
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+privateGateway.interceptors.request.use(
   (config) => {
-    const token = Cookies.get("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const access_token = Cookies.get("access_token");
+    if (access_token) {
+      config.headers.Authorization = `Bearer ${access_token}`;
     }
     return config;
   },
@@ -21,16 +28,15 @@ api.interceptors.request.use(
   }
 );
 
-api.interceptors.response.use(
+privateGateway.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response.status === 401) {
       // Handle token expiry or unauthorized access
-      Cookies.remove("token");
-      window.location.href = "/signin";
+      console.log("Token expired or unauthorized access");
+      // Cookies.remove("token");
+      // window.location.href = "/signin";
     }
     return Promise.reject(error);
   }
 );
-
-export default api;

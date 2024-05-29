@@ -1,8 +1,13 @@
 import { PieChart } from "@mui/x-charts/PieChart";
 import React from "react";
 
-type Props = {};
-
+type Props = {
+  data: {
+    value: number;
+    color: string;
+    label: string;
+  }[];
+};
 const KarmaPieChart = (props: Props) => {
   return (
     <>
@@ -13,11 +18,7 @@ const KarmaPieChart = (props: Props) => {
         <PieChart
           series={[
             {
-              data: [
-                { value: 50, color: "#8892E8", label: "Label 1" },
-                { value: 20, color: "#81D4E6", label: "Label 2" },
-                { value: 30, color: "#FF6D6D", label: "Label 3" },
-              ],
+              data: props.data,
               // arcLabel: "value",
               innerRadius: 30,
               outerRadius: "80%",

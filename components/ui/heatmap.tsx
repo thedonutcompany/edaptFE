@@ -8,19 +8,24 @@ import {
 import moment from "moment";
 
 type Props = {
-  data: { task_name: string; karma: string; created_date: string }[];
-  year: number;
+  data: { title: string; point: number; created_at: string }[];
+  year: any;
 };
 
-const HeatmapComponent = ({ data, year: initialYear }: Props) => {
+const HeatmapComponent = (props: Props) => {
   const currentYear = new Date().getFullYear();
-  const [year, setYear] = useState(initialYear);
+  const [year, setYear] = useState(currentYear);
   const startDate = moment(`${year}-01-01`);
   const endDate = moment(`${year}-12-31`);
   const totalDays = endDate.diff(startDate, "days") + 1;
   const content: JSX.Element[] = [];
 
-  const dataYearFiltered = ["2021", "2022"];
+  const dataYearFiltered = props.data
+    ? props.data.filter(
+        (item) =>
+          item.created_at && item.created_at.slice(0, 4) === year.toString()
+      )
+    : [];
 
   const dataDayFiltered: {
     date: string;
@@ -28,15 +33,15 @@ const HeatmapComponent = ({ data, year: initialYear }: Props) => {
     taskCount: number;
   }[] = dataYearFiltered.reduce(
     (acc: { date: string; totalKarma: number; taskCount: number }[], item) => {
-      const date = "2021-01-01";
+      const date = item.created_at.slice(0, 10);
       const existingItem = acc.find((el) => el.date === date);
       if (existingItem) {
-        existingItem.totalKarma += parseInt("200");
+        existingItem.totalKarma += parseInt(item.point.toString());
         existingItem.taskCount += 1;
       } else {
         acc.push({
           date,
-          totalKarma: parseInt("1000"),
+          totalKarma: parseInt(item.point.toString()),
           taskCount: 1,
         });
       }
@@ -47,9 +52,10 @@ const HeatmapComponent = ({ data, year: initialYear }: Props) => {
 
   const renderSquares = () => {
     let currentDate = moment(startDate);
-    let currentWeekday = currentDate.isoWeekday();
+    let currentWeekday = currentDate.isoWeekday(); // Get the ISO weekday (1-7, Monday-Sunday) of the start date
     let emptySquaresCount = currentWeekday - 7;
 
+    // Render empty squares for the first week
     for (let i = 0; i < emptySquaresCount; i++) {
       content.push(<p key={`empty_${i}`}></p>);
     }
@@ -59,7 +65,7 @@ const HeatmapComponent = ({ data, year: initialYear }: Props) => {
       const existingItem = dataDayFiltered.find(
         (item) => item.date === dateString
       );
-      const totalKarma = existingItem?.totalKarma ?? 0;
+      const totalKarma = existingItem?.totalKarma ?? 0; // Use nullish coalescing operator to provide a default value
       const backgroundColor =
         totalKarma >= 500
           ? "#00814a"
@@ -71,7 +77,7 @@ const HeatmapComponent = ({ data, year: initialYear }: Props) => {
           ? "#2dce899e"
           : totalKarma > 0
           ? "#2dce897d"
-          : "#EEEEEE";
+          : "";
       const tooltipContent = existingItem
         ? `Total Task: ${
             existingItem.taskCount
@@ -107,7 +113,7 @@ const HeatmapComponent = ({ data, year: initialYear }: Props) => {
 
   const renderYearButtons = () => {
     const years = [];
-    for (let y = initialYear; y <= currentYear; y++) {
+    for (let y = props.year; y <= currentYear; y++) {
       years.push(
         <p
           key={y}

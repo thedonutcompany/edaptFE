@@ -15,7 +15,7 @@ export const ProfileUpdate = async (data: any) => {
     const response = await privateGateway.patch("/profile/", data);
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response.data);
+    throw new Error(error.response.data.data);
   }
 };
 

@@ -42,8 +42,8 @@ const profileSchema = z.object({
   mobile: z.string().optional(),
   community: z.string().optional(),
   gender: z.string().optional(),
-  dateOfBirth: z.date().optional(),
-  image: z.any().optional(),
+  dob: z.date().optional(),
+  // image: z.any().optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -62,19 +62,20 @@ const EditProfile: React.FC<EditProfileProps> = ({
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: data.name,
-      surname: "",
+      name: data.name.split(" ")[0],
+      surname: data.name.split("")[1],
       email: data.email,
       mobile: "",
       community: "",
       gender: data.gender || "Prefer not to say",
-      dateOfBirth: data.dob ? new Date(data.dob) : undefined,
+      dob: data.dob ? new Date() : undefined,
     },
   });
 
   const onSubmit: SubmitHandler<ProfileFormData> = async (formData) => {
     try {
-      const profileUpdateData = { ...formData, image: formData.image[0] };
+      // console.log(formData.image);
+      // const profileUpdateData = { ...formData, image: formData.image[0] };
       const updatedProfileData = await ProfileUpdate(formData);
       updateProfileData(updatedProfileData);
       toast({
@@ -246,7 +247,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
           <div>
             <FormField
               control={form.control}
-              name="dateOfBirth"
+              name="dob"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Date of birth</FormLabel>
@@ -287,6 +288,10 @@ const EditProfile: React.FC<EditProfileProps> = ({
             />
           </div>
           <div>
+            {/* <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => ( */}
             <FormItem className="flex flex-col">
               <FormLabel>Image</FormLabel>
               <FormControl>
@@ -294,11 +299,13 @@ const EditProfile: React.FC<EditProfileProps> = ({
                   type="file"
                   className="block w-full text-sm text-slate-500 file:mr-4 file:py-0 file:px-0 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
                   placeholder="image"
-                  {...form.register("image")}
+                  {...form}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
+            {/* )}
+            /> */}
           </div>
           <div className="col-span-2">
             <Button type="submit" className="w-full">

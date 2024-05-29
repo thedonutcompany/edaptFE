@@ -94,7 +94,7 @@ const ShareProfile: React.FC<Props> = () => {
             )
           }
         >
-          <Facebook className="text-green-500" />
+          <i className="fi fi-brands-whatsapp text-green-600 text-2xl h-full"></i>
           <span>Whatsapp</span>
         </Button>
         <Button
@@ -107,7 +107,7 @@ const ShareProfile: React.FC<Props> = () => {
             )
           }
         >
-          <Twitter className="text-blue-500" />
+          <i className="fi fi-brands-twitter text-blue-500 text-2xl h-full leading-none"></i>{" "}
           <span>Twitter</span>
         </Button>
       </div>

@@ -19,6 +19,7 @@ import {
 import EditProfile from "./modules/profile/edit-profile";
 import ShareProfile from "./modules/profile/share-profile";
 import moment from "moment";
+import { useUserStore } from "@/lib/store/useUserStore";
 
 // profileDataType.ts
 export type profileDataType = {
@@ -63,6 +64,7 @@ export type profileDataType = {
 };
 
 const Profile = () => {
+  const { userName, setUserName } = useUserStore();
   const [profileList, setProfileList] = useState("basic-details");
   const [pointFormattedData, setPointFormattedData] = useState<
     {
@@ -115,6 +117,10 @@ const Profile = () => {
 
     fetchProfileData();
   }, []); // Empty dependency array to run the effect only once
+
+  useEffect(() => {
+    setUserName(profileData.data.name);
+  }, [profileData.data.name, setUserName]);
   // console.log(profileData);
 
   useEffect(() => {
@@ -124,7 +130,7 @@ const Profile = () => {
       (item) => ({
         value: item.point,
         color: colors[Math.floor(Math.random() * colors.length)], // Random color selection
-        label: item.title,
+        label: item.title.split(" ").join("\n"),
       })
     );
     setPointFormattedData(formattedData);
@@ -334,7 +340,7 @@ const Profile = () => {
               ) : (
                 profileList === "karma-history" && (
                   <div className="flex gap-10 max-w-full overflow-scroll no-scrollbar">
-                    {profileData?.data?.point_history ? (
+                    {profileData?.data?.point_history.length > 0 ? (
                       profileData?.data?.point_history.map((data, i) => {
                         return (
                           <div
@@ -361,8 +367,15 @@ const Profile = () => {
                         );
                       })
                     ) : (
-                      <div>
-                        <p>There is no recent recent activities</p>
+                      <div className="flex bg-white w-full rounded-2xl p-2 flex-col m-auto justify-center items-center">
+                        <Image
+                          alt="nodata"
+                          src="/assets/images/nodata.jpg"
+                          height={500}
+                          width={500}
+                          className="h-52 w-52 m-auto"
+                        />
+                        <p className="text-slate-500">No data to show</p>
                       </div>
                     )}
                   </div>

@@ -2,9 +2,13 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import Cookies from "js-cookie";
+import { useUserStore } from "@/lib/store/useUserStore";
 type Props = {};
 
 const NavBar = (props: Props) => {
+  const { userName } = useUserStore();
+  // console.log(userName);
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>("Homepage");
 
@@ -55,7 +59,7 @@ const NavBar = (props: Props) => {
                 />
               </a>
               <h1 className="hidden md:block font-semibold text-gray-900 dark:text-white">
-                Hi! Aditya Raj 👋
+                Hi! {userName} 👋
               </h1>
             </div>
             <div className="flex items-center">

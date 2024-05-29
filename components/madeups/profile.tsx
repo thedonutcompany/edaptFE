@@ -71,7 +71,36 @@ const Profile = () => {
       label: string;
     }[]
   >([]);
-  const [profileData, setProfileData] = useState<profileDataType>(); // Assuming profileData is an array
+  const [profileData, setProfileData] = useState<profileDataType>({
+    data: {
+      email: "",
+      name: "",
+      dob: new Date(),
+      gender: "",
+      image: "",
+      created_at: "",
+      socials: {
+        linkedin: null,
+        instagram: null,
+        github: null,
+        upwork: null,
+        pinterest: null,
+        twitter: null,
+        facebook: null,
+        youtube: null,
+        tiktok: null,
+      },
+      point: {
+        total_points: 0,
+        average_points_this_month: 0,
+        rank: 0,
+        percentile: 0,
+      },
+      point_distribution: [],
+      point_log: [],
+      point_history: [],
+    },
+  });
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -100,6 +129,9 @@ const Profile = () => {
     );
     setPointFormattedData(formattedData);
   }, [profileData]);
+  const updateProfileData = (newData: any) => {
+    setProfileData(newData);
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -167,7 +199,10 @@ const Profile = () => {
                             you're done.
                           </DialogDescription>
                         </DialogHeader>
-                        <EditProfile data={profileData?.data} />
+                        <EditProfile
+                          data={profileData?.data}
+                          updateProfileData={updateProfileData}
+                        />
                         {/* <DialogFooter>
                           <Button type="submit">Save changes</Button>
                         </DialogFooter> */}

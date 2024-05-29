@@ -50,9 +50,13 @@ type ProfileFormData = z.infer<typeof profileSchema>;
 
 type EditProfileProps = {
   data: profileDataType["data"];
+  updateProfileData: any;
 };
 
-const EditProfile: React.FC<EditProfileProps> = ({ data }) => {
+const EditProfile: React.FC<EditProfileProps> = ({
+  data,
+  updateProfileData,
+}) => {
   const { toast } = useToast();
 
   const form = useForm<ProfileFormData>({
@@ -70,14 +74,15 @@ const EditProfile: React.FC<EditProfileProps> = ({ data }) => {
 
   const onSubmit: SubmitHandler<ProfileFormData> = async (formData) => {
     try {
-      const profileUpdateData = {
-        ...formData,
-        image: formData.image[0], // Only take the first file
-      };
-      await ProfileUpdate(profileUpdateData);
+      const profileUpdateData = { ...formData, image: formData.image[0] };
+      const updatedProfileData = await ProfileUpdate(formData);
+      updateProfileData(updatedProfileData);
+      toast({
+        variant: "default",
+        title: "Profile updated successfully",
+      });
     } catch (error: any) {
-      console.error(JSON.stringify(error));
-      // update zod error in any field
+      console.error(error);
       if (error.response && error.response.data) {
         const serverErrors = error.response.data.data;
         Object.keys(serverErrors).forEach((field) => {

@@ -42,7 +42,7 @@ const profileSchema = z.object({
   community: z.string().optional(),
   gender: z.string().optional(),
   dob: z.date().optional(),
-  // image: z.any().optional(),
+  image: z.any().optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -67,6 +67,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
       email: data.email,
       mobile: "",
       community: "",
+      image: data.image || "",
       gender: data.gender || "Prefer not to say",
       dob: data.dob ? new Date(data.dob) : undefined, // Ensure dob is correctly initialized
     },
@@ -80,6 +81,10 @@ const EditProfile: React.FC<EditProfileProps> = ({
         : undefined;
 
       const profileUpdateData = { ...formData, dob: formattedDob };
+      if (formData.image === data.image) {
+        delete profileUpdateData.image;
+      }
+
       const updatedProfileData = await ProfileUpdate(profileUpdateData);
       updateProfileData(updatedProfileData);
       toast({
@@ -254,11 +259,13 @@ const EditProfile: React.FC<EditProfileProps> = ({
             <FormItem className="flex flex-col">
               <FormLabel>Image</FormLabel>
               <FormControl>
-                <Input
+                <input
                   type="file"
+                  multiple={false}
+                  accept="image/*"
+                  onChange={(e) => form.setValue("image", e.target.files[0])}
                   className="block w-full text-sm text-slate-500 file:mr-4 file:py-0 file:px-0 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
                   placeholder="image"
-                  {...form}
                 />
               </FormControl>
               <FormMessage />

@@ -58,39 +58,44 @@ const Socials = ({ data }: Props) => {
         </p>
       </div>
       <div className="flex w-full gap-4 mt-4">
-        <Tabs defaultValue="linkedin" className="">
-          <TabsList className="bg-transparent w-full h-auto flex flex-wrap justify-start">
-            {Object.keys(socials)
-              .filter((platform) => edit || socials[platform])
-              .map((platform) => (
-                <TabsTrigger key={platform} value={platform} className="p-0">
-                  <div className="flex items-center justify-center h-12 w-12 bg-gray-200/10 text-[#585EFB] rounded-md text-3xl leading-none">
-                    {platform === "upwork" ? (
-                      <UpworkIcon />
-                    ) : (
-                      <i className={`fi fi-brands-${platform}`}></i>
-                    )}
-                  </div>
-                </TabsTrigger>
-              ))}
-          </TabsList>
-          {edit && (
-            <>
-              {Object.keys(socials).map((platform) => (
-                <TabsContent key={platform} value={platform}>
-                  <Input
-                    key={platform}
-                    type="url"
-                    placeholder={`www.${platform}.com/`}
-                    className="w-full mt-4"
-                    value={socials[platform] || ""}
-                    onChange={(e) => handleInputChange(e, platform)}
-                  />
-                </TabsContent>
-              ))}
-            </>
-          )}
-        </Tabs>
+        {Object.keys(socials).filter((platform) => socials[platform]).length ===
+          0 && !edit ? (
+          <i className="p-2 m-auto">Add your socials</i>
+        ) : (
+          <Tabs defaultValue="linkedin" className="">
+            <TabsList className="bg-transparent w-full h-auto flex flex-wrap justify-start">
+              {Object.keys(socials)
+                .filter((platform) => edit || socials[platform])
+                .map((platform) => (
+                  <TabsTrigger key={platform} value={platform} className="p-0">
+                    <div className="flex items-center justify-center h-12 w-12 bg-gray-200/10 text-[#585EFB] rounded-md text-3xl leading-none">
+                      {platform === "upwork" ? (
+                        <UpworkIcon />
+                      ) : (
+                        <i className={`fi fi-brands-${platform}`}></i>
+                      )}
+                    </div>
+                  </TabsTrigger>
+                ))}
+            </TabsList>
+            {edit && (
+              <>
+                {Object.keys(socials).map((platform) => (
+                  <TabsContent key={platform} value={platform}>
+                    <Input
+                      key={platform}
+                      type="url"
+                      placeholder={`www.${platform}.com/`}
+                      className="w-full mt-4"
+                      value={socials[platform] || ""}
+                      onChange={(e) => handleInputChange(e, platform)}
+                    />
+                  </TabsContent>
+                ))}
+              </>
+            )}
+          </Tabs>
+        )}
       </div>
     </>
   );

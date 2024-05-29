@@ -64,7 +64,9 @@ export type profileDataType = {
 };
 
 const Profile = () => {
-  const { userName, setUserName } = useUserStore();
+  const { setUserName } = useUserStore();
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
+  const closeEditDialog = () => setEditDialogOpen(false);
   const [profileList, setProfileList] = useState("basic-details");
   const [pointFormattedData, setPointFormattedData] = useState<
     {
@@ -191,9 +193,15 @@ const Profile = () => {
                     </div>
                   </div>
                   <div className="flex space-x-4 sm:absolute right-5 top-16">
-                    <Dialog>
-                      <DialogTrigger>
-                        <p className="cursor-pointer p-0 h-8 w-8 flex items-center justify-center bg-[#B9A7FF]/20 text-[#6648D6] rounded-md">
+                    <Dialog
+                      open={isEditDialogOpen}
+                      onOpenChange={setEditDialogOpen}
+                    >
+                      <DialogTrigger asChild>
+                        <p
+                          className="cursor-pointer p-0 h-8 w-8 flex items-center justify-center bg-[#B9A7FF]/20 text-[#6648D6] rounded-md"
+                          onClick={() => setEditDialogOpen(true)}
+                        >
                           <i className="fi fi-bs-pencil"></i>
                         </p>
                       </DialogTrigger>
@@ -208,14 +216,12 @@ const Profile = () => {
                         <EditProfile
                           data={profileData?.data}
                           updateProfileData={updateProfileData}
+                          closeDialog={closeEditDialog}
                         />
-                        {/* <DialogFooter>
-                          <Button type="submit">Save changes</Button>
-                        </DialogFooter> */}
                       </DialogContent>
                     </Dialog>
                     <Dialog>
-                      <DialogTrigger>
+                      <DialogTrigger asChild>
                         <p className="cursor-pointer p-0 h-8 w-8 flex items-center justify-center bg-[#B9A7FF]/20 text-[#6648D6] rounded-md">
                           <svg
                             width="16"
@@ -242,9 +248,6 @@ const Profile = () => {
                           </DialogDescription>
                         </DialogHeader>
                         <ShareProfile />
-                        {/* <DialogFooter>
-                          <Button type="submit">Save changes</Button>
-                        </DialogFooter> */}
                       </DialogContent>
                     </Dialog>
                   </div>

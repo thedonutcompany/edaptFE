@@ -37,7 +37,6 @@ import { useToast } from "@/components/ui/use-toast";
 
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  surname: z.string().min(1, "Surname is required"),
   email: z.string().email("Invalid email address"),
   mobile: z.string().optional(),
   community: z.string().optional(),
@@ -51,37 +50,43 @@ type ProfileFormData = z.infer<typeof profileSchema>;
 type EditProfileProps = {
   data: profileDataType["data"];
   updateProfileData: any;
+  closeDialog: () => void; // Add closeDialog prop
 };
 
 const EditProfile: React.FC<EditProfileProps> = ({
   data,
   updateProfileData,
+  closeDialog,
 }) => {
   const { toast } = useToast();
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: data.name.split(" ")[0],
-      surname: data.name.split("")[1],
+      name: data.name,
       email: data.email,
       mobile: "",
       community: "",
       gender: data.gender || "Prefer not to say",
-      dob: data.dob ? new Date() : undefined,
+      dob: data.dob ? new Date(data.dob) : undefined, // Ensure dob is correctly initialized
     },
   });
 
   const onSubmit: SubmitHandler<ProfileFormData> = async (formData) => {
     try {
-      // console.log(formData.image);
-      // const profileUpdateData = { ...formData, image: formData.image[0] };
-      const updatedProfileData = await ProfileUpdate(formData);
+      // Format dob to 'YYYY-MM-DD' before sending to backend
+      const formattedDob = formData.dob
+        ? format(formData.dob, "yyyy-MM-dd")
+        : undefined;
+
+      const profileUpdateData = { ...formData, dob: formattedDob };
+      const updatedProfileData = await ProfileUpdate(profileUpdateData);
       updateProfileData(updatedProfileData);
       toast({
         variant: "default",
         title: "Profile updated successfully",
       });
+      closeDialog();
     } catch (error: any) {
       console.error(error);
       if (error.response && error.response.data) {
@@ -114,30 +119,11 @@ const EditProfile: React.FC<EditProfileProps> = ({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Full Name</FormLabel>
                   <FormControl>
                     <Input
                       className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
                       placeholder="Type your name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div>
-            <FormField
-              control={form.control}
-              name="surname"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Surname</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
-                      placeholder="Type your surname"
                       {...field}
                     />
                   </FormControl>
@@ -179,36 +165,6 @@ const EditProfile: React.FC<EditProfileProps> = ({
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div>
-            <FormField
-              control={form.control}
-              name="community"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Community</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Communities" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Mulearn">Mulearn</SelectItem>
-                      <SelectItem value="GDSC">GDSC</SelectItem>
-                      <SelectItem value="IEEE">IEEE</SelectItem>
-                      <SelectItem value="Prefer not to say">
-                        Prefer not to say
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -272,6 +228,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
+                        captionLayout="dropdown-buttons"
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
@@ -279,6 +236,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
                           date > new Date() || date < new Date("1900-01-01")
                         }
                         initialFocus
+                        fromYear={1960}
+                        toYear={2030}
                       />
                     </PopoverContent>
                   </Popover>

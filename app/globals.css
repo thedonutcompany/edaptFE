@@ -106,3 +106,12 @@
     border-image-slice: 1;
   }
 }
+
+/* 
+.rdp [aria-hidden="true"] {
+  @apply hidden;
+} */
+
+.rdp-vhidden {
+  @apply hidden;
+}

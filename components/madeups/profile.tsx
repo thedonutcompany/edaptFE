@@ -89,68 +89,6 @@ const Profile = () => {
   // console.log(profileData);
 
   useEffect(() => {
-    setProfileData({
-      data: {
-        email: "muhammedzafar.mm@gmail.com",
-        name: "Muhammed Zafar",
-        dob: "2024-05-17T16:39:24Z",
-        gender: "",
-        image: "https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg",
-        created_at: "2024-05-17T16:39:24Z",
-        socials: {
-          linkedin: "https://www.linkedin.com/in/muhammed-zafar-mm/",
-          instagram: "https://www.instagram.com/zxfxr/",
-          github: "https://github.com/MZaFaRM",
-          upwork: null,
-          pinterest: null,
-          twitter: null,
-          facebook: null,
-          youtube: null,
-          tiktok: null,
-        },
-        point: {
-          total_points: 900.0,
-          average_points_this_month: 450.0,
-          rank: 1,
-          percentile: 100.0,
-        },
-        point_distribution: [
-          {
-            title: "Engineering 101",
-            point: 600.0,
-          },
-          {
-            title: "Mathematics 101",
-            point: 300.0,
-          },
-        ],
-        point_log: [
-          {
-            created_at: "2024-05-25T15:55:23Z",
-            point: 600.0,
-          },
-          {
-            created_at: "2024-05-25T15:55:23Z",
-            point: 300.0,
-          },
-        ],
-        point_history: [
-          {
-            point: 600.0,
-            created_at: "2024-05-25T15:55:23Z",
-            title: "Engineering 101",
-          },
-          {
-            point: 300.0,
-            created_at: "2024-05-25T15:55:23Z",
-            title: "Mathematics 101",
-          },
-        ],
-      },
-    });
-  }, []);
-
-  useEffect(() => {
     const colors = ["#8892E8", "#81D4E6", "#FF6D6D", "#f0f"]; // Example color array
 
     const formattedData = (profileData?.data?.point_distribution ?? []).map(

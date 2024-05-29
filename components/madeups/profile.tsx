@@ -77,7 +77,7 @@ const Profile = () => {
     const fetchProfileData = async () => {
       try {
         const data = await ProfileData();
-        // setProfileData(data);
+        setProfileData(data);
       } catch (error) {
         console.error(error);
         // Handle error

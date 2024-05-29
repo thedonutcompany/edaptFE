@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { profileDataType } from "../../profile";
+
 import {
   TooltipTrigger,
   TooltipContent,
@@ -18,20 +20,26 @@ import { CopyIcon, Facebook, Twitter } from "lucide-react";
 // import { FaWhatsapp, FaTwitter } from "react-icons/fa";
 import Image from "next/image";
 
-type Props = {};
+type ShareProfileProps = {
+  data: profileDataType["data"];
+};
 
-const ShareProfile: React.FC<Props> = () => {
+const ShareProfile: React.FC<ShareProfileProps> = ({ data }) => {
   const [tooltipMessage, setTooltipMessage] = useState("Click to copy");
   const [popoverOpen, setPopoverOpen] = useState(false);
   const handleCopy = () => {
-    navigator.clipboard.writeText("https://example.com").then(() => {
-      setTooltipMessage("Copied!");
-      setPopoverOpen(true);
-      setTimeout(() => {
-        setTooltipMessage("Click to copy");
-        setPopoverOpen(false);
-      }, 2000);
-    });
+    navigator.clipboard
+      .writeText(
+        `${process.env.NEXT_PUBLIC_API_BASE_FRONTEND_URL}/profile/${data?.email}`
+      )
+      .then(() => {
+        setTooltipMessage("Copied!");
+        setPopoverOpen(true);
+        setTimeout(() => {
+          setTooltipMessage("Click to copy");
+          setPopoverOpen(false);
+        }, 2000);
+      });
   };
   return (
     <div className="w-full">
@@ -50,15 +58,15 @@ const ShareProfile: React.FC<Props> = () => {
           className="w-12 h-12 rounded-full mr-4"
         />
         <div>
-          <h3 className="text-lg font-semibold">Aditya Raj Kundra</h3>
-          <p className="text-sm text-gray-500">adityaraj2266@edapt</p>
-          <p className="text-sm text-blue-600">LEVEL 07</p>
+          <h3 className="text-lg font-semibold">{data?.name}</h3>
+          <p className="text-sm text-gray-500">{data?.email}</p>
+          {/* <p className="text-sm text-blue-600">LEVEL 07</p> */}
         </div>
       </div>
       <div className="relative w-full mb-4">
         <Input
           className="pr-10"
-          defaultValue="https://example.com"
+          defaultValue={`${process.env.NEXT_PUBLIC_API_BASE_FRONTEND_URL}/profile/${data?.email}`}
           type="text"
           readOnly
         />

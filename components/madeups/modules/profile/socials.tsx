@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UpworkIcon from "@/public/assets/svgs/upwork-icon";
 import { socialsUpdate } from "@/lib/dasboard";
+import { toast } from "@/components/ui/use-toast";
 
 // Define a type for the social platforms
 type SocialPlatforms = string;
@@ -32,15 +33,24 @@ const Socials = ({ data }: Props) => {
     });
   };
 
-  const handleSubmit = (socials: Props["data"]) => {
-    console.log(socials);
+  const handleSubmit = async (socials: Props["data"]) => {
+    // console.log(socials);
     // if the socials is an empty string then pass it as null
     for (const key in socials) {
       if (socials[key as SocialPlatforms] === "") {
         socials[key as SocialPlatforms] = null;
       }
     }
-    socialsUpdate(socials);
+    try {
+      socialsUpdate(socials);
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error.message,
+      });
+    }
   };
 
   return (

@@ -247,7 +247,7 @@ const Profile = () => {
                             Share your profile with others.
                           </DialogDescription>
                         </DialogHeader>
-                        <ShareProfile />
+                        <ShareProfile data={profileData?.data} />
                       </DialogContent>
                     </Dialog>
                   </div>

@@ -24,7 +24,7 @@ export const socialsUpdate = async (data: any) => {
     const response = await privateGateway.patch("/profile/socials/", data);
     console.log(response.data);
     return response.data;
-  } catch (error) {
-    throw new Error("Failed to update socials data");
+  } catch (error: any) {
+    throw new Error(error.response);
   }
 };

@@ -4,14 +4,14 @@ import Cookies from "js-cookie";
 export const publicGateway = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // Use environment variables for the API base URL
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type": "multipart/form-data",
   },
 });
 
 export const privateGateway = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // Use environment variables for the API base URL
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type": "multipart/form-data",
   },
 });
 

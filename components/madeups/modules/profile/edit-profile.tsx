@@ -92,11 +92,25 @@ const EditProfile: React.FC<EditProfileProps> = ({
       closeDialog();
     } catch (error: any) {
       console.error(error);
-      if (error.response && error.response.data) {
-        const serverErrors = error.response.data.data;
+      // console.log(error.response.data.data);
+      let errorMessage = error.message;
+
+      // Check if the error message is a JSON string
+      try {
+        const parsedError = JSON.parse(error.message);
+        if (typeof parsedError === "object" && parsedError !== null) {
+          errorMessage = JSON.stringify(parsedError, null, 2); // Pretty-print the error object
+        }
+      } catch (e) {
+        // Do nothing if parsing fails
+      }
+      console.log(JSON.parse(errorMessage));
+
+      if (errorMessage) {
+        const serverErrors = JSON.parse(errorMessage);
         Object.keys(serverErrors).forEach((field) => {
           form.setError(field as keyof ProfileFormData, {
-            type: "server",
+            type: "manual",
             message: serverErrors[field].join(" "),
           });
         });
@@ -104,7 +118,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: error.message,
+        // description: errorMessage,
       });
     }
   };

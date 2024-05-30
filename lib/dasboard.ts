@@ -16,7 +16,10 @@ export const ProfileUpdate = async (data: any) => {
     const response = await privateGateway.patch("/profile/", data);
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response.data.data);
+    // Extract the error message and include any additional information you need
+    const errorMessage =
+      error.response?.data?.data || "An error occurred during profile update.";
+    throw new Error(JSON.stringify(errorMessage)); // Stringify the error object to get more readable output
   }
 };
 

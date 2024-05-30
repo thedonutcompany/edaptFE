@@ -34,6 +34,8 @@ import { cn } from "@/lib/utils";
 import { profileDataType } from "../../profile";
 import { ProfileUpdate } from "@/lib/dasboard";
 import { useToast } from "@/components/ui/use-toast";
+import imageCompression from "browser-image-compression";
+import { Progress } from "@/components/ui/progress";
 
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -58,7 +60,9 @@ const EditProfile: React.FC<EditProfileProps> = ({
   closeDialog,
 }) => {
   const { toast } = useToast();
-
+  const [compressionProgress, setCompressionProgress] = useState<number>(0);
+  const [updateButtonDisable, setUpdateButtonDisable] =
+    useState<boolean>(false);
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -94,6 +98,11 @@ const EditProfile: React.FC<EditProfileProps> = ({
       console.error(error);
       // console.log(error.response.data.data);
       let errorMessage = error.message;
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: errorMessage ? errorMessage : error,
+      });
 
       // Check if the error message is a JSON string
       try {
@@ -115,11 +124,44 @@ const EditProfile: React.FC<EditProfileProps> = ({
           });
         });
       }
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        // description: errorMessage,
-      });
+    }
+  };
+  const imageLoader = (progress: number) => {
+    // Example: Update progress bar or loading indicator
+    setCompressionProgress(progress);
+    progress === 100 ? setUpdateButtonDisable(false) : null;
+    // Update UI to reflect progress
+  };
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setUpdateButtonDisable(true);
+    const file = event.target.files ? event.target.files[0] : null;
+    if (file) {
+      try {
+        const compressedFile = await imageCompression(file, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1024,
+          useWebWorker: true,
+          fileType: file.type,
+          onProgress: imageLoader,
+        });
+
+        const compressedFileWithOriginalName = new File(
+          [compressedFile],
+          file.name,
+          {
+            type: "images/*",
+          }
+        );
+        form.setValue("image", compressedFileWithOriginalName);
+        // console.log(compressedFileWithOriginalName, compressedFile);
+        // form.setValue("image", compressedFile);
+      } catch (error) {
+        console.error("Image compression error:", error);
+      }
+    } else {
+      form.setValue("image", "");
     }
   };
 
@@ -264,32 +306,30 @@ const EditProfile: React.FC<EditProfileProps> = ({
             />
           </div>
           <div>
-            {/* <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => ( */}
             <FormItem className="flex flex-col">
               <FormLabel>Image</FormLabel>
               <FormControl>
-                <input
-                  type="file"
-                  multiple={false}
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files ? e.target.files[0] : null;
-                    form.setValue("image", file ?? "");
-                  }}
-                  className="block w-full text-sm text-slate-500 file:mr-4 file:py-0 file:px-0 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
-                  placeholder="image"
-                />
+                <>
+                  <input
+                    type="file"
+                    multiple={false}
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="block w-full text-sm text-slate-500 file:mr-4 file:py-0 file:px-0 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+                    placeholder="image"
+                  />
+                  <Progress value={compressionProgress} />
+                </>
               </FormControl>
               <FormMessage />
             </FormItem>
-            {/* )}
-            /> */}
           </div>
           <div className="col-span-2">
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              disabled={updateButtonDisable}
+              className="w-full"
+            >
               Update profile
             </Button>
           </div>

@@ -98,8 +98,8 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
 
   useEffect(() => {
     setUserName(data?.data?.name);
-    setUserImageUrl(data?.data?.image_url);
-  }, [data?.data?.name, setUserName, setUserImageUrl, data?.data?.image_url]);
+    setUserImageUrl(profileData?.data?.image_url);
+  }, [data?.data?.name, setUserName, setUserImageUrl, profileData]);
   // console.log(profileData);
 
   useEffect(() => {

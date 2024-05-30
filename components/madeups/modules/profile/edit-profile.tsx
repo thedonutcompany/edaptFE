@@ -65,7 +65,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
       name: data.name,
       email: data.email,
       phone: data.phone,
-      image: data.image || "",
+      image: data.image_url || "",
       gender: data.gender || "Prefer not to say",
       dob: data.dob ? new Date(data.dob) : undefined, // Ensure dob is correctly initialized
     },
@@ -79,7 +79,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
         : undefined;
 
       const profileUpdateData = { ...formData, dob: formattedDob };
-      if (formData.image === data.image) {
+      if (formData.image === data.image_url) {
         delete profileUpdateData.image;
       }
 

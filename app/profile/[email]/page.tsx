@@ -31,8 +31,8 @@ export async function generateMetadata(
       images: {
         url: profileData.data.image_url,
         alt: "Preview image for ",
-        width: 1200,
-        height: 630,
+        width: 800,
+        height: 600,
       },
     },
   };

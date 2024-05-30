@@ -80,8 +80,8 @@ const NavBar = (props: Props) => {
                     <Image
                       src={userImageUrl}
                       alt="user photo"
-                      width={32}
-                      height={32}
+                      width={500}
+                      height={500}
                       className="rounded-full h-8 w-8 object-cover"
                     />
                   </button>

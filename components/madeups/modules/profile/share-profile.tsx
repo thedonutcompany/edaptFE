@@ -97,7 +97,7 @@ const ShareProfile: React.FC<ShareProfileProps> = ({ data }) => {
           className="flex items-center space-x-2"
           onClick={() =>
             window.open(
-              "https://wa.me/?text=https://app.edapt.org/profile/abhis...",
+              `https://wa.me/?text=${process.env.NEXT_PUBLIC_API_BASE_FRONTEND_URL}/profile/${data?.id}`,
               "_blank"
             )
           }
@@ -110,7 +110,7 @@ const ShareProfile: React.FC<ShareProfileProps> = ({ data }) => {
           className="flex items-center space-x-2"
           onClick={() =>
             window.open(
-              "https://twitter.com/intent/tweet?text=Check%20out%20this%20profile:%20https://app.edapt.org/profile/abhis...",
+              `https://twitter.com/intent/tweet?text=Check%20out%20this%20profile:%20${process.env.NEXT_PUBLIC_API_BASE_FRONTEND_URL}/profile/${data?.id}`,
               "_blank"
             )
           }

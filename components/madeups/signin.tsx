@@ -42,6 +42,7 @@ const SignIn = () => {
   const router = useRouter();
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<EmailFormData | OtpFormData>({
     resolver: zodResolver(isOtpSent ? otpSchema : emailSchema),
@@ -53,6 +54,8 @@ const SignIn = () => {
 
   const onSubmit: SubmitHandler<EmailFormData | OtpFormData> = async (data) => {
     try {
+      setIsLoading(true);
+
       if (isOtpSent) {
         const { email, otp } = data as OtpFormData;
         await verifyOtp(email, otp);
@@ -72,8 +75,10 @@ const SignIn = () => {
           description: "Please check your email for the OTP.",
         });
         setIsOtpSent(true);
+        setIsLoading(false);
       }
     } catch (error: any) {
+      setIsLoading(false);
       console.error(error);
       // update zod error in email
       if (error.message) {
@@ -165,6 +170,7 @@ const SignIn = () => {
                     <Button
                       type="button"
                       variant="link"
+                      disabled={isLoading}
                       onClick={resendOtp}
                       className=" text-[#456FF6] text-sm font-normal place-content-end justify-end text-right p-0 "
                     >
@@ -173,7 +179,11 @@ const SignIn = () => {
                   </div>
                 </div>
               )}
-              <Button type="submit" className="w-full bg-[#456FF6] px-6 py-6">
+              <Button
+                type="submit"
+                className="w-full bg-[#456FF6] px-6 py-6"
+                disabled={isLoading}
+              >
                 {isOtpSent ? "Verify OTP" : "Send OTP"}
               </Button>
             </form>

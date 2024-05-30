@@ -157,7 +157,7 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
                         alt="profile_pic"
                         width={150}
                         height={150}
-                        className="aspect-square rounded-full border-4 border-white sm:ml-8 mt-[-1.5rem] bg-light"
+                        className="aspect-square rounded-full border-4 border-white sm:ml-8 mt-[-1.5rem] bg-light object-cover"
                       />
                       <span className="absolute mr-2 mb-2 text-white flex justify-center">
                         {/* <i className="fi fi-sr-shield-check bg-blue-600 p-2 rounded-full"></i>

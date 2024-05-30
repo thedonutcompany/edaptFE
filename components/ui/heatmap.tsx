@@ -90,7 +90,7 @@ const HeatmapComponent = (props: Props) => {
           <Tooltip>
             <TooltipTrigger>
               <p
-                className="h-2.5 w-2.5 m-0.5 text-center text-[9px] rounded-[2px] bg-[#2dce891f] border border-solid"
+                className="h-3 aspect-square m-0.5 text-center text-[9px] rounded-[2px] bg-[#2dce891f] border border-solid"
                 style={{ backgroundColor }}
               ></p>
             </TooltipTrigger>
@@ -133,7 +133,12 @@ const HeatmapComponent = (props: Props) => {
 
   return (
     <div className="w-full max-w-[95%]">
-      <div className="flex gap-8 ml-6 justify-between w-[92%]">
+      <div className="flex flex-col justify-between h-[180px] pb-16 pt-7 absolute text-[11px] bg-white ml-[-18px] w-8">
+        <p>Mon</p>
+        <p>Wed</p>
+        <p>Fri</p>
+      </div>
+      <div className="flex gap-7 ml-6 justify-between w-[57rem]">
         <p>Jan</p>
         <p>Feb</p>
         <p>Mar</p>
@@ -147,11 +152,7 @@ const HeatmapComponent = (props: Props) => {
         <p>Nov</p>
         <p>Dec</p>
       </div>
-      <div className="flex flex-col justify-between h-[101px] p-2  absolute text-[9.5px] bg-white ml-[-18px]">
-        <p>Mon</p>
-        <p>Wed</p>
-        <p>Fri</p>
-      </div>
+
       <div className="flex flex-wrap h-[110px] w-[10px] content-between flex-col ml-5">
         {content}
       </div>

@@ -392,7 +392,9 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
             <KarmaPieChart data={pointFormattedData} />
           </div>
           <div className="bg-white rounded-2xl p-4 mb-4 md:mb-0">
-            <RecentKarma data={profileData?.data.point_history ?? []} />
+            <RecentKarma
+              data={profileData?.data.point_history.slice(0, 3) ?? []}
+            />
           </div>
         </div>
       </div>

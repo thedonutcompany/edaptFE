@@ -51,8 +51,8 @@ const ShareProfile: React.FC<ShareProfileProps> = ({ data }) => {
           className="w-12 h-12 rounded-full mr-4"
         /> */}
         <Image
-          src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg"
-          alt="Edapt"
+          src={data?.image_url}
+          alt="profile pic"
           width={48}
           height={48}
           className="w-12 h-12 rounded-full mr-4"

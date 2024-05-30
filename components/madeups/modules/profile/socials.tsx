@@ -19,6 +19,9 @@ type Props = {
 const Socials = ({ data, isPublic }: Props) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [socials, setSocials] = useState(data);
+  const [errors, setErrors] = useState<{ [key in SocialPlatforms]?: string[] }>(
+    {}
+  );
 
   useEffect(() => {
     setSocials(data);
@@ -56,11 +59,27 @@ const Socials = ({ data, isPublic }: Props) => {
           });
         })
         .catch((error: any) => {
-          toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            description: "Invalid url not updated",
-          });
+          let errorMessage = error.message;
+          const parsedError = JSON.parse(errorMessage);
+          if (errorMessage) {
+            const serverErrors = JSON.parse(errorMessage);
+            console.log(serverErrors);
+            setErrors(serverErrors);
+            const errorDescriptions = Object.keys(serverErrors).map(
+              (field) => `${field}: ${serverErrors[field].join(", ")}`
+            );
+            toast({
+              variant: "destructive",
+              title: "Uh oh! Something went wrong.",
+              description: errorDescriptions.join(" | "),
+            });
+          } else {
+            toast({
+              variant: "destructive",
+              title: "Uh oh! Something went wrong.",
+              description: "Invalid URL not updated",
+            });
+          }
         });
     } else {
       setEdit(!edit);
@@ -115,6 +134,11 @@ const Socials = ({ data, isPublic }: Props) => {
                       value={socials[platform] || ""}
                       onChange={(e) => handleInputChange(e, platform)}
                     />
+                    {errors[platform] && (
+                      <div className="text-red-500 text-sm mt-1">
+                        {errors[platform]?.join(", ")}
+                      </div>
+                    )}
                   </TabsContent>
                 ))}
               </>

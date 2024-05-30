@@ -28,6 +28,8 @@ export type profileDataType = {
     name: string;
     dob: Date;
     gender: string;
+    phone: string;
+    id: string;
     image: string;
     created_at?: string;
     socials: {

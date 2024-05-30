@@ -30,7 +30,7 @@ const ShareProfile: React.FC<ShareProfileProps> = ({ data }) => {
   const handleCopy = () => {
     navigator.clipboard
       .writeText(
-        `${process.env.NEXT_PUBLIC_API_BASE_FRONTEND_URL}/profile/${data?.email}`
+        `${process.env.NEXT_PUBLIC_API_BASE_FRONTEND_URL}/profile/${data?.id}`
       )
       .then(() => {
         setTooltipMessage("Copied!");
@@ -66,7 +66,7 @@ const ShareProfile: React.FC<ShareProfileProps> = ({ data }) => {
       <div className="relative w-full mb-4">
         <Input
           className="pr-10"
-          defaultValue={`${process.env.NEXT_PUBLIC_API_BASE_FRONTEND_URL}/profile/${data?.email}`}
+          defaultValue={`${process.env.NEXT_PUBLIC_API_BASE_FRONTEND_URL}/profile/${data?.id}`}
           type="text"
           readOnly
         />

@@ -1,6 +1,7 @@
 import Profile, { profileDataType } from "@/components/madeups/profile";
 import { PublicProfileData } from "@/lib/public-apis";
 import { type Metadata, type ResolvingMetadata } from "next";
+import Error from "./error";
 
 export async function generateMetadata(
   { params }: { params: { email: string } },
@@ -42,8 +43,19 @@ export async function generateMetadata(
 
 const ProfilePage = async ({ params }: { params: { email: string } }) => {
   const email = decodeURIComponent(params.email);
+  let profileData: profileDataType | null = null;
+  let errorCode: number | null = null;
 
-  const profileData: profileDataType = await PublicProfileData(email);
+  try {
+    profileData = await PublicProfileData(email);
+  } catch (error: any) {
+    errorCode = error.response ? error.response.status : 500;
+  }
+
+  if (errorCode) {
+    return <Error statusCode={errorCode} />;
+  }
+
   if (!profileData) {
     return <div>Loading...</div>;
   }

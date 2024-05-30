@@ -38,8 +38,7 @@ import { useToast } from "@/components/ui/use-toast";
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
-  mobile: z.string().optional(),
-  community: z.string().optional(),
+  phone: z.string().optional(),
   gender: z.string().optional(),
   dob: z.date().optional(),
   image: z.any().optional(),
@@ -65,8 +64,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
     defaultValues: {
       name: data.name,
       email: data.email,
-      mobile: "",
-      community: "",
+      phone: data.phone,
       image: data.image || "",
       gender: data.gender || "Prefer not to say",
       dob: data.dob ? new Date(data.dob) : undefined, // Ensure dob is correctly initialized
@@ -159,14 +157,14 @@ const EditProfile: React.FC<EditProfileProps> = ({
           <div>
             <FormField
               control={form.control}
-              name="mobile"
+              name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mobile</FormLabel>
+                  <FormLabel>phone</FormLabel>
                   <FormControl>
                     <Input
                       className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
-                      placeholder="Type your mobile number"
+                      placeholder="Type your phone number"
                       {...field}
                     />
                   </FormControl>
@@ -263,7 +261,10 @@ const EditProfile: React.FC<EditProfileProps> = ({
                   type="file"
                   multiple={false}
                   accept="image/*"
-                  onChange={(e) => form.setValue("image", e.target.files[0])}
+                  onChange={(e) => {
+                    const file = e.target.files ? e.target.files[0] : null;
+                    form.setValue("image", file ?? "");
+                  }}
                   className="block w-full text-sm text-slate-500 file:mr-4 file:py-0 file:px-0 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
                   placeholder="image"
                 />

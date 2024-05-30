@@ -38,7 +38,7 @@ import { useToast } from "@/components/ui/use-toast";
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
-  mobile: z.string().optional(),
+  phone: z.string().optional(),
   community: z.string().optional(),
   gender: z.string().optional(),
   dob: z.date().optional(),
@@ -65,8 +65,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
     defaultValues: {
       name: data.name,
       email: data.email,
-      mobile: "",
-      community: "",
+      phone: "",
       image: data.image || "",
       gender: data.gender || "Prefer not to say",
       dob: data.dob ? new Date(data.dob) : undefined, // Ensure dob is correctly initialized
@@ -159,14 +158,14 @@ const EditProfile: React.FC<EditProfileProps> = ({
           <div>
             <FormField
               control={form.control}
-              name="mobile"
+              name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mobile</FormLabel>
+                  <FormLabel>Phone</FormLabel>
                   <FormControl>
                     <Input
                       className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
-                      placeholder="Type your mobile number"
+                      placeholder="Type your phone number"
                       {...field}
                     />
                   </FormControl>

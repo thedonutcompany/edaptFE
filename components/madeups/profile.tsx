@@ -105,15 +105,27 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
   useEffect(() => {
     const colors = ["#8892E8", "#81D4E6", "#FF6D6D", "#f0f"]; // Example color array
 
-    const formattedData = (profileData?.data?.point_distribution ?? []).map(
-      (item) => ({
-        value: item.point,
-        color: colors[Math.floor(Math.random() * colors.length)], // Random color selection
-        label: item.title.split(" ").join("\n"),
-      })
-    );
+    // Function to generate a random color
+    const generateRandomColor = () => {
+      const letters = "0123456789ABCDEF";
+      let color = "#";
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    };
+
+    const pointDistribution = profileData?.data?.point_distribution ?? [];
+
+    const formattedData = pointDistribution.map((item, index) => ({
+      value: item.point,
+      color: colors[index % colors.length] || generateRandomColor(), // Linearly assign colors and generate if needed
+      label: item.title.split(" ").join("\n"),
+    }));
+
     setPointFormattedData(formattedData);
   }, [profileData]);
+
   const updateProfileData = (newData: any) => {
     setProfileData(newData);
   };

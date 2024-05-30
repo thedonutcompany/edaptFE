@@ -55,7 +55,7 @@ const Socials = ({ data, isPublic }: Props) => {
             title: "Socials updated",
           });
         })
-        .catch((error) => {
+        .catch((error: any) => {
           toast({
             variant: "destructive",
             title: "Uh oh! Something went wrong.",

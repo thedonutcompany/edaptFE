@@ -101,7 +101,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: errorMessage ? errorMessage : error,
+        // description: error,
       });
 
       // Check if the error message is a JSON string
@@ -126,6 +126,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
       }
     }
   };
+
   const imageLoader = (progress: number) => {
     // Example: Update progress bar or loading indicator
     setCompressionProgress(progress);
@@ -216,7 +217,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>phone</FormLabel>
+                  <FormLabel>Phone</FormLabel>
                   <FormControl>
                     <Input
                       className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"

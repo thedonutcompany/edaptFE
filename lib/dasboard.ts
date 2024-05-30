@@ -29,8 +29,8 @@ export const socialsUpdate = async (data: any) => {
     console.log(response.data);
     return response.data;
   } catch (error: any) {
-    console.log(JSON.stringify(error.response.data.data));
-
-    throw new Error(error);
+    const errorMessage =
+      error.response?.data?.data || "An error occurred during profile update.";
+    throw new Error(JSON.stringify(errorMessage));
   }
 };

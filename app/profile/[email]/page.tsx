@@ -22,17 +22,14 @@ export async function generateMetadata(
     title: profileData.data.name,
     description: "here is your bio",
     openGraph: {
-      images: [
-        "https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg",
-        ...previousImages,
-      ],
+      images: [profileData.data.image_url, ...previousImages],
     },
     twitter: {
       card: "summary_large_image",
       title: "edapt",
       description: "",
       images: {
-        url: "https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg",
+        url: profileData.data.image_url,
         alt: "Preview image for ",
         width: 1200,
         height: 630,

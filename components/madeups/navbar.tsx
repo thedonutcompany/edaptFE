@@ -6,7 +6,7 @@ import { useUserStore } from "@/lib/store/useUserStore";
 type Props = {};
 
 const NavBar = (props: Props) => {
-  const { userName } = useUserStore();
+  const { userName, userImageUrl } = useUserStore();
   // console.log(userName);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -78,7 +78,7 @@ const NavBar = (props: Props) => {
                   >
                     <span className="sr-only">Open user menu</span>
                     <Image
-                      src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg"
+                      src={userImageUrl}
                       alt="user photo"
                       width={32}
                       height={32}

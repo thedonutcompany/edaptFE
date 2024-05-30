@@ -9,6 +9,11 @@ const nextConfig = {
         hostname: "pbs.twimg.com",
         pathname: "**",
       },
+      {
+        protocol: "https",
+        hostname: new URL(process.env.NEXT_PUBLIC_API_BASE_URL).hostname,
+        pathname: "**",
+      },
     ],
   },
   // webpack: (config, { isServer }) => {

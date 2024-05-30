@@ -30,7 +30,7 @@ export type profileDataType = {
     gender: string;
     phone: string;
     id: string;
-    image: string;
+    image_url: string;
     created_at?: string;
     socials: {
       linkedin: string | null;
@@ -69,7 +69,7 @@ type ProfileProps = {
   isPublic: boolean;
 };
 const Profile = ({ data, isPublic }: ProfileProps) => {
-  const { setUserName } = useUserStore();
+  const { setUserName, setUserImageUrl } = useUserStore();
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
   const closeEditDialog = () => setEditDialogOpen(false);
   const [profileList, setProfileList] = useState("basic-details");
@@ -98,7 +98,8 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
 
   useEffect(() => {
     setUserName(data?.data?.name);
-  }, [data?.data?.name, setUserName]);
+    setUserImageUrl(data?.data?.image_url);
+  }, [data?.data?.name, setUserName, setUserImageUrl, data?.data?.image_url]);
   // console.log(profileData);
 
   useEffect(() => {
@@ -140,7 +141,7 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
                   <div className="flex flex-col sm:flex-row items-center gap-4 mt-4">
                     <div className="relative flex justify-end items-end">
                       <Image
-                        src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg"
+                        src={profileData?.data.image_url}
                         alt="profile_pic"
                         width={150}
                         height={150}

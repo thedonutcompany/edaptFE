@@ -152,23 +152,18 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
                 <div className="relative h-80 sm:h-52 flex flex-col gap-1 sm:flex-row justify-center sm:justify-between items-center -mt-14">
                   <div className="flex flex-col sm:flex-row items-center gap-4 mt-4">
                     <div className="relative flex justify-end items-end">
-                      {profileData?.data?.image_url !== null ? (
-                        <Image
-                          src={profileData?.data.image_url}
-                          alt="profile_pic"
-                          width={150}
-                          height={150}
-                          className="aspect-square rounded-full border-4 border-white sm:ml-8 mt-[-1.5rem] bg-light object-cover"
-                        />
-                      ) : (
-                        <Image
-                          src="/assets/images/404.jpg"
-                          alt="profile_pic"
-                          width={150}
-                          height={150}
-                          className="aspect-square rounded-full border-4 border-white sm:ml-8 mt-[-1.5rem] bg-light object-cover"
-                        />
-                      )}
+                      <Image
+                        src={
+                          profileData?.data?.image_url !== null
+                            ? profileData?.data.image_url
+                            : "/assets/images/404.jpg"
+                        }
+                        alt="profile_pic"
+                        width={150}
+                        height={150}
+                        className="aspect-square rounded-full border-4 border-white sm:ml-8 mt-[-1.5rem] bg-light object-cover"
+                      />
+
                       <span className="absolute mr-2 mb-2 text-white flex justify-center">
                         {/* <i className="fi fi-sr-shield-check bg-blue-600 p-2 rounded-full"></i>
                 <div className="absolute text-xs bg-gray-400 bg-opacity-50 backdrop-blur-sm p-1 rounded mt-8 hidden group-hover:block">
@@ -255,7 +250,7 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
                 </div>
                 <div className="relative flex gap-4 list-none h-8 justify-start mt-[-1rem] px-4 overflow-scroll no-scrollbar">
                   <p
-                    className={`absolute bottom-0 h-1 bg-blue-600 transition-all ${
+                    className={`absolute bottom-0 h-1 rounded-md bg-blue-600 transition-all ${
                       profileList === "basic-details"
                         ? "ml-0 w-24"
                         : profileList === "karma-history"

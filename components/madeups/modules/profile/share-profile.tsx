@@ -51,11 +51,11 @@ const ShareProfile: React.FC<ShareProfileProps> = ({ data }) => {
           className="w-12 h-12 rounded-full mr-4"
         /> */}
         <Image
-          src={data?.image_url}
+          src={data?.image_url ? data?.image_url : "/assets/images/404.jpg"}
           alt="profile pic"
           width={48}
           height={48}
-          className="w-12 h-12 rounded-full mr-4"
+          className="w-12 h-12 rounded-full mr-4 object-cover"
         />
         <div>
           <h3 className="text-lg font-semibold">{data?.name}</h3>

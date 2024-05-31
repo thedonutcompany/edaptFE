@@ -77,13 +77,23 @@ const NavBar = (props: Props) => {
                     data-dropdown-toggle="dropdown-user"
                   >
                     <span className="sr-only">Open user menu</span>
-                    <Image
-                      src={userImageUrl}
-                      alt="user photo"
-                      width={500}
-                      height={500}
-                      className="rounded-full h-8 w-8 object-cover"
-                    />
+                    {userImageUrl !== null ? (
+                      <Image
+                        src={userImageUrl}
+                        alt="user photo"
+                        width={500}
+                        height={500}
+                        className="rounded-full h-8 w-8 object-cover"
+                      />
+                    ) : (
+                      <Image
+                        src="/assets/images/404.jpg"
+                        alt="profile_pic"
+                        width={150}
+                        height={150}
+                        className="rounded-full h-8 w-8 object-cover"
+                      />
+                    )}
                   </button>
                 </div>
                 <div

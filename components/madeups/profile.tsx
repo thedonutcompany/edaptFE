@@ -30,8 +30,13 @@ export type profileDataType = {
     gender: string;
     phone: string;
     id: string;
+    banner_url: string;
     image_url: string;
     created_at?: string;
+    level_info: {
+      level_order: number;
+      course: string;
+    }[];
     socials: {
       linkedin: string | null;
       instagram: string | null;
@@ -50,8 +55,8 @@ export type profileDataType = {
       percentile: number;
     };
     point_distribution: {
-      title: string;
-      point: number;
+      task__category: string;
+      total_points: number;
     }[];
     point_log: {
       created_at: string;
@@ -118,9 +123,9 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
     const pointDistribution = profileData?.data?.point_distribution ?? [];
 
     const formattedData = pointDistribution.map((item, index) => ({
-      value: item.point,
+      value: item.total_points,
       color: colors[index % colors.length] || generateRandomColor(), // Linearly assign colors and generate if needed
-      label: item.title.split(" ").join("\n"),
+      label: item.task__category.split(" ").join("\n"),
     }));
 
     setPointFormattedData(formattedData);
@@ -138,7 +143,16 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
           <div className="p-0">
             <div className=" flex flex-col gap-5">
               <div className="bg-white rounded-2xl p-0">
-                <div className="relative h-40 w-full rounded-t-2xl bg-cover bg-bottom bg-[url('/assets/images/profile_banner.png')]">
+                <div
+                  className="relative h-40 w-full rounded-t-2xl bg-cover bg-bottom"
+                  style={{
+                    backgroundImage: `url(${
+                      profileData?.data?.banner_url
+                        ? profileData?.data?.banner_url
+                        : "/assets/images/profile_banner.png"
+                    })`,
+                  }}
+                >
                   <div className="absolute right-0 bottom-2 mr-1 sm:mr-7 text-right">
                     <p className="text-white text-xs sm:text-sm font-semibold">
                       edapt
@@ -156,34 +170,41 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
                         src={
                           profileData?.data?.image_url !== null
                             ? profileData?.data.image_url
-                            : "/assets/images/404.jpg"
+                            : "/assets/images/dp.jpg"
                         }
                         alt="profile_pic"
-                        width={150}
-                        height={150}
-                        className="aspect-square rounded-full border-4 border-white sm:ml-8 mt-[-1.5rem] bg-light object-cover"
+                        width={500}
+                        height={500}
+                        className="aspect-square h-[150px] w-[150px] rounded-full border-4 border-white sm:ml-8 mt-[-1.5rem] bg-light object-cover"
                       />
 
-                      <span className="absolute mr-2 mb-2 text-white flex justify-center">
-                        {/* <i className="fi fi-sr-shield-check bg-blue-600 p-2 rounded-full"></i>
-                <div className="absolute text-xs bg-gray-400 bg-opacity-50 backdrop-blur-sm p-1 rounded mt-8 hidden group-hover:block">
-                  Private profile
-                  <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full border-6 border-transparent border-t-gray-400 border-opacity-50"></div>
-                </div> */}
+                      {/* <span className="absolute mr-2 mb-2 text-white flex justify-center">
                         <Image
                           src="/assets/images/badge.png"
                           alt="shield"
                           width={50}
                           height={50}
                         />
-                      </span>
+                      </span> */}
                     </div>
                     <div className="text-center sm:text-left">
                       <h1>{profileData?.data?.name}</h1>
                       <p className="mt-[-5px] text-[#7A7A7A]">
                         {profileData?.data?.email}
                       </p>
-                      <p className="text-blue-600">LEVEL 1</p>
+                      {profileData?.data?.level_info.length !== 0 ? (
+                        profileData?.data?.level_info.map((level, i) => {
+                          return (
+                            <p className="text-blue-600" key={i}>
+                              Level {level.level_order}{" "}
+                              <span className="text-black">in</span>{" "}
+                              {level.course}
+                            </p>
+                          );
+                        })
+                      ) : (
+                        <p className="text-blue-600">No level and course</p>
+                      )}
                     </div>
                   </div>
                   {!isPublic && (
@@ -326,7 +347,7 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
                 </div>
               </div>
               {profileList === "basic-details" ? (
-                <div className="bg-white rounded-2xl p-4">
+                <div className="bg-white h-56 relative rounded-2xl p-4">
                   <div className="flex justify-center overflow-scroll bg-white rounded-lg no-scrollbar">
                     <HeatmapComponent
                       data={profileData?.data.point_history ?? []}

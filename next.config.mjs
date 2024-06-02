@@ -14,6 +14,11 @@ const nextConfig = {
         hostname: new URL(process.env.NEXT_PUBLIC_API_BASE_URL).hostname,
         pathname: "**",
       },
+      {
+        protocol: "https",
+        hostname: "dev-api.edapt.me",
+        pathname: "**",
+      },
     ],
   },
   // webpack: (config, { isServer }) => {

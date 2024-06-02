@@ -44,18 +44,18 @@ const ShareProfile: React.FC<ShareProfileProps> = ({ data }) => {
   return (
     <div className="w-full">
       {/* <h2 className="text-xl font-bold mb-4">Share your profile</h2> */}
-      <div className="flex gap-5 items-center mb-4 bg-gray-100 p-4 rounded-md">
+      <div className="flex gap-4 items-center mb-4 bg-gray-100 p-4 rounded-md">
         {/* <img
           src="https://via.placeholder.com/48"
           alt="Profile"
           className="w-12 h-12 rounded-full mr-4"
         /> */}
         <Image
-          src={data?.image_url ? data?.image_url : "/assets/images/404.jpg"}
+          src={data?.image_url ? data?.image_url : "/assets/images/dp.jpg"}
           alt="profile pic"
           width={48}
           height={48}
-          className="w-12 h-12 rounded-full mr-4 object-cover"
+          className="w-16 h-16 rounded-full mr-4 object-cover"
         />
         <div>
           <h3 className="text-lg font-semibold">{data?.name}</h3>

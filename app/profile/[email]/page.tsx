@@ -20,7 +20,7 @@ export async function generateMetadata(
   return {
     metadataBase: new URL("https://edapt.netlify.app/"),
     title: profileData.data.name,
-    description: "here is your bio",
+    description: profileData.data.email,
     openGraph: {
       images: [profileData.data.image_url, ...previousImages],
     },

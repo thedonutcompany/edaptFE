@@ -156,27 +156,22 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
                         src={
                           profileData?.data?.image_url !== null
                             ? profileData?.data.image_url
-                            : "/assets/images/404.jpg"
+                            : "/assets/images/dp.jpg"
                         }
                         alt="profile_pic"
-                        width={150}
-                        height={150}
-                        className="aspect-square rounded-full border-4 border-white sm:ml-8 mt-[-1.5rem] bg-light object-cover"
+                        width={1000}
+                        height={1000}
+                        className="aspect-square h-[150px] w-[150px] rounded-full border-4 border-white sm:ml-8 mt-[-1.5rem] bg-light object-cover"
                       />
 
-                      <span className="absolute mr-2 mb-2 text-white flex justify-center">
-                        {/* <i className="fi fi-sr-shield-check bg-blue-600 p-2 rounded-full"></i>
-                <div className="absolute text-xs bg-gray-400 bg-opacity-50 backdrop-blur-sm p-1 rounded mt-8 hidden group-hover:block">
-                  Private profile
-                  <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full border-6 border-transparent border-t-gray-400 border-opacity-50"></div>
-                </div> */}
+                      {/* <span className="absolute mr-2 mb-2 text-white flex justify-center">
                         <Image
                           src="/assets/images/badge.png"
                           alt="shield"
                           width={50}
                           height={50}
                         />
-                      </span>
+                      </span> */}
                     </div>
                     <div className="text-center sm:text-left">
                       <h1>{profileData?.data?.name}</h1>
@@ -326,7 +321,7 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
                 </div>
               </div>
               {profileList === "basic-details" ? (
-                <div className="bg-white rounded-2xl p-4">
+                <div className="bg-white h-56 relative rounded-2xl p-4">
                   <div className="flex justify-center overflow-scroll bg-white rounded-lg no-scrollbar">
                     <HeatmapComponent
                       data={profileData?.data.point_history ?? []}

@@ -90,7 +90,7 @@ const HeatmapComponent = (props: Props) => {
           <Tooltip>
             <TooltipTrigger>
               <p
-                className="h-3 aspect-square m-0.5 text-center text-[9px] rounded-[2px] bg-[#2dce891f] border border-solid"
+                className="h-3.5 aspect-square m-0.5 text-center text-[9px] rounded-[2px] bg-[#2dce891f] border border-solid"
                 style={{ backgroundColor }}
               ></p>
             </TooltipTrigger>
@@ -133,12 +133,12 @@ const HeatmapComponent = (props: Props) => {
 
   return (
     <div className="w-full max-w-[95%]">
-      <div className="flex flex-col justify-between h-[180px] pb-16 pt-7 absolute text-[11px] bg-white ml-[-18px] w-8">
+      <div className="flex flex-col justify-between h-[195px] pb-16 pt-11 absolute text-[11px] text-center bg-white ml-[-23px] w-8">
         <p>Mon</p>
         <p>Wed</p>
         <p>Fri</p>
       </div>
-      <div className="flex gap-7 ml-6 justify-between w-[57rem]">
+      <div className="flex gap-7 ml-5 justify-between w-[56rem]">
         <p>Jan</p>
         <p>Feb</p>
         <p>Mar</p>
@@ -153,10 +153,10 @@ const HeatmapComponent = (props: Props) => {
         <p>Dec</p>
       </div>
 
-      <div className="flex flex-wrap h-[110px] w-[10px] content-between flex-col ml-5">
+      <div className="flex flex-wrap h-[130px] w-[10px] content-between flex-col ml-4">
         {content}
       </div>
-      <div className="flex justify-center gap-2.5 mt-2.5">
+      <div className="flex justify-center gap-2.5 mt-2.5 absolute w-full left-0">
         {renderYearButtons()}
       </div>
     </div>

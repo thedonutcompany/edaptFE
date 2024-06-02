@@ -81,7 +81,7 @@ const NavBar = (props: Props) => {
                       src={
                         userImageUrl !== null
                           ? userImageUrl
-                          : "/assets/images/404.jpg"
+                          : "/assets/images/dp.jpg"
                       }
                       alt="user photo"
                       width={500}

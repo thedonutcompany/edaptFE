@@ -3,14 +3,19 @@ import Image from "next/image";
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 import { useUserStore } from "@/lib/store/useUserStore";
+import { useRouter, usePathname } from "next/navigation";
 type Props = {};
 
 const NavBar = (props: Props) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const { userName, userImageUrl } = useUserStore();
-  // console.log(userName);
+  // console.log(pathname.split("/")[2]);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selected, setSelected] = useState<string | null>("Homepage");
+  const [selected, setSelected] = useState<string | null>(
+    pathname.split("/")[2]
+  );
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -18,6 +23,7 @@ const NavBar = (props: Props) => {
 
   const handleItemClick = (label: string) => {
     setSelected(label);
+    router.push(`${label.toLowerCase()}`);
   };
 
   return (
@@ -141,15 +147,20 @@ const NavBar = (props: Props) => {
               selected={selected}
               onClick={() => handleItemClick("Homepage")}
             />
-            {/* <NavList
+            <NavList
               label="Portfolio"
               icon="fi fi-rr-document"
               selected={selected}
               onClick={() => handleItemClick("Portfolio")}
-            /> */}
+            />
             {/* <NavList label="Referrals" icon="fi fi-rs-users" selected={selected} onClick={() => handleItemClick("Referrals")} /> */}
-            {/* <hr /> */}
-            {/* <NavList label="Courses" icon="fi fi-rr-book-alt" selected={selected} onClick={() => handleItemClick("Courses")} /> */}
+            <hr />
+            <NavList
+              label="Curriculum"
+              icon="fi fi-rr-book-alt"
+              selected={selected}
+              onClick={() => handleItemClick("Curriculum")}
+            />
           </ul>
           <ul className="space-y-2 mt-auto mb-0">
             <hr />
@@ -202,7 +213,7 @@ const NavList: React.FC<NavProps> = ({
   onClick,
   selected,
 }) => {
-  const isSelected = selected === label;
+  const isSelected = selected === label.toLowerCase();
 
   return (
     <li onClick={onClick} className="flex flex-row cursor-pointer">

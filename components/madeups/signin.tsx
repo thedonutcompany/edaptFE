@@ -137,6 +137,7 @@ const SignIn = () => {
                         <Input
                           className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
                           placeholder="Type your mail"
+                          type="email"
                           {...field}
                           disabled={isOtpSent}
                         />

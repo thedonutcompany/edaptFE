@@ -1,9 +1,10 @@
+import Curriculum from "@/components/madeups/curriculum";
 import React from "react";
 
 type Props = {};
 
 const page = (props: Props) => {
-  return <div>Cariculam</div>;
+  return <Curriculum />;
 };
 
 export default page;

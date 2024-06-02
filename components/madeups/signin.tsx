@@ -64,7 +64,7 @@ const SignIn = () => {
           title: "OTP verified successfully",
           description: "You are now logged in. Redirecting to your profile.",
         });
-        router.push("/dashboard/profile");
+        router.push("/dashboard/homepage");
       } else {
         const { email } = data as EmailFormData;
         setEmail(email);

@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
   const accessToken = request.cookies.get("access_token");
 
   if (request.nextUrl.pathname === "/signin" && accessToken) {
-    return NextResponse.redirect(new URL("/dashboard/profile", request.url));
+    return NextResponse.redirect(new URL("/dashboard/homepage", request.url));
   }
 
   if (request.nextUrl.pathname.startsWith("/dashboard") && !accessToken) {
@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (request.nextUrl.pathname === "/" && accessToken) {
-    return NextResponse.redirect(new URL("/dashboard/profile", request.url));
+    return NextResponse.redirect(new URL("/dashboard/homepage", request.url));
   }
 
   return NextResponse.next();

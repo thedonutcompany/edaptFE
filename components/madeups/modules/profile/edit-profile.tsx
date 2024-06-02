@@ -39,11 +39,12 @@ import { Progress } from "@/components/ui/progress";
 
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
+  // email: z.string().email("Invalid email address"),
   phone: z.string().optional(),
   gender: z.string().optional(),
   dob: z.date().optional(),
   image: z.any().optional(),
+  banner: z.any().optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -60,16 +61,20 @@ const EditProfile: React.FC<EditProfileProps> = ({
   closeDialog,
 }) => {
   const { toast } = useToast();
-  const [compressionProgress, setCompressionProgress] = useState<number>(0);
+  const [compressionProgressProfile, setCompressionProgressProfile] =
+    useState<number>(0);
+  const [compressionProgressBanner, setCompressionProgressBanner] =
+    useState<number>(0);
   const [updateButtonDisable, setUpdateButtonDisable] =
     useState<boolean>(false);
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: data.name,
-      email: data.email,
+      // email: data.email,
       phone: data.phone,
       image: data.image_url || "",
+      banner: data.banner_url || "",
       gender: data.gender || "Prefer not to say",
       dob: data.dob ? new Date(data.dob) : undefined, // Ensure dob is correctly initialized
     },
@@ -126,15 +131,10 @@ const EditProfile: React.FC<EditProfileProps> = ({
       }
     }
   };
-
-  const imageLoader = (progress: number) => {
-    // Example: Update progress bar or loading indicator
-    setCompressionProgress(progress);
-    progress === 100 ? setUpdateButtonDisable(false) : null;
-    // Update UI to reflect progress
-  };
   const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
+    formKey: any,
+    progressHandler: (progress: number) => void
   ) => {
     setUpdateButtonDisable(true);
     const file = event.target.files ? event.target.files[0] : null;
@@ -145,25 +145,51 @@ const EditProfile: React.FC<EditProfileProps> = ({
           maxWidthOrHeight: 1024,
           useWebWorker: true,
           fileType: file.type,
-          onProgress: imageLoader,
+          onProgress: progressHandler,
         });
 
         const compressedFileWithOriginalName = new File(
           [compressedFile],
           file.name,
           {
-            type: "images/*",
+            type: file.type,
           }
         );
-        form.setValue("image", compressedFileWithOriginalName);
+        form.setValue(formKey, compressedFileWithOriginalName);
         // console.log(compressedFileWithOriginalName, compressedFile);
-        // form.setValue("image", compressedFile);
       } catch (error) {
         console.error("Image compression error:", error);
       }
     } else {
-      form.setValue("image", "");
+      form.setValue(formKey, "");
+      setUpdateButtonDisable(false);
     }
+  };
+
+  const imageLoaderProfile = (progress: number) => {
+    setCompressionProgressProfile(progress);
+    if (progress === 100) {
+      setUpdateButtonDisable(false);
+    }
+  };
+
+  const imageLoaderBanner = (progress: number) => {
+    setCompressionProgressBanner(progress);
+    if (progress === 100) {
+      setUpdateButtonDisable(false);
+    }
+  };
+
+  const handleProfileImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    handleImageUpload(event, "image", imageLoaderProfile);
+  };
+
+  const handleBannerImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    handleImageUpload(event, "banner", imageLoaderBanner);
   };
 
   return (
@@ -192,7 +218,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
               )}
             />
           </div>
-          <div>
+          {/* <div>
             <FormField
               control={form.control}
               name="email"
@@ -210,7 +236,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
                 </FormItem>
               )}
             />
-          </div>
+          </div> */}
           <div>
             <FormField
               control={form.control}
@@ -308,18 +334,37 @@ const EditProfile: React.FC<EditProfileProps> = ({
           </div>
           <div>
             <FormItem className="flex flex-col">
-              <FormLabel>Image</FormLabel>
+              <FormLabel>Profile Pic</FormLabel>
               <FormControl>
                 <>
                   <input
                     type="file"
                     multiple={false}
                     accept="image/*"
-                    onChange={handleImageUpload}
+                    onChange={handleProfileImageUpload}
                     className="block w-full text-sm text-slate-500 file:mr-4 file:py-0 file:px-0 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
                     placeholder="image"
                   />
-                  <Progress value={compressionProgress} />
+                  <Progress value={compressionProgressProfile} />
+                </>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </div>
+          <div>
+            <FormItem className="flex flex-col">
+              <FormLabel>Banner</FormLabel>
+              <FormControl>
+                <>
+                  <input
+                    type="file"
+                    multiple={false}
+                    accept="image/*"
+                    onChange={handleBannerImageUpload}
+                    className="block w-full text-sm text-slate-500 file:mr-4 file:py-0 file:px-0 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+                    placeholder="image"
+                  />
+                  <Progress value={compressionProgressBanner} />
                 </>
               </FormControl>
               <FormMessage />

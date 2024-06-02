@@ -30,8 +30,13 @@ export type profileDataType = {
     gender: string;
     phone: string;
     id: string;
+    banner_url: string;
     image_url: string;
     created_at?: string;
+    level_info: {
+      level_order: number;
+      course: string;
+    }[];
     socials: {
       linkedin: string | null;
       instagram: string | null;
@@ -50,8 +55,8 @@ export type profileDataType = {
       percentile: number;
     };
     point_distribution: {
-      title: string;
-      point: number;
+      task__category: string;
+      total_points: number;
     }[];
     point_log: {
       created_at: string;
@@ -118,9 +123,9 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
     const pointDistribution = profileData?.data?.point_distribution ?? [];
 
     const formattedData = pointDistribution.map((item, index) => ({
-      value: item.point,
+      value: item.total_points,
       color: colors[index % colors.length] || generateRandomColor(), // Linearly assign colors and generate if needed
-      label: item.title.split(" ").join("\n"),
+      label: item.task__category.split(" ").join("\n"),
     }));
 
     setPointFormattedData(formattedData);
@@ -138,7 +143,16 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
           <div className="p-0">
             <div className=" flex flex-col gap-5">
               <div className="bg-white rounded-2xl p-0">
-                <div className="relative h-40 w-full rounded-t-2xl bg-cover bg-bottom bg-[url('/assets/images/profile_banner.png')]">
+                <div
+                  className="relative h-40 w-full rounded-t-2xl bg-cover bg-bottom"
+                  style={{
+                    backgroundImage: `url(${
+                      profileData?.data?.banner_url
+                        ? profileData?.data?.banner_url
+                        : "/assets/images/profile_banner.png"
+                    })`,
+                  }}
+                >
                   <div className="absolute right-0 bottom-2 mr-1 sm:mr-7 text-right">
                     <p className="text-white text-xs sm:text-sm font-semibold">
                       edapt
@@ -159,8 +173,8 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
                             : "/assets/images/dp.jpg"
                         }
                         alt="profile_pic"
-                        width={1000}
-                        height={1000}
+                        width={500}
+                        height={500}
                         className="aspect-square h-[150px] w-[150px] rounded-full border-4 border-white sm:ml-8 mt-[-1.5rem] bg-light object-cover"
                       />
 
@@ -178,7 +192,19 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
                       <p className="mt-[-5px] text-[#7A7A7A]">
                         {profileData?.data?.email}
                       </p>
-                      <p className="text-blue-600">LEVEL 1</p>
+                      {profileData?.data?.level_info.length !== 0 ? (
+                        profileData?.data?.level_info.map((level, i) => {
+                          return (
+                            <p className="text-blue-600" key={i}>
+                              Level {level.level_order}{" "}
+                              <span className="text-black">in</span>{" "}
+                              {level.course}
+                            </p>
+                          );
+                        })
+                      ) : (
+                        <p className="text-blue-600">No level and course</p>
+                      )}
                     </div>
                   </div>
                   {!isPublic && (

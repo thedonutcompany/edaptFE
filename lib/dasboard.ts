@@ -34,3 +34,14 @@ export const socialsUpdate = async (data: any) => {
     throw new Error(JSON.stringify(errorMessage));
   }
 };
+export const CurriculumData = async () => {
+  try {
+    const response = await privateGateway.get("/course/");
+    console.log(response.data);
+    return response.data;
+  } catch (error: any) {
+    const errorMessage =
+      error.response?.data?.data || "An error occurred during profile update.";
+    throw new Error(JSON.stringify(errorMessage));
+  }
+};

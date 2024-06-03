@@ -1,8 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
-import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react"; // Ensure lucide-react is installed
-import { Button } from "@/components/ui/button"; // Adjust the import based on your setup
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge"; // Adjust the import based on your setup
 import Image from "next/image";
 import {
@@ -11,58 +9,91 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { CurriculumData } from "@/lib/dasboard";
+type CurriculumItem = {
+  id: number;
+  title: string;
+  description: string;
+};
+
+type curriculumDataType = {
+  data: {
+    name: string;
+    description: string;
+    duration: string;
+    banner: string;
+    curriculum: CurriculumItem[];
+    tags: string[];
+  };
+};
+
+// type Props = {
+//   data: curriculumDataType;
+// };
 
 const Curriculum = () => {
-  const [openWeeks, setOpenWeeks] = useState<number[]>([]);
+  const [curriculumData, setCurriculumData] = useState<curriculumDataType>();
 
-  const toggleWeek = (week: number) => {
-    setOpenWeeks((prev) =>
-      prev.includes(week) ? prev.filter((w) => w !== week) : [...prev, week]
-    );
-  };
+  useEffect(() => {
+    const fetchCurriculumData = async () => {
+      try {
+        const data = await CurriculumData();
+        console.log(data);
 
+        setCurriculumData(data);
+      } catch (error) {
+        console.error(error);
+        // Handle error
+      }
+    };
+
+    fetchCurriculumData();
+  }, []);
   return (
-    <div className="p-6 bg-white rounded-xl">
-      <h1 className="text-1xl font-semibold mb-4">TLP foundation course</h1>
-      <div className=" rounded-md mb-6 flex flex-col md:flex-row">
+    <div className="p-6 bg-white rounded-2xl">
+      <h1 className="text-1xl font-semibold mb-4">
+        {curriculumData?.data?.name}
+      </h1>
+      <div className="rounded-md mb-6 flex flex-col md:flex-row">
         <div>
           <Image
-            src="/assets/images/cr.png" // Replace with your image path
+            src={
+              curriculumData?.data?.banner
+                ? curriculumData?.data?.banner
+                : "/assets/images/cr.png"
+            }
             alt="Programming Language Training"
-            width={1000}
-            height={1000}
-            className="rounded-md h-[220px] w-[700px] object-cover"
+            width={500}
+            height={500}
+            className="rounded-md h-[220px] w-[700px] object-left object-cover"
           />
         </div>
         <div className="md:w-2/3 md:pl-6">
           <p className="text-lg leading-6 font-medium mb-4">
-            This course would introduce you to the fundamentals of programming
-            using ternary logic, which expands on traditional binary logic
-            (true/false) by adding a third state, often representing "unknown"
-            or "undefined."
+            {curriculumData?.data?.description}
           </p>
           <div className="flex flex-wrap gap-2 mb-4">
-            <Badge>Programming</Badge>
-            <Badge>Logic</Badge>
-            <Badge>Computer Science</Badge>
+            {curriculumData?.data?.tags?.length !== 0 &&
+              curriculumData?.data?.tags?.map((tag, i) => (
+                <Badge key={i}>{tag}</Badge>
+              ))}
           </div>
           <p className="text-sm bg-[#F2F2F2] w-fit font-medium p-3 rounded-md">
-            Duration: 4 weeks
+            Duration: {curriculumData?.data?.duration}
           </p>
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        {Array.from({ length: 4 }, (_, i) => (
+        {curriculumData?.data?.curriculum.map((item, i) => (
           <Accordion key={i} type="single" collapsible>
-            <AccordionItem value="item-1">
+            <AccordionItem value={`item-${item.id}`}>
               <AccordionTrigger>
                 <div className="flex flex-col text-left justify-start gap-4 items-start">
-                  <h1>Week 01 : Mapping Business Outcome to Product Outcome</h1>
-                  <p className="text-sm text-gray-600">
-                    Explore the world of product design in this dynamic course.
-                    Learn to ideate, prototype, and bring innovative ideas to
-                    life through hands-on projects and expert guidance.
-                  </p>
+                  <h1>{item.title}</h1>
+                  <div
+                    className="text-sm text-gray-600"
+                    dangerouslySetInnerHTML={{ __html: item.description }}
+                  />
                   <p className="text-sm bg-[#F2F2F2] w-fit font-medium p-3 rounded-md">
                     Watch hours : 12 hours
                   </p>
@@ -80,4 +111,3 @@ const Curriculum = () => {
 };
 
 export default Curriculum;
-// pages/index.tsx

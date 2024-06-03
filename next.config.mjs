@@ -11,6 +11,11 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "t3.ftcdn.net",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
         hostname: new URL(process.env.NEXT_PUBLIC_API_BASE_URL).hostname,
         pathname: "**",
       },

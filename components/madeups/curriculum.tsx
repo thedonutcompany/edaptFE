@@ -1,8 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
-import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react"; // Ensure lucide-react is installed
-import { Button } from "@/components/ui/button"; // Adjust the import based on your setup
 import { Badge } from "@/components/ui/badge"; // Adjust the import based on your setup
 import Image from "next/image";
 import {
@@ -13,16 +10,8 @@ import {
 } from "@/components/ui/accordion";
 
 const Curriculum = () => {
-  const [openWeeks, setOpenWeeks] = useState<number[]>([]);
-
-  const toggleWeek = (week: number) => {
-    setOpenWeeks((prev) =>
-      prev.includes(week) ? prev.filter((w) => w !== week) : [...prev, week]
-    );
-  };
-
   return (
-    <div className="p-6 bg-white rounded-xl">
+    <div className="p-6 bg-white rounded-2xl">
       <h1 className="text-1xl font-semibold mb-4">TLP foundation course</h1>
       <div className=" rounded-md mb-6 flex flex-col md:flex-row">
         <div>

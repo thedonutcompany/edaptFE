@@ -213,7 +213,7 @@ const NavList: React.FC<NavProps> = ({
   onClick,
   selected,
 }) => {
-  const isSelected = selected === label.toLowerCase();
+  const isSelected = selected?.toLowerCase() === label.toLowerCase();
 
   return (
     <li onClick={onClick} className="flex flex-row cursor-pointer">

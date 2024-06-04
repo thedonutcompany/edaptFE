@@ -11,7 +11,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "t3.ftcdn.net",
+        hostname: "**",
         pathname: "**",
       },
       {

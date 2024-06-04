@@ -168,7 +168,7 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
                     <div className="relative flex justify-end items-end">
                       <Image
                         src={
-                          profileData?.data?.image_url !== null
+                          profileData?.data?.image_url !== null || ""
                             ? profileData?.data.image_url
                             : "/assets/images/dp.jpg"
                         }

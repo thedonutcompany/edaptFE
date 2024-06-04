@@ -210,7 +210,13 @@ const Portfolio = () => {
       <hr className="w-full my-8" />
 
       <div className="mt-8">
-        <h3 className="text-lg font-bold">Work Experience</h3>
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-bold">Work Experience</h3>
+          <div className="flex gap-3">
+            <i className="fi fi-br-plus"></i>
+            <i className="fi fi-bs-pencil"></i>
+          </div>
+        </div>
         <div className="mt-4 bg-zinc-100 p-4 flex gap-4 rounded-md">
           <Image
             src="/assets/images/pf.png" // Replace with your project image path
@@ -250,7 +256,13 @@ const Portfolio = () => {
       <hr className="w-full my-8" />
 
       <div className="mt-8 ">
-        <h3 className="text-lg font-bold">Education</h3>
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-bold">Education</h3>
+          <div className="flex gap-3">
+            <i className="fi fi-br-plus"></i>
+            <i className="fi fi-bs-pencil"></i>
+          </div>
+        </div>
         <div className="mt-4 bg-zinc-100 p-4 rounded-md">
           <div className="flex justify-between">
             <div>

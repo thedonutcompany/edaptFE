@@ -4,26 +4,26 @@ const nextConfig = {
   transpilePackages: ["@mui/x-charts"],
   images: {
     remotePatterns: [
+      // {
+      //   protocol: "https",
+      //   hostname: "pbs.twimg.com",
+      //   pathname: "**",
+      // },
       {
         protocol: "https",
-        hostname: "pbs.twimg.com",
+        hostname: "**",
         pathname: "**",
       },
-      {
-        protocol: "https",
-        hostname: "t3.ftcdn.net",
-        pathname: "**",
-      },
-      {
-        protocol: "https",
-        hostname: new URL(process.env.NEXT_PUBLIC_API_BASE_URL).hostname,
-        pathname: "**",
-      },
-      {
-        protocol: "https",
-        hostname: "dev-api.edapt.me",
-        pathname: "**",
-      },
+      // {
+      //   protocol: "https",
+      //   hostname: new URL(process.env.NEXT_PUBLIC_API_BASE_URL).hostname,
+      //   pathname: "**",
+      // },
+      // {
+      //   protocol: "https",
+      //   hostname: "dev-api.edapt.me",
+      //   pathname: "**",
+      // },
     ],
   },
   // webpack: (config, { isServer }) => {

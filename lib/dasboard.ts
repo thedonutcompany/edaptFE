@@ -45,3 +45,14 @@ export const CurriculumData = async () => {
     throw new Error(JSON.stringify(errorMessage));
   }
 };
+export const PortfolioData = async () => {
+  try {
+    const response = await privateGateway.get("/portfolio/");
+    console.log(response.data);
+    return response.data;
+  } catch (error: any) {
+    const errorMessage =
+      error.response?.data?.data || "An error occurred during profile update.";
+    throw new Error(JSON.stringify(errorMessage));
+  }
+};

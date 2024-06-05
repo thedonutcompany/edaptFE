@@ -439,7 +439,7 @@ const Portfolio = () => {
             portfolioData?.data?.work_experience.map((work, i) => (
               <div key={i} className="flex gap-4">
                 <Image
-                  src="/assets/images/pf.png" // Replace with your project image path
+                  src="/assets/images/dp.jpg" // Replace with your project image path
                   alt="Project"
                   width={50}
                   height={50}

@@ -123,13 +123,14 @@ const Portfolio = () => {
           <h1 className="text-5xl font-semibold">
             {portfolioData?.data?.name}
           </h1>
-          <p className="mt-2">Product @ Media.net | ICICI | IIT Roorkee</p>
+          {/* <p className="mt-2">Product @ Media.net | ICICI | IIT Roorkee</p> */}
           <div className="flex items-center gap-3 space-x-2 mt-2">
             <div className="flex gap-1">
               <i className="fi fi-rr-file mt-1"></i>
               <a
                 href={portfolioData?.data?.resume_url ?? "#"}
                 className="underline hover:font-semibold"
+                target="_blank"
               >
                 Resume
               </a>
@@ -173,21 +174,21 @@ const Portfolio = () => {
         </div>
         <div className="relative md:ml-8 mt-4 md:mt-0">
           <Image
-            src={portfolioData?.data?.image_url ?? "/assets/images/pf.png"}
+            src={portfolioData?.data?.image_url ?? "/assets/images/dp.jpg"}
             alt="Profile"
             className="w-60 h-60 rounded-lg object-cover"
             width={300}
             height={300}
           />
 
-          <span className="absolute -right-4 -top-4 text-white flex justify-center">
+          {/* <span className="absolute -right-4 -top-4 text-white flex justify-center">
             <Image
               src="/assets/images/badge.png"
               alt="shield"
               width={70}
               height={70}
             />
-          </span>
+          </span> */}
         </div>
       </div>
 
@@ -242,7 +243,7 @@ const Portfolio = () => {
               {portfolioData?.data?.badges.map((tag, i) => (
                 <div key={i} className="border border-black rounded-md p-2">
                   <p className="font-semibold w-max">{tag}</p>
-                  <p className="font-medium text-sm w-max">PhonePe</p>
+                  {/* <p className="font-medium text-sm w-max">PhonePe</p> */}
                 </div>
               ))}
             </div>

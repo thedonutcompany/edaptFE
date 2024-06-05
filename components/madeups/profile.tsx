@@ -125,7 +125,7 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
     const formattedData = pointDistribution.map((item, index) => ({
       value: item.total_points,
       color: colors[index % colors.length] || generateRandomColor(), // Linearly assign colors and generate if needed
-      label: item.task__category.split(" ").join("\n"),
+      label: item.task__category?.split(" ").join("\n"),
     }));
 
     setPointFormattedData(formattedData);

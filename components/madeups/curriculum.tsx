@@ -27,10 +27,6 @@ type curriculumDataType = {
   };
 };
 
-// type Props = {
-//   data: curriculumDataType;
-// };
-
 const Curriculum = () => {
   const [curriculumData, setCurriculumData] = useState<curriculumDataType>();
 
@@ -49,6 +45,7 @@ const Curriculum = () => {
 
     fetchCurriculumData();
   }, []);
+
   return (
     <div className="p-6 bg-white rounded-2xl">
       <h1 className="text-1xl font-semibold mb-4">
@@ -84,27 +81,33 @@ const Curriculum = () => {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        {curriculumData?.data?.curriculum.map((item, i) => (
-          <Accordion key={i} type="single" collapsible>
-            <AccordionItem value={`item-${item.id}`}>
-              <AccordionTrigger>
-                <div className="flex flex-col text-left justify-start gap-4 items-start">
-                  <h1>{item.title}</h1>
+        {curriculumData?.data?.curriculum.map((item, i) => {
+          const lines = item.description.split("\n");
+          const firstTwoLines = lines.slice(0, 2).join("\n");
+          const restOfContent = lines.slice(2).join("\n");
+
+          return (
+            <Accordion key={i} type="single" collapsible>
+              <AccordionItem value={`item-${item.id}`}>
+                <AccordionTrigger>
+                  <div className="flex flex-col text-left justify-start gap-4 items-start">
+                    <h1>{item.title}</h1>
+                    <div
+                      className="text-sm text-gray-600"
+                      dangerouslySetInnerHTML={{ __html: firstTwoLines }}
+                    />
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
                   <div
                     className="text-sm text-gray-600"
-                    dangerouslySetInnerHTML={{ __html: item.description }}
+                    dangerouslySetInnerHTML={{ __html: restOfContent }}
                   />
-                  <p className="text-sm bg-[#F2F2F2] w-fit font-medium p-3 rounded-md">
-                    Watch hours : 12 hours
-                  </p>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                Yes. It adheres to the WAI-ARIA design pattern.
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        ))}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          );
+        })}
       </div>
     </div>
   );

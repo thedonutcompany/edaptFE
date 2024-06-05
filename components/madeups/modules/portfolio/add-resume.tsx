@@ -58,6 +58,7 @@ const AddResume: React.FC<AddResumeProps> = ({
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
+        description: "Too large file max 1MB allowed",
       });
 
       try {
@@ -73,10 +74,14 @@ const AddResume: React.FC<AddResumeProps> = ({
       if (errorMessage) {
         const serverErrors = JSON.parse(errorMessage);
         Object.keys(serverErrors).forEach((field) => {
-          form.setError(field as keyof PortfolioFormData, {
+          form.setError("resume", {
             type: "manual",
-            message: serverErrors[field].join(" "),
+            message: "too large file Max 1MB",
           });
+          // form.setError(field as keyof PortfolioFormData, {
+          //   type: "manual",
+          //   message: serverErrors[field],
+          // });
         });
       }
     }
@@ -132,7 +137,7 @@ const AddResume: React.FC<AddResumeProps> = ({
               name="resume"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Resume URL</FormLabel>
+                  <FormLabel>Upload Resume</FormLabel>
                   <FormControl>
                     <>
                       <input

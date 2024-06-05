@@ -1,4 +1,5 @@
 import NavBar from "@/components/madeups/navbar";
+import UpdateZustand from "@/lib/updateZuztand";
 import type { Metadata } from "next";
 import Image from "next/image";
 
@@ -19,6 +20,7 @@ export default function RootLayout({
     <div className="bg-[#F3F5F9] min-h-screen">
       <NavBar />
       <div className="p-4 sm:ml-64">
+        <UpdateZustand />
         <div className="px-1 py-4 md:p-4  mt-14">{children}</div>
       </div>
     </div>

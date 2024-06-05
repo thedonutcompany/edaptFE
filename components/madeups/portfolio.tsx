@@ -8,6 +8,16 @@ import Verified from "@/public/assets/svgs/verified";
 import { Progress } from "../ui/progress";
 import { PortfolioData } from "@/lib/dasboard";
 import moment from "moment";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import AddResume from "./modules/portfolio/add-resume";
+
 interface Course {
   name: string;
   joined_at: string;
@@ -40,29 +50,57 @@ interface Projects {
   url: string;
 }
 
-interface PortfolioDataType {
+export type PortfolioDataType = {
   data: {
     name: string;
     image_url: string;
-    course: Course;
+    course: {
+      name: string;
+      joined_at: string;
+    };
     linkedin: string;
-    projects: Projects[]; // Assuming projects can be any type of data
+    projects: {
+      banner_url: string | null;
+      title: string;
+      main_project: boolean;
+      url: string;
+    }[]; // Assuming projects can be any type of data
     resume_url: string | null;
     primary_badge: string;
     badges: string[];
-    skills: Skills[]; // Assuming skills can be any type of data
-    work_experience: WorkExperience[];
-    education: Education[];
+    skills: {
+      title: string;
+      percentage: number;
+    }[]; // Assuming skills can be any type of data
+    work_experience: {
+      title: string;
+      skills: string[];
+      company: string;
+      end_date: string;
+      location: string;
+      start_date: string;
+    }[];
+    education: {
+      id: number;
+      degree: string;
+      end_date: string;
+      start_date: string;
+      institution: string;
+    }[];
   };
-}
+};
 const Portfolio = () => {
-  const [portfolioData, setPortfolioData] = useState<PortfolioDataType>();
+  const [portfolioData, setPortfolioData] = useState<
+    PortfolioDataType | undefined
+  >(undefined);
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
 
+  const closeEditDialog = () => setEditDialogOpen(false);
   useEffect(() => {
     const fetchPortfolioData = async () => {
       try {
         const data = await PortfolioData();
-        console.log(data);
+        // console.log(data);
 
         setPortfolioData(data);
       } catch (error) {
@@ -73,10 +111,13 @@ const Portfolio = () => {
 
     fetchPortfolioData();
   }, []);
-  console.log(portfolioData);
+  // console.log(portfolioData);
+  const updatePortfolioData = (newData: any) => {
+    setPortfolioData(newData);
+  };
 
   return (
-    <div className="relative p-14 bg-white rounded-2xl">
+    <div className="relative p-4 md:p-14 bg-white rounded-2xl">
       <div className="flex flex-col md:flex-row items-start justify-start">
         <div className="flex-1">
           <h1 className="text-5xl font-semibold">
@@ -104,9 +145,31 @@ const Portfolio = () => {
               </a>
             </div>
           </div>
-          <Button className="mt-5 bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200">
-            <i className="fi fi-rr-pencil"></i> Edit
-          </Button>
+          <Dialog open={isEditDialogOpen} onOpenChange={setEditDialogOpen}>
+            <DialogTrigger>
+              <p
+                className="mt-5 py-3  rounded-md px-4 bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+                onClick={() => setEditDialogOpen(true)}
+              >
+                <i className="fi fi-rr-pencil"></i> Edit
+              </p>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Upload Your Resume</DialogTitle>
+                <DialogDescription>
+                  Select your PDF and Upload and save it .... any content here
+                </DialogDescription>
+              </DialogHeader>
+              {portfolioData && (
+                <AddResume
+                  data={portfolioData.data}
+                  updatePortfolioData={updatePortfolioData}
+                  closeDialog={closeEditDialog}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
         </div>
         <div className="relative md:ml-8 mt-4 md:mt-0">
           <Image

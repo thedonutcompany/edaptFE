@@ -56,3 +56,14 @@ export const PortfolioData = async () => {
     throw new Error(JSON.stringify(errorMessage));
   }
 };
+export const PortfolioUpdate = async (data: any) => {
+  try {
+    const response = await privateGateway.patch("/portfolio/", data);
+    console.log(response.data);
+    return response.data;
+  } catch (error: any) {
+    const errorMessage =
+      error.response?.data?.data || "An error occurred during profile update.";
+    throw new Error(JSON.stringify(errorMessage));
+  }
+};

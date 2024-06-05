@@ -24,6 +24,7 @@ const NavBar = (props: Props) => {
   const handleItemClick = (label: string) => {
     setSelected(label);
     router.push(`${label.toLowerCase()}`);
+    handleSidebarToggle();
   };
 
   return (

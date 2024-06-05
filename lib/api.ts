@@ -1,3 +1,4 @@
+import { toast } from "@/components/ui/use-toast";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -76,12 +77,25 @@ privateGateway.interceptors.response.use(
         });
       } catch (error_2) {
         // toast.error("Your session has expired. Please login again.");
-
+        toast({
+          variant: "destructive",
+          title: "Token Expired",
+          description: "Redirecting to login page",
+        });
         // Wait for 3 seconds
-        // setTimeout(() => {
-        //     //localStorage.clear();
-        //     //window.location.href = "/login";
-        // }, 3000);
+        setTimeout(() => {
+          new Promise((resolve) => {
+            Cookies.remove("access_token");
+            Cookies.remove("refresh_token");
+            resolve("done");
+          })
+            .then(() => {
+              window.location.href = "/signin";
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }, 3000);
         return await Promise.reject(error_2);
       }
     }

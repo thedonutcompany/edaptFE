@@ -273,53 +273,6 @@ const Portfolio = () => {
                   Add Skill <i className="fi fi-bs-arrow-up-right"></i>
                 </a>
               )}
-
-              {/* <div className="flex flex-col gap-2 justify-between rounded-sm bg-zinc-100 p-3">
-                <span className="font-semibold">Creativity of Solution</span>
-                <div className="flex gap-2 items-center">
-                  <Progress
-                    value={85}
-                    className="h-2.5 rounded-none bg-black/30"
-                  />
-                  <span>85%</span>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2 justify-between rounded-sm bg-zinc-100 p-3">
-                <span className="font-semibold">
-                  Data & Metrics Orientation
-                </span>
-                <div className="flex gap-2 items-center">
-                  <Progress
-                    value={81}
-                    className="h-2.5 rounded-none bg-black/30"
-                  />
-                  <span>81%</span>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2 justify-between rounded-sm bg-zinc-100 p-3">
-                <span className="font-semibold">
-                  Presentation & Communication Skills
-                </span>
-                <div className="flex gap-2 items-center">
-                  <Progress
-                    value={77}
-                    className="h-2.5 rounded-none bg-black/30"
-                  />
-                  <span>77%</span>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2 justify-between rounded-sm bg-zinc-100 p-3">
-                <span className="font-semibold">
-                  Clarity and Depth of Thought
-                </span>
-                <div className="flex gap-2 items-center">
-                  <Progress
-                    value={69}
-                    className="h-2.5 rounded-none bg-black/30"
-                  />
-                  <span>69%</span>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
@@ -335,8 +288,9 @@ const Portfolio = () => {
                           Graduation Project
                         </h3>
                         <a
-                          href="#"
+                          href={project?.url}
                           className="p-3 rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+                          target="_blank"
                         >
                           Open in new tab{" "}
                           <i className="fi fi-bs-arrow-up-right"></i>
@@ -346,8 +300,7 @@ const Portfolio = () => {
                         <Image
                           key={index}
                           src={
-                            project.banner_url ||
-                            "/assets/images/default_image.png"
+                            project.banner_url ?? "/assets/images/pj_banner.png"
                           }
                           alt={project.title}
                           width={600}
@@ -398,7 +351,7 @@ const Portfolio = () => {
             portfolioData?.data.projects.map((project, i) => (
               <a key={i} href={project.url}>
                 <Image
-                  src={project.banner_url ?? "/assets/images/pfc1.png"} // Replace with your project image path
+                  src={project.banner_url ?? "/assets/images/pj_banner.png"} // Replace with your project image path
                   alt="project_banner"
                   width={300}
                   height={300}

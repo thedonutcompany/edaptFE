@@ -60,9 +60,9 @@ const NavBar = (props: Props) => {
                 <Image
                   src="/assets/images/logo.png"
                   alt="Logo"
-                  width={100}
-                  height={100}
-                  className="object-contain"
+                  width={1000}
+                  height={1000}
+                  className="w-24 h-auto object-contain"
                 />
               </a>
               <h1 className="hidden md:block font-semibold text-gray-900 dark:text-white">
@@ -84,17 +84,15 @@ const NavBar = (props: Props) => {
                     data-dropdown-toggle="dropdown-user"
                   >
                     <span className="sr-only">Open user menu</span>
-                    <Image
-                      src={
-                        userImageUrl !== null
-                          ? userImageUrl
-                          : "/assets/images/dp.jpg"
-                      }
-                      alt="user photo"
-                      width={500}
-                      height={500}
-                      className="rounded-full h-8 w-8 object-cover"
-                    />
+                    {userImageUrl && (
+                      <Image
+                        src={userImageUrl ?? "/assets/images/dp.jpg"}
+                        alt="user photo"
+                        width={500}
+                        height={500}
+                        className="rounded-full h-8 w-8 object-cover"
+                      />
+                    )}
                   </button>
                 </div>
                 <div

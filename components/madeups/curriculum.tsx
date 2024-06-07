@@ -34,7 +34,7 @@ const Curriculum = () => {
     const fetchCurriculumData = async () => {
       try {
         const data = await CurriculumData();
-        console.log(data);
+        // console.log(data);
 
         setCurriculumData(data);
       } catch (error) {

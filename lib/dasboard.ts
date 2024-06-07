@@ -3,7 +3,7 @@ import { privateGateway } from "./api";
 export const ProfileData = async () => {
   try {
     const response = await privateGateway.get("/profile/");
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Failed to fetch profile data:", error);
@@ -37,7 +37,7 @@ export const socialsUpdate = async (data: any) => {
 export const CurriculumData = async () => {
   try {
     const response = await privateGateway.get("/course/");
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error: any) {
     const errorMessage =
@@ -48,7 +48,7 @@ export const CurriculumData = async () => {
 export const PortfolioData = async () => {
   try {
     const response = await privateGateway.get("/portfolio/");
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error: any) {
     const errorMessage =
@@ -59,7 +59,7 @@ export const PortfolioData = async () => {
 export const PortfolioUpdate = async (data: any) => {
   try {
     const response = await privateGateway.patch("/portfolio/", data);
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error: any) {
     const errorMessage =

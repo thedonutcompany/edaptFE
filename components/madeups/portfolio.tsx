@@ -288,7 +288,10 @@ const Portfolio = () => {
                 if (project.main_project) {
                   return (
                     <>
-                      <div className="flex justify-between items-center">
+                      <div
+                        key={index}
+                        className="flex justify-between items-center"
+                      >
                         <h3 className="text-lg font-bold">
                           Graduation Project
                         </h3>
@@ -308,6 +311,7 @@ const Portfolio = () => {
                             project.banner_url ?? "/assets/images/pj_banner.png"
                           }
                           alt={project.title}
+                          priority={true}
                           width={600}
                           height={600}
                           className="w-full h-full rounded-md object-cover"
@@ -316,15 +320,18 @@ const Portfolio = () => {
                     </>
                   );
                 } else {
-                  <a
-                    href="#"
-                    className="p-3 rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
-                  >
-                    Add your Main Project
-                    <i className="fi fi-bs-arrow-up-right"></i>
-                  </a>;
+                  return (
+                    <div key={index} className="h-full">
+                      <a
+                        href="#"
+                        className="p-3 h-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+                      >
+                        Add your Main Project
+                        <i className="fi fi-bs-arrow-up-right"></i>
+                      </a>
+                    </div>
+                  );
                 }
-                return null;
               })
             ) : (
               <a
@@ -380,6 +387,7 @@ const Portfolio = () => {
                 <Image
                   src={project.banner_url ?? "/assets/images/pj_banner.png"} // Replace with your project image path
                   alt="project_banner"
+                  priority={true}
                   width={300}
                   height={300}
                   className="w-full h-32 object-cover rounded-md"

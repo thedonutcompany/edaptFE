@@ -17,6 +17,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import AddResume from "./modules/portfolio/add-resume";
+import AddProject from "./modules/portfolio/add-project";
 
 interface Course {
   name: string;
@@ -94,8 +95,12 @@ const Portfolio = () => {
     PortfolioDataType | undefined
   >(undefined);
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
+  const [isProjectDialogOpen, setProjectDialogOpen] = useState(false);
 
-  const closeEditDialog = () => setEditDialogOpen(false);
+  const closeEditDialog = () => {
+    setEditDialogOpen(false);
+    setProjectDialogOpen(false);
+  };
   useEffect(() => {
     const fetchPortfolioData = async () => {
       try {
@@ -273,53 +278,6 @@ const Portfolio = () => {
                   Add Skill <i className="fi fi-bs-arrow-up-right"></i>
                 </a>
               )}
-
-              {/* <div className="flex flex-col gap-2 justify-between rounded-sm bg-zinc-100 p-3">
-                <span className="font-semibold">Creativity of Solution</span>
-                <div className="flex gap-2 items-center">
-                  <Progress
-                    value={85}
-                    className="h-2.5 rounded-none bg-black/30"
-                  />
-                  <span>85%</span>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2 justify-between rounded-sm bg-zinc-100 p-3">
-                <span className="font-semibold">
-                  Data & Metrics Orientation
-                </span>
-                <div className="flex gap-2 items-center">
-                  <Progress
-                    value={81}
-                    className="h-2.5 rounded-none bg-black/30"
-                  />
-                  <span>81%</span>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2 justify-between rounded-sm bg-zinc-100 p-3">
-                <span className="font-semibold">
-                  Presentation & Communication Skills
-                </span>
-                <div className="flex gap-2 items-center">
-                  <Progress
-                    value={77}
-                    className="h-2.5 rounded-none bg-black/30"
-                  />
-                  <span>77%</span>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2 justify-between rounded-sm bg-zinc-100 p-3">
-                <span className="font-semibold">
-                  Clarity and Depth of Thought
-                </span>
-                <div className="flex gap-2 items-center">
-                  <Progress
-                    value={69}
-                    className="h-2.5 rounded-none bg-black/30"
-                  />
-                  <span>69%</span>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
@@ -330,13 +288,17 @@ const Portfolio = () => {
                 if (project.main_project) {
                   return (
                     <>
-                      <div className="flex justify-between items-center">
+                      <div
+                        key={index}
+                        className="flex justify-between items-center"
+                      >
                         <h3 className="text-lg font-bold">
                           Graduation Project
                         </h3>
                         <a
-                          href="#"
+                          href={project?.url}
                           className="p-3 rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+                          target="_blank"
                         >
                           Open in new tab{" "}
                           <i className="fi fi-bs-arrow-up-right"></i>
@@ -346,10 +308,10 @@ const Portfolio = () => {
                         <Image
                           key={index}
                           src={
-                            project.banner_url ||
-                            "/assets/images/default_image.png"
+                            project.banner_url ?? "/assets/images/pj_banner.png"
                           }
                           alt={project.title}
+                          priority={true}
                           width={600}
                           height={600}
                           className="w-full h-full rounded-md object-cover"
@@ -358,15 +320,18 @@ const Portfolio = () => {
                     </>
                   );
                 } else {
-                  <a
-                    href="#"
-                    className="p-3 rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
-                  >
-                    Add your Main Project
-                    <i className="fi fi-bs-arrow-up-right"></i>
-                  </a>;
+                  return (
+                    <div key={index} className="h-full">
+                      <a
+                        href="#"
+                        className="p-3 h-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+                      >
+                        Add your Main Project
+                        <i className="fi fi-bs-arrow-up-right"></i>
+                      </a>
+                    </div>
+                  );
                 }
-                return null;
               })
             ) : (
               <a
@@ -387,7 +352,29 @@ const Portfolio = () => {
         <div className="flex justify-between items-center">
           <h3 className="text-lg font-bold">Projects</h3>
           <div className="flex gap-3">
-            <i className="fi fi-br-plus"></i>
+            <Dialog
+              open={isProjectDialogOpen}
+              onOpenChange={setProjectDialogOpen}
+            >
+              <DialogTrigger>
+                <i className="fi fi-br-plus"></i>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add your Project</DialogTitle>
+                  <DialogDescription>
+                    Fill the details of yor project
+                  </DialogDescription>
+                </DialogHeader>
+                {portfolioData && (
+                  <AddProject
+                    data={portfolioData.data}
+                    updatePortfolioData={updatePortfolioData}
+                    closeDialog={closeEditDialog}
+                  />
+                )}
+              </DialogContent>
+            </Dialog>
             <i className="fi fi-bs-pencil"></i>
           </div>
         </div>
@@ -398,8 +385,9 @@ const Portfolio = () => {
             portfolioData?.data.projects.map((project, i) => (
               <a key={i} href={project.url}>
                 <Image
-                  src={project.banner_url ?? "/assets/images/pfc1.png"} // Replace with your project image path
+                  src={project.banner_url ?? "/assets/images/pj_banner.png"} // Replace with your project image path
                   alt="project_banner"
+                  priority={true}
                   width={300}
                   height={300}
                   className="w-full h-32 object-cover rounded-md"

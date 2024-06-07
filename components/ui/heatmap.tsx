@@ -86,7 +86,7 @@ const HeatmapComponent = (props: Props) => {
           )}`
         : "";
       content.push(
-        <TooltipProvider>
+        <TooltipProvider key={`tooltip_${i}`}>
           <Tooltip>
             <TooltipTrigger>
               <p

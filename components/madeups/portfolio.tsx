@@ -17,6 +17,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import AddResume from "./modules/portfolio/add-resume";
+import AddProject from "./modules/portfolio/add-project";
 
 interface Course {
   name: string;
@@ -94,8 +95,12 @@ const Portfolio = () => {
     PortfolioDataType | undefined
   >(undefined);
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
+  const [isProjectDialogOpen, setProjectDialogOpen] = useState(false);
 
-  const closeEditDialog = () => setEditDialogOpen(false);
+  const closeEditDialog = () => {
+    setEditDialogOpen(false);
+    setProjectDialogOpen(false);
+  };
   useEffect(() => {
     const fetchPortfolioData = async () => {
       try {
@@ -340,7 +345,29 @@ const Portfolio = () => {
         <div className="flex justify-between items-center">
           <h3 className="text-lg font-bold">Projects</h3>
           <div className="flex gap-3">
-            <i className="fi fi-br-plus"></i>
+            <Dialog
+              open={isProjectDialogOpen}
+              onOpenChange={setProjectDialogOpen}
+            >
+              <DialogTrigger>
+                <i className="fi fi-br-plus"></i>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add your Project</DialogTitle>
+                  <DialogDescription>
+                    Fill the details of yor project
+                  </DialogDescription>
+                </DialogHeader>
+                {portfolioData && (
+                  <AddProject
+                    data={portfolioData.data}
+                    updatePortfolioData={updatePortfolioData}
+                    closeDialog={closeEditDialog}
+                  />
+                )}
+              </DialogContent>
+            </Dialog>
             <i className="fi fi-bs-pencil"></i>
           </div>
         </div>

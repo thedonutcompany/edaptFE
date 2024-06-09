@@ -67,3 +67,44 @@ export const PortfolioUpdate = async (data: any) => {
     throw new Error(JSON.stringify(errorMessage));
   }
 };
+export const PortfolioProjectCreate = async (data: any) => {
+  try {
+    const response = await privateGateway.post("/portfolio/projects/", data);
+    // console.log(response.data);
+    return response.data;
+  } catch (error: any) {
+    const errorMessage =
+      error.response?.data?.data || "An error occurred during profile update.";
+    throw new Error(JSON.stringify(errorMessage));
+  }
+};
+export const ProjectUpdate = async (
+  projectId: string | null | undefined,
+  data: any
+) => {
+  try {
+    const response = await privateGateway.patch(
+      `/portfolio/projects/${projectId}/`,
+      data
+    );
+    // console.log(response.data);
+    return response.data;
+  } catch (error: any) {
+    const errorMessage =
+      error.response?.data?.data || "An error occurred during profile update.";
+    throw new Error(JSON.stringify(errorMessage));
+  }
+};
+export const ProjectDelete = async (projectId: string | null | undefined) => {
+  try {
+    const response = await privateGateway.delete(
+      `/portfolio/projects/${projectId}/`
+    );
+    // console.log(response.data);
+    return response.data;
+  } catch (error: any) {
+    const errorMessage =
+      error.response?.data?.data || "An error occurred during profile update.";
+    throw new Error(JSON.stringify(errorMessage));
+  }
+};

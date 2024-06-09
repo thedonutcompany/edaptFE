@@ -8,6 +8,8 @@ import Verified from "@/public/assets/svgs/verified";
 import { Progress } from "../ui/progress";
 import { PortfolioData } from "@/lib/dasboard";
 import moment from "moment";
+import Link from "next/link";
+
 import {
   Dialog,
   DialogContent,
@@ -18,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import AddResume from "./modules/portfolio/add-resume";
 import AddProject from "./modules/portfolio/add-project";
+import React from "react";
 
 interface Course {
   name: string;
@@ -44,7 +47,8 @@ interface Skills {
   title: string;
   percentage: number;
 }
-interface Projects {
+export interface Projects {
+  id: string;
   banner_url: string | null;
   title: string;
   main_project: boolean;
@@ -55,39 +59,15 @@ export type PortfolioDataType = {
   data: {
     name: string;
     image_url: string;
-    course: {
-      name: string;
-      joined_at: string;
-    };
+    course: Course;
     linkedin: string;
-    projects: {
-      banner_url: string | null;
-      title: string;
-      main_project: boolean;
-      url: string;
-    }[]; // Assuming projects can be any type of data
+    projects: Projects[]; // Assuming projects can be any type of data
     resume_url: string | null;
     primary_badge: string;
     badges: string[];
-    skills: {
-      title: string;
-      percentage: number;
-    }[]; // Assuming skills can be any type of data
-    work_experience: {
-      title: string;
-      skills: string[];
-      company: string;
-      end_date: string;
-      location: string;
-      start_date: string;
-    }[];
-    education: {
-      id: number;
-      degree: string;
-      end_date: string;
-      start_date: string;
-      institution: string;
-    }[];
+    skills: Skills[]; // Assuming skills can be any type of data
+    work_experience: WorkExperience[];
+    education: Education[];
   };
 };
 const Portfolio = () => {
@@ -106,7 +86,6 @@ const Portfolio = () => {
       try {
         const data = await PortfolioData();
         // console.log(data);
-
         setPortfolioData(data);
       } catch (error) {
         console.error(error);
@@ -119,6 +98,7 @@ const Portfolio = () => {
   // console.log(portfolioData);
   const updatePortfolioData = (newData: any) => {
     setPortfolioData(newData);
+    console.log(newData);
   };
 
   return (
@@ -185,7 +165,7 @@ const Portfolio = () => {
             width={300}
             height={300}
           />
-
+          {/* badge */}
           {/* <span className="absolute -right-4 -top-4 text-white flex justify-center">
             <Image
               src="/assets/images/badge.png"
@@ -245,7 +225,7 @@ const Portfolio = () => {
           </div>
           <div>
             <div className="mt-3 flex gap-1 overflow-scroll no-scrollbar">
-              {portfolioData?.data?.badges.map((tag, i) => (
+              {portfolioData?.data?.badges?.map((tag, i) => (
                 <div key={i} className="border border-black rounded-md p-2">
                   <p className="font-semibold w-max">{tag}</p>
                   {/* <p className="font-medium text-sm w-max">PhonePe</p> */}
@@ -284,62 +264,62 @@ const Portfolio = () => {
         <div className="mt-4">
           <div className="h-full flex flex-col">
             {portfolioData?.data?.projects.length !== 0 ? (
-              portfolioData?.data?.projects.map((project, index) => {
-                if (project.main_project) {
-                  return (
-                    <>
-                      <div
-                        key={index}
-                        className="flex justify-between items-center"
-                      >
-                        <h3 className="text-lg font-bold">
-                          Graduation Project
-                        </h3>
-                        <a
-                          href={project?.url}
-                          className="p-3 rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
-                          target="_blank"
-                        >
-                          Open in new tab{" "}
-                          <i className="fi fi-bs-arrow-up-right"></i>
-                        </a>
-                      </div>
-                      <div className="mt-4 h-full">
-                        <Image
-                          key={index}
-                          src={
-                            project.banner_url ?? "/assets/images/pj_banner.png"
-                          }
-                          alt={project.title}
-                          priority={true}
-                          width={600}
-                          height={600}
-                          className="w-full h-full rounded-md object-cover"
-                        />
-                      </div>
-                    </>
-                  );
-                } else {
-                  return (
-                    <div key={index} className="h-full">
-                      <a
-                        href="#"
-                        className="p-3 h-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
-                      >
-                        Add your Main Project
-                        <i className="fi fi-bs-arrow-up-right"></i>
-                      </a>
-                    </div>
-                  );
-                }
-              })
+              <>
+                {portfolioData?.data.projects.some(
+                  (project) => project.main_project
+                ) ? (
+                  portfolioData?.data?.projects.map((project, index) => (
+                    <React.Fragment key={index}>
+                      {project.main_project ? (
+                        <>
+                          <div className="flex justify-between items-center">
+                            <h3 className="text-lg font-bold">
+                              Graduation Project
+                            </h3>
+                            <a
+                              href={project?.url}
+                              className="p-3 rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+                              target="_blank"
+                            >
+                              Open in new tab{" "}
+                              <i className="fi fi-bs-arrow-up-right"></i>
+                            </a>
+                          </div>
+                          <div className="mt-4 h-full">
+                            <Image
+                              src={
+                                project.banner_url ??
+                                "/assets/images/pj_banner.png"
+                              }
+                              alt={project.title}
+                              priority={true}
+                              width={600}
+                              height={600}
+                              className="w-full h-full rounded-md object-cover"
+                            />
+                          </div>
+                        </>
+                      ) : null}
+                    </React.Fragment>
+                  ))
+                ) : (
+                  <div className="h-full">
+                    <a
+                      href="#"
+                      className="p-3 h-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+                    >
+                      Add your Main Project{" "}
+                      <i className="fi fi-bs-arrow-up-right"></i>
+                    </a>
+                  </div>
+                )}
+              </>
             ) : (
               <a
                 href="#"
                 className="p-3 h-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
               >
-                Add your projects
-                <i className="fi fi-bs-arrow-up-right"></i>
+                Add your projects <i className="fi fi-bs-arrow-up-right"></i>
               </a>
             )}
           </div>
@@ -351,13 +331,13 @@ const Portfolio = () => {
       <div className="mt-8">
         <div className="flex justify-between items-center">
           <h3 className="text-lg font-bold">Projects</h3>
-          <div className="flex gap-3">
+          <div className="flex">
             <Dialog
               open={isProjectDialogOpen}
               onOpenChange={setProjectDialogOpen}
             >
               <DialogTrigger>
-                <i className="fi fi-br-plus"></i>
+                <i className="fi fi-br-plus p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -375,14 +355,20 @@ const Portfolio = () => {
                 )}
               </DialogContent>
             </Dialog>
-            <i className="fi fi-bs-pencil"></i>
+            <Link
+              href="/dashboard/portfolio/details/projects"
+              scroll={false}
+              shallow
+            >
+              <i className="fi fi-bs-pencil p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
+            </Link>
           </div>
         </div>
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {/* Repeat for each project */}
 
           {portfolioData?.data.projects.length !== 0 ? (
-            portfolioData?.data.projects.map((project, i) => (
+            portfolioData?.data.projects.slice(0, 4).map((project, i) => (
               <a key={i} href={project.url}>
                 <Image
                   src={project.banner_url ?? "/assets/images/pj_banner.png"} // Replace with your project image path
@@ -406,9 +392,13 @@ const Portfolio = () => {
           )}
         </div>
         {portfolioData?.data.projects.length !== 0 && (
-          <a className="mt-5 font-medium flex items-center gap-1">
-            View All <i className="fi fi-rr-arrow-small-right leading-3"></i>
-          </a>
+          <Link
+            href="/dashboard/portfolio/details/projects"
+            className="mt-5 font-medium flex items-center gap-1"
+          >
+            View All {portfolioData?.data?.projects?.length ?? 4 - 4} projects
+            <i className="fi fi-rr-arrow-small-right leading-3"></i>
+          </Link>
         )}
       </div>
 
@@ -501,5 +491,3 @@ const Portfolio = () => {
 };
 
 export default Portfolio;
-
-// pages/index.tsx

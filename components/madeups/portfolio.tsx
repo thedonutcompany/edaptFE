@@ -21,6 +21,7 @@ import {
 import AddResume from "./modules/portfolio/add-resume";
 import AddProject from "./modules/portfolio/add-project";
 import React from "react";
+import WorkExperience from "./modules/portfolio/work-experience";
 
 interface Course {
   name: string;
@@ -28,6 +29,7 @@ interface Course {
 }
 
 interface WorkExperience {
+  id: string;
   title: string;
   skills: string[];
   company: string;
@@ -405,59 +407,7 @@ const Portfolio = () => {
       <hr className="w-full my-8" />
 
       <div className="mt-8">
-        <div className="flex justify-between items-center">
-          <h3 className="text-lg font-bold">Work Experience</h3>
-          <div className="flex gap-3">
-            <i className="fi fi-br-plus"></i>
-            <i className="fi fi-bs-pencil"></i>
-          </div>
-        </div>
-        <div className="mt-4 bg-zinc-100 p-4 flex flex-col gap-4 rounded-md">
-          {portfolioData?.data?.work_experience.length !== 0 ? (
-            portfolioData?.data?.work_experience.map((work, i) => (
-              <div key={i} className="flex gap-4">
-                <Image
-                  src="/assets/images/dp.jpg" // Replace with your project image path
-                  alt="Project"
-                  width={50}
-                  height={50}
-                  className="w-12 h-12 object-cover rounded-md"
-                />
-                <div>
-                  <div className="flex justify-between">
-                    <div>
-                      <h4 className="font-semibold">{work.title}</h4>
-                      <p className="font-medium">{work.company}k</p>
-                      <p className="text-sm text-black/60">
-                        {work.start_date} - {work.end_date}
-                      </p>
-                      <p className="text-sm text-black/60">
-                        {work.location} • Full-Time
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {work?.skills?.map((skill, i) => {
-                      return (
-                        <Badge key={i} variant="secondary">
-                          {skill}
-                        </Badge>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <a
-              href="#"
-              className="p-3 h-full w-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
-            >
-              Add your Work Experience
-              <i className="fi fi-bs-arrow-up-right"></i>
-            </a>
-          )}
-        </div>
+        <WorkExperience data={portfolioData} />
       </div>
 
       <hr className="w-full my-8" />

@@ -60,7 +60,7 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
             <DialogTrigger>
               <i className="fi fi-br-plus p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
               <DialogHeader>
                 <DialogTitle>Add your Experience</DialogTitle>
                 <DialogDescription>
@@ -138,7 +138,7 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
                           <i className="fi fi-bs-pencil"></i>
                         </div>
                       </DialogTrigger>
-                      <DialogContent>
+                      <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
                         <DialogHeader>
                           <DialogTitle>Edit Experience</DialogTitle>
                           <DialogDescription>

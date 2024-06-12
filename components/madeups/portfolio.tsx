@@ -143,7 +143,7 @@ const Portfolio = () => {
                 <i className="fi fi-rr-pencil"></i> Edit
               </p>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
               <DialogHeader>
                 <DialogTitle>Upload Your Resume</DialogTitle>
                 <DialogDescription>
@@ -342,7 +342,7 @@ const Portfolio = () => {
               <DialogTrigger>
                 <i className="fi fi-br-plus p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
                 <DialogHeader>
                   <DialogTitle>Add your Project</DialogTitle>
                   <DialogDescription>

@@ -32,6 +32,7 @@ interface WorkExperience {
   id: string;
   title: string;
   skills: string[];
+  job_type: string;
   company: string;
   end_date: string;
   location: string;

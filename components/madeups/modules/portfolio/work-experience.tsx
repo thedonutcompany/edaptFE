@@ -1,8 +1,5 @@
-import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { PortfolioDataType } from "../../portfolio";
-import Link from "next/link";
 import {
   Dialog,
   DialogContent,
@@ -11,39 +8,44 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import AddExperience from "./add-experience";
+import ExperienceForm from "./ExperienceForm";
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 type Props = {
   data: PortfolioDataType | undefined;
 };
 
-const WorkExperience = ({ data }: Props) => {
-  const [experienceData, setExperienceData] = useState<
+const WorkExperience: React.FC<Props> = ({ data }) => {
+  const [portfolioData, setPortfolioData] = useState<
     PortfolioDataType | undefined
-  >();
-  useEffect(() => {
-    setExperienceData(data);
-  }, [setExperienceData, data]);
-  // console.log(data, experienceData);
-
+  >(undefined);
+  const [editable, setEditable] = useState(false);
   const [isExperienceDialogOpen, setExperienceDialogOpen] = useState(false);
+  const [isExperienceEditDialogOpen, setExperienceEditDialogOpen] = useState<
+    string | null
+  >(null);
+
+  useEffect(() => {
+    try {
+      setPortfolioData(data);
+    } catch (error) {
+      console.error(error);
+      // Handle error
+    }
+  }, [data]);
+
   const closeEditDialog = () => {
     setExperienceDialogOpen(false);
+    setExperienceEditDialogOpen(null);
   };
-  const updateExperienceData = (newData: any) => {
-    setExperienceData((prevData) => {
-      if (!prevData) return newData;
-      const prevWorkExperience = prevData.data.work_experience || [];
-      const newWorkExperience = newData?.data?.work_experience || [];
 
-      return {
-        ...prevData,
-        data: {
-          ...prevData.data,
-          work_experience: [...prevWorkExperience, ...newWorkExperience],
-        },
-      };
-    });
+  const updateExperienceData = (newData: any) => {
+    setPortfolioData(newData);
+  };
+
+  const openEditDialog = (id: string) => {
+    setExperienceEditDialogOpen(id);
   };
 
   return (
@@ -62,11 +64,11 @@ const WorkExperience = ({ data }: Props) => {
               <DialogHeader>
                 <DialogTitle>Add your Experience</DialogTitle>
                 <DialogDescription>
-                  Fill the details of yor Experience
+                  Fill the details of your Experience
                 </DialogDescription>
               </DialogHeader>
               {data && (
-                <AddExperience
+                <ExperienceForm
                   data={data.data}
                   updatePortfolioData={updateExperienceData}
                   closeDialog={closeEditDialog}
@@ -74,22 +76,21 @@ const WorkExperience = ({ data }: Props) => {
               )}
             </DialogContent>
           </Dialog>
-          <Link
-            href="/dashboard/portfolio/details/Experiences"
-            scroll={false}
-            shallow
+          <div
+            onClick={() => setEditable(!editable)}
+            className="h-10 w-10 flex flex-1 justify-center items-center rounded-full cursor-pointer hover:bg-zinc-100"
           >
-            <i className="fi fi-bs-pencil p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
-          </Link>
+            <i className="fi fi-bs-pencil"></i>
+          </div>
         </div>
       </div>
       <div className="mt-4 bg-zinc-100 p-4 flex flex-col gap-4 rounded-md">
-        {experienceData?.data?.work_experience.length !== 0 ? (
-          experienceData?.data?.work_experience.map((work, i) => (
+        {portfolioData?.data?.work_experience.length !== 0 ? (
+          portfolioData?.data?.work_experience.map((work, i) => (
             <div key={i} className="flex justify-between">
               <div className="flex gap-4">
                 <Image
-                  src="/assets/images/dp.jpg" // Replace with your Experience image path
+                  src="/assets/images/dp.jpg"
                   alt="Experience"
                   width={50}
                   height={50}
@@ -109,31 +110,44 @@ const WorkExperience = ({ data }: Props) => {
                     </div>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {work?.skills?.map((skill, i) => {
-                      return (
-                        <Badge key={i} variant="secondary">
-                          {skill}
-                        </Badge>
-                      );
-                    })}
+                    {work?.skills?.map((skill, i) => (
+                      <Badge key={i} variant="secondary">
+                        {skill}
+                      </Badge>
+                    ))}
                   </div>
                 </div>
               </div>
-              <div className="w-fit">
-                <div
-                  // onClick={() =>
-                  //   openEditDialog({
-                  //     id: project.id,
-                  //     main_project: project.main_project,
-                  //     title: project.title,
-                  //     url: project.url,
-                  //   })
-                  // }
-                  className="h-10 w-10 flex flex-1 justify-center items-center rounded-full cursor-pointer hover:bg-zinc-50"
-                >
-                  <i className="fi fi-bs-pencil"></i>
+              {editable && (
+                <div className="w-fit">
+                  <Dialog
+                    open={isExperienceEditDialogOpen === work.id}
+                    onOpenChange={() => openEditDialog(work.id)}
+                  >
+                    <DialogTrigger>
+                      <div className="h-10 w-10 flex flex-1 justify-center items-center rounded-full cursor-pointer hover:bg-zinc-50">
+                        <i className="fi fi-bs-pencil"></i>
+                      </div>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Edit Experience</DialogTitle>
+                        <DialogDescription>
+                          Edit the details of your Experience
+                        </DialogDescription>
+                      </DialogHeader>
+                      {data && (
+                        <ExperienceForm
+                          data={data.data}
+                          experience={work}
+                          updatePortfolioData={updateExperienceData}
+                          closeDialog={closeEditDialog}
+                        />
+                      )}
+                    </DialogContent>
+                  </Dialog>
                 </div>
-              </div>
+              )}
             </div>
           ))
         ) : (

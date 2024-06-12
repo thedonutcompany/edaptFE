@@ -59,7 +59,6 @@ export const PortfolioData = async () => {
 export const PortfolioUpdate = async (data: any) => {
   try {
     const response = await privateGateway.patch("/portfolio/", data);
-    // console.log(response.data);
     return response.data;
   } catch (error: any) {
     const errorMessage =
@@ -67,6 +66,7 @@ export const PortfolioUpdate = async (data: any) => {
     throw new Error(JSON.stringify(errorMessage));
   }
 };
+
 export const PortfolioProjectCreate = async (data: any) => {
   try {
     const response = await privateGateway.post("/portfolio/projects/", data);

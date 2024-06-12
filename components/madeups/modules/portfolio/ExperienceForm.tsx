@@ -148,9 +148,9 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
           : [...data?.work_experience, newExperience],
       };
 
-      const newData = await PortfolioUpdate(
-        JSON.stringify({ work_experience: updatedProfileData.work_experience })
-      );
+      const newData = await PortfolioUpdate({
+        work_experience: JSON.stringify(updatedProfileData.work_experience),
+      });
       updatePortfolioData(newData);
 
       toast({

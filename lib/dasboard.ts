@@ -16,13 +16,11 @@ export const ProfileUpdate = async (data: any) => {
     const response = await privateGateway.patch("/profile/", data);
     return response.data;
   } catch (error: any) {
-    // Extract the error message and include any additional information you need
     const errorMessage =
       error.response?.data?.data || "An error occurred during profile update.";
-    throw new Error(JSON.stringify(errorMessage)); // Stringify the error object to get more readable output
+    throw new Error(JSON.stringify(errorMessage));
   }
 };
-
 export const socialsUpdate = async (data: any) => {
   try {
     const response = await privateGateway.patch("/profile/socials/", data);
@@ -59,7 +57,6 @@ export const PortfolioData = async () => {
 export const PortfolioUpdate = async (data: any) => {
   try {
     const response = await privateGateway.patch("/portfolio/", data);
-    // console.log(response.data);
     return response.data;
   } catch (error: any) {
     const errorMessage =
@@ -67,6 +64,7 @@ export const PortfolioUpdate = async (data: any) => {
     throw new Error(JSON.stringify(errorMessage));
   }
 };
+
 export const PortfolioProjectCreate = async (data: any) => {
   try {
     const response = await privateGateway.post("/portfolio/projects/", data);

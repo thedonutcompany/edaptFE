@@ -184,7 +184,7 @@ const EditProjects = ({ data }: Props) => {
       {updatedProjectData?.map((project) => (
         <div
           key={project.id}
-          className="flex bg-white border border-gray-200 rounded-xl shadow dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+          className="flex flex-wrap bg-white border border-gray-200 rounded-xl shadow dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
         >
           <Image
             src={project.banner_url ?? "/assets/images/pj_banner.png"}
@@ -213,7 +213,7 @@ const EditProjects = ({ data }: Props) => {
                 url: project.url,
               })
             }
-            className="m-2 h-10 w-10 flex justify-center items-center rounded-full cursor-pointer hover:bg-zinc-100"
+            className="m-2 h-10 w-10 flex flex-1 justify-center items-center rounded-full cursor-pointer hover:bg-zinc-100"
           >
             <i className="fi fi-bs-pencil"></i>
           </div>

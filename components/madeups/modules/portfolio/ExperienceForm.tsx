@@ -65,6 +65,7 @@ type ExperienceFormProps = {
   }; // type for editing existing experience
   updatePortfolioData: any;
   closeDialog: () => void;
+  isEdit: boolean;
 };
 
 const ExperienceForm: React.FC<ExperienceFormProps> = ({
@@ -72,6 +73,7 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
   experience,
   updatePortfolioData,
   closeDialog,
+  isEdit,
 }) => {
   const { toast } = useToast();
   const form = useForm<PortfolioFormData>({
@@ -423,18 +425,22 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
               )}
             />
           </div>
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={() => handleDelete(experience?.id!)}
-            className="w-full"
-          >
-            Delete project
-          </Button>
+          <div className="col-span-2 flex gap-4">
+            {isEdit && (
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={() => handleDelete(experience?.id!)}
+                className="w-full"
+              >
+                Delete project
+              </Button>
+            )}
 
-          <Button type="submit" className="w-full">
-            Update profile
-          </Button>
+            <Button type="submit" className="w-full">
+              {isEdit ? "Update experience" : "Add new experience"}
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

@@ -72,6 +72,7 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
                   data={data.data}
                   updatePortfolioData={updateExperienceData}
                   closeDialog={closeEditDialog}
+                  isEdit={false}
                 />
               )}
             </DialogContent>
@@ -84,76 +85,87 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
           </div>
         </div>
       </div>
-      <div className="mt-4 bg-zinc-100 p-4 flex flex-col gap-4 rounded-md">
+      <div className="mt-4 flex flex-col gap-4 rounded-md">
         {portfolioData?.data?.work_experience.length !== 0 ? (
           portfolioData?.data?.work_experience.map((work, i) => (
-            <div key={i} className="flex justify-between">
-              <div className="flex gap-4">
-                <Image
-                  src="/assets/images/dp.jpg"
-                  alt="Experience"
-                  width={50}
-                  height={50}
-                  className="w-12 h-12 object-cover rounded-md"
-                />
-                <div>
-                  <div className="flex justify-between">
-                    <div>
-                      <h4 className="font-semibold">{work.title}</h4>
-                      <p className="font-medium">{work.company}k</p>
-                      <p className="text-sm text-black/60">
-                        {work.start_date} - {work.end_date}
-                      </p>
-                      <p className="text-sm text-black/60">
-                        {work.location} • Full-Time
-                      </p>
+            <div
+              key={i}
+              className="bg-zinc-100 p-4 flex flex-col gap-4 rounded-md"
+            >
+              <div className="flex justify-between">
+                <div className="flex gap-4">
+                  <Image
+                    src="/assets/images/dp.jpg"
+                    alt="Experience"
+                    width={50}
+                    height={50}
+                    className="w-12 h-12 object-cover rounded-md"
+                  />
+                  <div>
+                    <div className="flex justify-between">
+                      <div>
+                        <h4 className="font-semibold">{work.title}</h4>
+                        <p className="font-medium">{work.company}</p>
+                        <p className="text-sm text-black/60">
+                          {work.start_date} - {work.end_date}
+                        </p>
+                        <p className="text-sm text-black/60">
+                          {work.location} • {work.job_type}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {work?.skills?.map((skill, i) => (
+                        <Badge key={i} variant="secondary">
+                          {skill}
+                        </Badge>
+                      ))}
                     </div>
                   </div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {work?.skills?.map((skill, i) => (
-                      <Badge key={i} variant="secondary">
-                        {skill}
-                      </Badge>
-                    ))}
+                </div>
+                {editable && (
+                  <div className="w-fit">
+                    <Dialog
+                      open={isExperienceEditDialogOpen === work.id}
+                      onOpenChange={() => {
+                        isExperienceEditDialogOpen !== work.id
+                          ? openEditDialog(work.id)
+                          : openEditDialog("");
+                      }}
+                    >
+                      <DialogTrigger>
+                        <div className="h-10 w-10 flex flex-1 justify-center items-center rounded-full cursor-pointer hover:bg-zinc-50">
+                          <i className="fi fi-bs-pencil"></i>
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Edit Experience</DialogTitle>
+                          <DialogDescription>
+                            Edit the details of your Experience
+                          </DialogDescription>
+                        </DialogHeader>
+                        {data && (
+                          <ExperienceForm
+                            data={data.data}
+                            experience={work}
+                            updatePortfolioData={updateExperienceData}
+                            closeDialog={closeEditDialog}
+                            isEdit={true}
+                          />
+                        )}
+                      </DialogContent>
+                    </Dialog>
                   </div>
-                </div>
+                )}
               </div>
-              {editable && (
-                <div className="w-fit">
-                  <Dialog
-                    open={isExperienceEditDialogOpen === work.id}
-                    onOpenChange={() => openEditDialog(work.id)}
-                  >
-                    <DialogTrigger>
-                      <div className="h-10 w-10 flex flex-1 justify-center items-center rounded-full cursor-pointer hover:bg-zinc-50">
-                        <i className="fi fi-bs-pencil"></i>
-                      </div>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Edit Experience</DialogTitle>
-                        <DialogDescription>
-                          Edit the details of your Experience
-                        </DialogDescription>
-                      </DialogHeader>
-                      {data && (
-                        <ExperienceForm
-                          data={data.data}
-                          experience={work}
-                          updatePortfolioData={updateExperienceData}
-                          closeDialog={closeEditDialog}
-                        />
-                      )}
-                    </DialogContent>
-                  </Dialog>
-                </div>
-              )}
             </div>
           ))
         ) : (
           <a
             href="#"
             className="p-3 h-full w-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+            onClick={() => setExperienceDialogOpen(true)}
           >
             Add your Work Experience
             <i className="fi fi-bs-arrow-up-right"></i>

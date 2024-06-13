@@ -19,21 +19,12 @@ type Props = {
 const WorkExperience: React.FC<Props> = ({ data }) => {
   const [portfolioData, setPortfolioData] = useState<
     PortfolioDataType | undefined
-  >(undefined);
+  >(data);
   const [editable, setEditable] = useState(false);
   const [isExperienceDialogOpen, setExperienceDialogOpen] = useState(false);
   const [isExperienceEditDialogOpen, setExperienceEditDialogOpen] = useState<
     number | null
   >(null);
-
-  useEffect(() => {
-    try {
-      setPortfolioData(data);
-    } catch (error) {
-      console.error(error);
-      // Handle error
-    }
-  }, [data]);
 
   const closeEditDialog = () => {
     setExperienceDialogOpen(false);
@@ -147,7 +138,7 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
                         </DialogHeader>
                         {data && (
                           <ExperienceForm
-                            data={data.data}
+                            data={portfolioData.data}
                             experience={work}
                             updatePortfolioData={updateExperienceData}
                             closeDialog={closeEditDialog}

@@ -1,23 +1,13 @@
 "use client";
-import { useState, KeyboardEvent, ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format, isValid } from "date-fns"; // Import isValid from date-fns
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -30,7 +20,6 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
-import { X } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { PortfolioUpdate } from "@/lib/dasboard";
 import { PortfolioDataType } from "../../portfolio";
@@ -116,7 +105,6 @@ const EducationForm: React.FC<ExperienceFormProps> = ({
             )
           : [...data?.education, newEducation],
       };
-
       const newData = await PortfolioUpdate({
         education: JSON.stringify(updatedProfileData.education),
       });
@@ -148,9 +136,6 @@ const EducationForm: React.FC<ExperienceFormProps> = ({
         ...data,
         education: updatedWorkExperience,
       };
-      console.log(updatedProfileData);
-
-      // Call your update function with the updated profile data
       const newData = await PortfolioUpdate({
         education: JSON.stringify(updatedProfileData.education),
       });

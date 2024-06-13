@@ -184,38 +184,40 @@ const EditProjects = ({ data }: Props) => {
       {updatedProjectData?.map((project) => (
         <div
           key={project.id}
-          className="flex flex-wrap bg-white border border-gray-200 rounded-xl shadow dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+          className="flex flex-col lg:flex-row bg-white border border-gray-200 rounded-xl shadow dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
         >
           <Image
             src={project.banner_url ?? "/assets/images/pj_banner.png"}
             width={500}
             height={500}
             alt=""
-            className="object-cover h-full p-3 rounded-3xl md:w-48"
+            className="object-cover h-40 w-full p-3 rounded-3xl lg:h-36  lg:w-48"
           />
-          <div className="flex flex-1 flex-col justify-center p-4 leading-normal">
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-              {project.title}
-            </h5>
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              {project.url}
-            </p>
-            {project.main_project && (
-              <Badge className="w-fit">Main Project</Badge>
-            )}
-          </div>
-          <div
-            onClick={() =>
-              openEditDialog({
-                id: project.id,
-                main_project: project.main_project,
-                title: project.title,
-                url: project.url,
-              })
-            }
-            className="m-2 h-10 w-10 flex flex-1 justify-center items-center rounded-full cursor-pointer hover:bg-zinc-100"
-          >
-            <i className="fi fi-bs-pencil"></i>
+          <div className="flex flex-1">
+            <div className="flex flex-1 flex-col justify-center p-4 leading-normal">
+              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {project.title}
+              </h5>
+              <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                {project.url}
+              </p>
+              {project.main_project && (
+                <Badge className="w-fit">Main Project</Badge>
+              )}
+            </div>
+            <div
+              onClick={() =>
+                openEditDialog({
+                  id: project.id,
+                  main_project: project.main_project,
+                  title: project.title,
+                  url: project.url,
+                })
+              }
+              className="m-2 h-10 w-10 flex justify-center items-center rounded-full cursor-pointer hover:bg-zinc-100"
+            >
+              <i className="fi fi-bs-pencil"></i>
+            </div>
           </div>
         </div>
       ))}

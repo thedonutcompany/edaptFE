@@ -22,6 +22,7 @@ import AddResume from "./modules/portfolio/add-resume";
 import AddProject from "./modules/portfolio/add-project";
 import React from "react";
 import WorkExperience from "./modules/portfolio/work-experience";
+import Education from "./modules/portfolio/education";
 
 interface Course {
   name: string;
@@ -29,7 +30,7 @@ interface Course {
 }
 
 interface WorkExperience {
-  id: string;
+  id: number;
   title: string;
   skills: string[];
   job_type: string;
@@ -42,6 +43,7 @@ interface WorkExperience {
 interface Education {
   id: number;
   degree: string;
+  description: string;
   end_date: string;
   start_date: string;
   institution: string;
@@ -414,28 +416,7 @@ const Portfolio = () => {
       <hr className="w-full my-8" />
 
       <div className="mt-8 ">
-        <div className="flex justify-between items-center">
-          <h3 className="text-lg font-bold">Education</h3>
-          <div className="flex gap-3">
-            <i className="fi fi-br-plus"></i>
-            <i className="fi fi-bs-pencil"></i>
-          </div>
-        </div>
-        <div className="mt-4 bg-zinc-100 p-4 flex flex-col gap-4 rounded-md">
-          {portfolioData?.data?.education?.map((education, i) => {
-            return (
-              <div key={i} className="flex justify-between">
-                <div>
-                  <h4 className="font-semibold">{education.degree}</h4>
-                  <p className="font-medium">{education.institution}</p>
-                  <p className="text-sm text-black/60">
-                    {education.start_date} - {education.end_date}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <Education data={portfolioData} />
       </div>
     </div>
   );

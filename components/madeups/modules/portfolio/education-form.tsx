@@ -37,40 +37,35 @@ import { PortfolioDataType } from "../../portfolio";
 import { cn } from "@/lib/utils";
 
 const portfolioSchema = z.object({
-  company: z.string().min(1, "Company is required"),
+  degree: z.string().min(1, "Company is required"),
   description: z.string().min(1, "Description is required"),
   end_date: z.date(),
-  job_type: z.string().min(1, "Job type is required"),
-  location: z.string().min(1, "Location is required"),
-  skills: z.array(z.string()).min(1, "Skills are required"),
+  institution: z.string().min(1, "Job type is required"),
   start_date: z.date({
     message: "Start date is required!",
   }),
-  title: z.string().min(1, "Title is required"),
 });
 
 type PortfolioFormData = z.infer<typeof portfolioSchema>;
 
 type ExperienceFormProps = {
   data: PortfolioDataType["data"];
-  experience?: {
+  education?: {
     id: number;
-    title: string;
-    skills: string[];
-    job_type: string;
-    company: string;
+    degree: string;
+    description: string;
     end_date: string;
-    location: string;
     start_date: string;
+    institution: string;
   }; // type for editing existing experience
   updatePortfolioData: any;
   closeDialog: () => void;
   isEdit: boolean;
 };
 
-const ExperienceForm: React.FC<ExperienceFormProps> = ({
+const EducationForm: React.FC<ExperienceFormProps> = ({
   data,
-  experience,
+  education,
   updatePortfolioData,
   closeDialog,
   isEdit,
@@ -78,50 +73,24 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
   const { toast } = useToast();
   const form = useForm<PortfolioFormData>({
     resolver: zodResolver(portfolioSchema),
-    defaultValues: experience
+    defaultValues: education
       ? {
-          ...experience,
-          start_date: experience.start_date
-            ? new Date(experience.start_date)
+          ...education,
+          start_date: education.start_date
+            ? new Date(education.start_date)
             : undefined,
-          end_date: experience.end_date
-            ? new Date(experience.end_date)
+          end_date: education.end_date
+            ? new Date(education.end_date)
             : undefined,
         }
       : {
-          company: "",
+          degree: "",
           description: "",
           end_date: new Date(),
           start_date: new Date(),
-          job_type: "",
-          location: "",
-          skills: [],
-          title: "",
+          institution: "",
         },
   });
-
-  const [skills, setSkills] = useState<string[]>(experience?.skills || []);
-  const [currentSkill, setCurrentSkill] = useState<string>("");
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      if (currentSkill.trim() !== "") {
-        const newSkills = [...skills, currentSkill.trim()];
-        setSkills(newSkills);
-        setCurrentSkill("");
-        form.setValue("skills", newSkills);
-      }
-    }
-  };
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCurrentSkill(e.target.value);
-  };
-
-  const handleRemoveSkill = (index: number) => {
-    setSkills(skills.filter((_, i) => i !== index));
-  };
 
   const onSubmit: SubmitHandler<PortfolioFormData> = async (formData) => {
     try {
@@ -133,7 +102,7 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
         ? format(formData.end_date, "MMMM yyyy")
         : undefined;
 
-      const newExperience = {
+      const newEducation = {
         ...formData,
         end_date: formattedEndDate,
         start_date: formattedStartDate,
@@ -141,15 +110,15 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
 
       const updatedProfileData = {
         ...data,
-        work_experience: experience
-          ? data?.work_experience.map((exp) =>
-              exp.id === experience.id ? newExperience : exp
+        education: education
+          ? data?.education.map((edu) =>
+              edu.id === education.id ? newEducation : edu
             )
-          : [...data?.work_experience, newExperience],
+          : [...data?.education, newEducation],
       };
 
       const newData = await PortfolioUpdate({
-        work_experience: JSON.stringify(updatedProfileData.work_experience),
+        education: JSON.stringify(updatedProfileData.education),
       });
       updatePortfolioData(newData);
 
@@ -169,7 +138,7 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
   const handleDelete = async (id: number) => {
     try {
       // Filter out the experience with the given ID
-      const updatedWorkExperience = data.work_experience.filter(
+      const updatedWorkExperience = data.education.filter(
         (exp) => exp.id !== id
       );
       console.log(id);
@@ -177,13 +146,13 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
       // Update the profile data with the filtered work experience
       const updatedProfileData = {
         ...data,
-        work_experience: updatedWorkExperience,
+        education: updatedWorkExperience,
       };
       console.log(updatedProfileData);
 
       // Call your update function with the updated profile data
       const newData = await PortfolioUpdate({
-        work_experience: JSON.stringify(updatedProfileData.work_experience),
+        education: JSON.stringify(updatedProfileData.education),
       });
       updatePortfolioData(newData);
 
@@ -209,13 +178,13 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
         >
           <FormField
             control={form.control}
-            name="title"
+            name="degree"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>Degree</FormLabel>
                 <Input
                   className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
-                  placeholder="Type your title"
+                  placeholder="Type your degree"
                   {...field}
                 />
                 <FormMessage />
@@ -224,13 +193,13 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
           />
           <FormField
             control={form.control}
-            name="company"
+            name="institution"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company</FormLabel>
+                <FormLabel>Institution</FormLabel>
                 <Input
                   className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
-                  placeholder="Type your company name"
+                  placeholder="Type your institution"
                   {...field}
                 />
                 <FormMessage />
@@ -342,95 +311,13 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="location"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Location</FormLabel>
-                <Input
-                  className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
-                  placeholder="Type your location"
-                  {...field}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="job_type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Job Type</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={experience?.job_type || ""}
-                >
-                  <FormControl>
-                    <SelectTrigger className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6">
-                      <SelectValue placeholder="Select a job type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="full-time">Full-time</SelectItem>
-                    <SelectItem value="part-time">Part-time</SelectItem>
-                    <SelectItem value="Contract">Contract</SelectItem>
-                    <SelectItem value="Freelance">Freelance</SelectItem>
-                    <SelectItem value="internship">Internship</SelectItem>
-                    <SelectItem value="Volunteer">Volunteer</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="col-span-2">
-            <FormField
-              control={form.control}
-              name="skills"
-              render={() => (
-                <FormItem>
-                  <FormLabel>Skills</FormLabel>
-                  <FormControl>
-                    <div className="flex flex-wrap items-center gap-2">
-                      {skills.map((skill, index) => (
-                        <span
-                          key={index}
-                          className="bg-[#07C553]/10 text-[#07C553] rounded-sm px-2 py-1 flex items-center gap-2"
-                        >
-                          {skill}
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveSkill(index)}
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        </span>
-                      ))}
-                      <Input
-                        className="bg-[#F1F1F1] rounded-sm focus:bg-[#07C553]/10 focus-visible:ring-offset-0 focus-visible:ring-[#07C553] focus:outline-none focus:border-[#07C553] focus:text-black border-none px-6 py-6"
-                        placeholder="Type your skill and press enter"
-                        value={currentSkill}
-                        onChange={handleChange}
-                        onKeyDown={handleKeyDown}
-                      />
-                    </div>
-                  </FormControl>
-                  <FormDescription>
-                    Press enter to add a skill. Press backspace to delete.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+
           <div className="col-span-2 flex gap-4">
             {isEdit && (
               <Button
                 type="button"
                 variant="destructive"
-                onClick={() => handleDelete(experience?.id!)}
+                onClick={() => handleDelete(education?.id!)}
                 className="w-full"
               >
                 Delete project
@@ -447,4 +334,4 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
   );
 };
 
-export default ExperienceForm;
+export default EducationForm;

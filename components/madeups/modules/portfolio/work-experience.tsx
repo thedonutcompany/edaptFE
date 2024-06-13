@@ -68,12 +68,14 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
               )}
             </DialogContent>
           </Dialog>
-          <div
-            onClick={() => setEditable(!editable)}
-            className="h-10 w-10 flex flex-1 justify-center items-center rounded-full cursor-pointer hover:bg-zinc-100"
-          >
-            <i className="fi fi-bs-pencil"></i>
-          </div>
+          {portfolioData?.data?.work_experience.length !== 0 && (
+            <div
+              onClick={() => setEditable(!editable)}
+              className="h-10 w-10 flex flex-1 justify-center items-center rounded-full cursor-pointer hover:bg-zinc-100"
+            >
+              <i className="fi fi-bs-pencil"></i>
+            </div>
+          )}
         </div>
       </div>
       <div className="mt-4 flex flex-col gap-4 rounded-md">
@@ -153,14 +155,13 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
             </div>
           ))
         ) : (
-          <a
-            href="#"
+          <div
             className="p-3 h-full w-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
             onClick={() => setExperienceDialogOpen(true)}
           >
             Add your Work Experience
             <i className="fi fi-bs-arrow-up-right"></i>
-          </a>
+          </div>
         )}
       </div>
     </>

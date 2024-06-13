@@ -8,21 +8,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import ExperienceForm from "./ExperienceForm";
-import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
+import EducationForm from "./education-form";
 
 type Props = {
   data: PortfolioDataType | undefined;
 };
 
-const WorkExperience: React.FC<Props> = ({ data }) => {
+const Education: React.FC<Props> = ({ data }) => {
   const [portfolioData, setPortfolioData] = useState<
     PortfolioDataType | undefined
   >(undefined);
   const [editable, setEditable] = useState(false);
-  const [isExperienceDialogOpen, setExperienceDialogOpen] = useState(false);
-  const [isExperienceEditDialogOpen, setExperienceEditDialogOpen] = useState<
+  const [isEducationDialogOpen, setEducationDialogOpen] = useState(false);
+  const [isEducationEditDialogOpen, setEducationEditDialogOpen] = useState<
     number | null
   >(null);
 
@@ -36,41 +34,41 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
   }, [data]);
 
   const closeEditDialog = () => {
-    setExperienceDialogOpen(false);
-    setExperienceEditDialogOpen(null);
+    setEducationDialogOpen(false);
+    setEducationEditDialogOpen(null);
   };
 
-  const updateExperienceData = (newData: any) => {
+  const updateEducationData = (newData: any) => {
     setPortfolioData(newData);
   };
 
   const openEditDialog = (id: number) => {
-    setExperienceEditDialogOpen(id);
+    setEducationEditDialogOpen(id);
   };
 
   return (
     <>
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-bold">Work Experience</h3>
+        <h3 className="text-lg font-bold">Education</h3>
         <div className="flex">
           <Dialog
-            open={isExperienceDialogOpen}
-            onOpenChange={setExperienceDialogOpen}
+            open={isEducationDialogOpen}
+            onOpenChange={setEducationDialogOpen}
           >
             <DialogTrigger>
               <i className="fi fi-br-plus p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
             </DialogTrigger>
             <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
               <DialogHeader>
-                <DialogTitle>Add your Experience</DialogTitle>
+                <DialogTitle>Add your Education</DialogTitle>
                 <DialogDescription>
-                  Fill the details of your Experience
+                  Fill the details of your Education
                 </DialogDescription>
               </DialogHeader>
               {data && (
-                <ExperienceForm
+                <EducationForm
                   data={data.data}
-                  updatePortfolioData={updateExperienceData}
+                  updatePortfolioData={updateEducationData}
                   closeDialog={closeEditDialog}
                   isEdit={false}
                 />
@@ -86,50 +84,27 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
         </div>
       </div>
       <div className="mt-4 flex flex-col gap-4 rounded-md">
-        {portfolioData?.data?.work_experience.length !== 0 ? (
-          portfolioData?.data?.work_experience.map((work, i) => (
+        {portfolioData?.data?.education.length !== 0 ? (
+          portfolioData?.data?.education.map((education, i) => (
             <div
               key={i}
               className="bg-zinc-100 p-4 flex flex-col gap-4 rounded-md"
             >
               <div className="flex justify-between">
-                <div className="flex gap-4">
-                  <Image
-                    src="/assets/images/dp.jpg"
-                    alt="Experience"
-                    width={50}
-                    height={50}
-                    className="w-12 h-12 object-cover rounded-md"
-                  />
-                  <div>
-                    <div className="flex justify-between">
-                      <div>
-                        <h4 className="font-semibold">{work.title}</h4>
-                        <p className="font-medium">{work.company}</p>
-                        <p className="text-sm text-black/60">
-                          {work.start_date} - {work.end_date}
-                        </p>
-                        <p className="text-sm text-black/60">
-                          {work.location} • {work.job_type}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {work?.skills?.map((skill, i) => (
-                        <Badge key={i} variant="secondary">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
+                <div>
+                  <h4 className="font-semibold">{education.degree}</h4>
+                  <p className="font-medium">{education.institution}</p>
+                  <p className="text-sm text-black/60">
+                    {education.start_date} - {education.end_date}
+                  </p>
                 </div>
                 {editable && (
                   <div className="w-fit">
                     <Dialog
-                      open={isExperienceEditDialogOpen === work.id}
+                      open={isEducationEditDialogOpen === education.id}
                       onOpenChange={() => {
-                        isExperienceEditDialogOpen !== work.id
-                          ? openEditDialog(work.id)
+                        isEducationEditDialogOpen !== education.id
+                          ? openEditDialog(education.id)
                           : openEditDialog(NaN);
                       }}
                     >
@@ -140,16 +115,16 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
                       </DialogTrigger>
                       <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
                         <DialogHeader>
-                          <DialogTitle>Edit Experience</DialogTitle>
+                          <DialogTitle>Edit Education</DialogTitle>
                           <DialogDescription>
-                            Edit the details of your Experience
+                            Edit the details of your Education
                           </DialogDescription>
                         </DialogHeader>
                         {data && (
-                          <ExperienceForm
+                          <EducationForm
                             data={data.data}
-                            experience={work}
-                            updatePortfolioData={updateExperienceData}
+                            education={education}
+                            updatePortfolioData={updateEducationData}
                             closeDialog={closeEditDialog}
                             isEdit={true}
                           />
@@ -165,9 +140,9 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
           <a
             href="#"
             className="p-3 h-full w-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
-            onClick={() => setExperienceDialogOpen(true)}
+            onClick={() => setEducationDialogOpen(true)}
           >
-            Add your Work Experience
+            Add your Education
             <i className="fi fi-bs-arrow-up-right"></i>
           </a>
         )}
@@ -176,4 +151,4 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
   );
 };
 
-export default WorkExperience;
+export default Education;

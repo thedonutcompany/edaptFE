@@ -323,12 +323,13 @@ const Portfolio = ({ data }: PortfolioProps) => {
                 )}
               </>
             ) : (
-              <a
-                href="#"
-                className="p-3 h-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+              <div
+                className="p-3 mt-4 h-full w-fit md:w-full mx-auto rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200 cursor-pointer"
+                onClick={() => setProjectDialogOpen(true)}
               >
-                Add your projects <i className="fi fi-bs-arrow-up-right"></i>
-              </a>
+                <p>Add your Graduation Project</p>
+                <i className="fi fi-bs-arrow-up-right"></i>
+              </div>
             )}
           </div>
         </div>
@@ -339,6 +340,7 @@ const Portfolio = ({ data }: PortfolioProps) => {
       <div className="mt-8">
         <div className="flex justify-between items-center">
           <h3 className="text-lg font-bold">Projects</h3>
+
           <div className="flex">
             <Dialog
               open={isProjectDialogOpen}
@@ -363,20 +365,20 @@ const Portfolio = ({ data }: PortfolioProps) => {
                 )}
               </DialogContent>
             </Dialog>
-            <Link
-              href="/dashboard/portfolio/details/projects"
-              scroll={false}
-              shallow
-            >
-              <i className="fi fi-bs-pencil p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
-            </Link>
+            {portfolioData?.data.projects.length !== 0 && (
+              <Link
+                href="/dashboard/portfolio/details/projects"
+                scroll={false}
+                shallow
+              >
+                <i className="fi fi-bs-pencil p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
+              </Link>
+            )}
           </div>
         </div>
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {/* Repeat for each project */}
-
-          {portfolioData?.data.projects.length !== 0 ? (
-            portfolioData?.data.projects.slice(0, 4).map((project, i) => (
+        {portfolioData?.data.projects.length !== 0 ? (
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {portfolioData?.data.projects.slice(0, 4).map((project, i) => (
               <a key={i} href={project.url}>
                 <Image
                   src={project.banner_url ?? "/assets/images/pj_banner.png"} // Replace with your project image path
@@ -388,18 +390,27 @@ const Portfolio = ({ data }: PortfolioProps) => {
                 />
                 <h4 className="mt-2">{project.title}</h4>
               </a>
-            ))
-          ) : (
-            <a
-              href="#"
-              className="p-3 h-full w-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+            ))}
+          </div>
+        ) : (
+          <>
+            <Image
+              alt="nodata"
+              src="/assets/images/nodata.jpg"
+              height={200}
+              width={200}
+              className="md:hidden m-auto"
+            />
+            <div
+              className="p-3 mt-4 h-full w-fit md:w-full mx-auto rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200 cursor-pointer"
+              onClick={() => setProjectDialogOpen(true)}
             >
-              Add your projects
+              <p>Add your projects</p>
               <i className="fi fi-bs-arrow-up-right"></i>
-            </a>
-          )}
-        </div>
-        {portfolioData?.data.projects.length !== 0 && (
+            </div>
+          </>
+        )}
+        {/* {portfolioData?.data.projects.length !== 0 && (
           <Link
             href="/dashboard/portfolio/details/projects"
             className="mt-5 font-medium flex items-center gap-1"
@@ -407,7 +418,7 @@ const Portfolio = ({ data }: PortfolioProps) => {
             View All {portfolioData?.data?.projects?.length ?? 4 - 4} projects
             <i className="fi fi-rr-arrow-small-right leading-3"></i>
           </Link>
-        )}
+        )} */}
       </div>
 
       <hr className="w-full my-8" />

@@ -39,7 +39,7 @@ import { cn } from "@/lib/utils";
 const portfolioSchema = z.object({
   company: z.string().min(1, "Company is required"),
   description: z.string().min(1, "Description is required"),
-  end_date: z.date(),
+  end_date: z.union([z.date(), z.literal("present")]),
   job_type: z.string().min(1, "Job type is required"),
   location: z.string().min(1, "Location is required"),
   skills: z.array(z.string()).min(1, "Skills are required"),
@@ -59,7 +59,7 @@ type ExperienceFormProps = {
     skills: string[];
     job_type: string;
     company: string;
-    end_date: string;
+    end_date: string | "present";
     location: string;
     start_date: string;
   }; // type for editing existing experience
@@ -84,9 +84,12 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
           start_date: experience.start_date
             ? new Date(experience.start_date)
             : undefined,
-          end_date: experience.end_date
-            ? new Date(experience.end_date)
-            : undefined,
+          end_date:
+            experience.end_date === "present"
+              ? undefined
+              : experience.end_date
+              ? new Date(experience.end_date)
+              : undefined,
         }
       : {
           company: "",
@@ -102,6 +105,9 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
 
   const [skills, setSkills] = useState<string[]>(experience?.skills || []);
   const [currentSkill, setCurrentSkill] = useState<string>("");
+  const [isOngoing, setIsOngoing] = useState<boolean>(
+    experience?.end_date === "present"
+  );
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -123,14 +129,25 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
     setSkills(skills.filter((_, i) => i !== index));
   };
 
+  const handleOngoingChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setIsOngoing(e.target.checked);
+    if (e.target.checked) {
+      form.setValue("end_date", "present"); // Pass undefined if ongoing
+    } else {
+      form.setValue("end_date", new Date());
+    }
+  };
+
   const onSubmit: SubmitHandler<PortfolioFormData> = async (formData) => {
     try {
       const formattedStartDate = formData.start_date
         ? format(formData.start_date, "MMMM yyyy")
         : undefined;
 
-      const formattedEndDate = formData.end_date
-        ? format(formData.end_date, "MMMM yyyy")
+      const formattedEndDate = isOngoing
+        ? "present"
+        : formData.end_date
+        ? format(formData.end_date as Date, "MMMM yyyy")
         : undefined;
 
       const newExperience = {
@@ -166,6 +183,7 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
       });
     }
   };
+
   const handleDelete = async (id: number) => {
     try {
       // Filter out the experience with the given ID
@@ -200,6 +218,7 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
       });
     }
   };
+
   return (
     <div className="flex flex-col gap-4">
       <Form {...form}>
@@ -250,6 +269,27 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
                     {...field}
                   />
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="col-span-2">
+            <FormField
+              control={form.control}
+              name="end_date"
+              render={() => (
+                <FormItem>
+                  <FormControl>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="checkbox"
+                        checked={isOngoing}
+                        onChange={handleOngoingChange}
+                        className="h-4 w-4"
+                      />
+                      <FormLabel>This experience is ongoing</FormLabel>
+                    </div>
+                  </FormControl>
                 </FormItem>
               )}
             />
@@ -324,7 +364,8 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
                     <Calendar
                       captionLayout="dropdown-buttons"
                       mode="single"
-                      selected={field.value}
+                      selected={field.value as Date | undefined} // Ensure the value is a valid date
+                      disabled={isOngoing}
                       onSelect={field.onChange}
                       initialFocus
                       fromYear={1960}
@@ -419,6 +460,7 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
               )}
             />
           </div>
+
           <div className="col-span-2 flex gap-4">
             {isEdit && (
               <Button

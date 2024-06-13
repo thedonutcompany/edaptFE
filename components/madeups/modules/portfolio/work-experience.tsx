@@ -155,13 +155,22 @@ const WorkExperience: React.FC<Props> = ({ data }) => {
             </div>
           ))
         ) : (
-          <div
-            className="p-3 h-full w-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
-            onClick={() => setExperienceDialogOpen(true)}
-          >
-            Add your Work Experience
-            <i className="fi fi-bs-arrow-up-right"></i>
-          </div>
+          <>
+            <Image
+              alt="nodata"
+              src="/assets/images/nodata.jpg"
+              height={200}
+              width={200}
+              className="md:hidden m-auto"
+            />
+            <div
+              className="p-3 mt-4 h-full w-fit md:w-full mx-auto rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200 cursor-pointer"
+              onClick={() => setExperienceDialogOpen(true)}
+            >
+              Add your Work Experience
+              <i className="fi fi-bs-arrow-up-right"></i>
+            </div>
+          </>
         )}
       </div>
     </>

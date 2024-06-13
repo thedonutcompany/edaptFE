@@ -75,10 +75,13 @@ export type PortfolioDataType = {
     education: Education[];
   };
 };
-const Portfolio = () => {
+type PortfolioProps = {
+  data: PortfolioDataType;
+};
+const Portfolio = ({ data }: PortfolioProps) => {
   const [portfolioData, setPortfolioData] = useState<
     PortfolioDataType | undefined
-  >(undefined);
+  >(data);
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
   const [isProjectDialogOpen, setProjectDialogOpen] = useState(false);
 
@@ -86,20 +89,20 @@ const Portfolio = () => {
     setEditDialogOpen(false);
     setProjectDialogOpen(false);
   };
-  useEffect(() => {
-    const fetchPortfolioData = async () => {
-      try {
-        const data = await PortfolioData();
-        // console.log(data);
-        setPortfolioData(data);
-      } catch (error) {
-        console.error(error);
-        // Handle error
-      }
-    };
+  // useEffect(() => {
+  //   const fetchPortfolioData = async () => {
+  //     try {
+  //       const data = await PortfolioData();
+  //       // console.log(data);
+  //       setPortfolioData(data);
+  //     } catch (error) {
+  //       console.error(error);
+  //       // Handle error
+  //     }
+  //   };
 
-    fetchPortfolioData();
-  }, []);
+  //   fetchPortfolioData();
+  // }, []);
   // console.log(portfolioData);
   const updatePortfolioData = (newData: any) => {
     setPortfolioData(newData);

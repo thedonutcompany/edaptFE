@@ -17,21 +17,12 @@ type Props = {
 const Education: React.FC<Props> = ({ data }) => {
   const [portfolioData, setPortfolioData] = useState<
     PortfolioDataType | undefined
-  >(undefined);
+  >(data);
   const [editable, setEditable] = useState(false);
   const [isEducationDialogOpen, setEducationDialogOpen] = useState(false);
   const [isEducationEditDialogOpen, setEducationEditDialogOpen] = useState<
     number | null
   >(null);
-
-  useEffect(() => {
-    try {
-      setPortfolioData(data);
-    } catch (error) {
-      console.error(error);
-      // Handle error
-    }
-  }, [data]);
 
   const closeEditDialog = () => {
     setEducationDialogOpen(false);
@@ -122,7 +113,7 @@ const Education: React.FC<Props> = ({ data }) => {
                         </DialogHeader>
                         {data && (
                           <EducationForm
-                            data={data.data}
+                            data={portfolioData.data}
                             education={education}
                             updatePortfolioData={updateEducationData}
                             closeDialog={closeEditDialog}

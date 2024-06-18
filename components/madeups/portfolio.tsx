@@ -76,11 +76,12 @@ export type PortfolioDataType = {
   };
 };
 type PortfolioProps = {
-  data: PortfolioDataType;
+  data: PortfolioDataType | null;
+  isPublic: boolean;
 };
-const Portfolio = ({ data }: PortfolioProps) => {
+const Portfolio = ({ data, isPublic }: PortfolioProps) => {
   const [portfolioData, setPortfolioData] = useState<
-    PortfolioDataType | undefined
+    PortfolioDataType | undefined | null
   >(data);
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
   const [isProjectDialogOpen, setProjectDialogOpen] = useState(false);
@@ -139,31 +140,33 @@ const Portfolio = ({ data }: PortfolioProps) => {
               </a>
             </div>
           </div>
-          <Dialog open={isEditDialogOpen} onOpenChange={setEditDialogOpen}>
-            <DialogTrigger>
-              <p
-                className="mt-5 py-3  rounded-md px-4 bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
-                onClick={() => setEditDialogOpen(true)}
-              >
-                <i className="fi fi-rr-pencil"></i> Edit
-              </p>
-            </DialogTrigger>
-            <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
-              <DialogHeader>
-                <DialogTitle>Upload Your Resume</DialogTitle>
-                <DialogDescription>
-                  Select your PDF and Upload and save it .... any content here
-                </DialogDescription>
-              </DialogHeader>
-              {portfolioData && (
-                <AddResume
-                  data={portfolioData.data}
-                  updatePortfolioData={updatePortfolioData}
-                  closeDialog={closeEditDialog}
-                />
-              )}
-            </DialogContent>
-          </Dialog>
+          {!isPublic && (
+            <Dialog open={isEditDialogOpen} onOpenChange={setEditDialogOpen}>
+              <DialogTrigger>
+                <p
+                  className="mt-5 py-3  rounded-md px-4 bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+                  onClick={() => setEditDialogOpen(true)}
+                >
+                  <i className="fi fi-rr-pencil"></i> Edit
+                </p>
+              </DialogTrigger>
+              <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
+                <DialogHeader>
+                  <DialogTitle>Upload Your Resume</DialogTitle>
+                  <DialogDescription>
+                    Select your PDF and Upload and save it .... any content here
+                  </DialogDescription>
+                </DialogHeader>
+                {portfolioData && (
+                  <AddResume
+                    data={portfolioData.data}
+                    updatePortfolioData={updatePortfolioData}
+                    closeDialog={closeEditDialog}
+                  />
+                )}
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
         <div className="relative md:ml-8 mt-4 md:mt-0">
           <Image
@@ -269,70 +272,72 @@ const Portfolio = ({ data }: PortfolioProps) => {
             </div>
           </div>
         </div>
-        <div className="mt-4">
-          <div className="h-full flex flex-col">
-            {portfolioData?.data?.projects.length !== 0 ? (
-              <>
-                {portfolioData?.data.projects.some(
-                  (project) => project.main_project
-                ) ? (
-                  portfolioData?.data?.projects.map((project, index) => (
-                    <React.Fragment key={index}>
-                      {project.main_project ? (
-                        <>
-                          <div className="flex justify-between items-center">
-                            <h3 className="text-lg font-bold">
-                              Graduation Project
-                            </h3>
-                            <a
-                              href={project?.url}
-                              className="p-3 rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
-                              target="_blank"
-                            >
-                              Open in new tab{" "}
-                              <i className="fi fi-bs-arrow-up-right"></i>
-                            </a>
-                          </div>
-                          <div className="mt-4 h-full">
-                            <Image
-                              src={
-                                project.banner_url ??
-                                "/assets/images/pj_banner.png"
-                              }
-                              alt={project.title}
-                              priority={true}
-                              width={600}
-                              height={600}
-                              className="w-full h-full rounded-md object-cover"
-                            />
-                          </div>
-                        </>
-                      ) : null}
-                    </React.Fragment>
-                  ))
-                ) : (
-                  <div className="h-full">
-                    <a
-                      href="#"
-                      className="p-3 h-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
-                    >
-                      Add your Main Project{" "}
-                      <i className="fi fi-bs-arrow-up-right"></i>
-                    </a>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div
-                className="p-3 mt-4 h-full w-fit md:w-full mx-auto rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200 cursor-pointer"
-                onClick={() => setProjectDialogOpen(true)}
-              >
-                <p>Add your Graduation Project</p>
-                <i className="fi fi-bs-arrow-up-right"></i>
-              </div>
-            )}
+        {!isPublic && portfolioData?.data?.projects.length === 0 && (
+          <div className="mt-4">
+            <div className="h-full flex flex-col">
+              {portfolioData?.data?.projects.length !== 0 ? (
+                <>
+                  {portfolioData?.data.projects.some(
+                    (project) => project.main_project
+                  ) ? (
+                    portfolioData?.data?.projects.map((project, index) => (
+                      <React.Fragment key={index}>
+                        {project.main_project ? (
+                          <>
+                            <div className="flex justify-between items-center">
+                              <h3 className="text-lg font-bold">
+                                Graduation Project
+                              </h3>
+                              <a
+                                href={project?.url}
+                                className="p-3 rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+                                target="_blank"
+                              >
+                                Open in new tab{" "}
+                                <i className="fi fi-bs-arrow-up-right"></i>
+                              </a>
+                            </div>
+                            <div className="mt-4 h-full">
+                              <Image
+                                src={
+                                  project.banner_url ??
+                                  "/assets/images/pj_banner.png"
+                                }
+                                alt={project.title}
+                                priority={true}
+                                width={600}
+                                height={600}
+                                className="w-full h-full rounded-md object-cover"
+                              />
+                            </div>
+                          </>
+                        ) : null}
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <div className="h-full">
+                      <a
+                        href="#"
+                        className="p-3 h-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+                      >
+                        Add your Main Project{" "}
+                        <i className="fi fi-bs-arrow-up-right"></i>
+                      </a>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div
+                  className="p-3 mt-4 h-full w-fit md:w-full mx-auto rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200 cursor-pointer"
+                  onClick={() => setProjectDialogOpen(true)}
+                >
+                  <p>Add your Graduation Project</p>
+                  <i className="fi fi-bs-arrow-up-right"></i>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <hr className="w-full my-8" />
@@ -341,40 +346,42 @@ const Portfolio = ({ data }: PortfolioProps) => {
         <div className="flex justify-between items-center">
           <h3 className="text-lg font-bold">Projects</h3>
 
-          <div className="flex">
-            <Dialog
-              open={isProjectDialogOpen}
-              onOpenChange={setProjectDialogOpen}
-            >
-              <DialogTrigger>
-                <i className="fi fi-br-plus p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
-              </DialogTrigger>
-              <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
-                <DialogHeader>
-                  <DialogTitle>Add your Project</DialogTitle>
-                  <DialogDescription>
-                    Fill the details of yor project
-                  </DialogDescription>
-                </DialogHeader>
-                {portfolioData && (
-                  <AddProject
-                    data={portfolioData.data}
-                    updatePortfolioData={updatePortfolioData}
-                    closeDialog={closeEditDialog}
-                  />
-                )}
-              </DialogContent>
-            </Dialog>
-            {portfolioData?.data.projects.length !== 0 && (
-              <Link
-                href="/dashboard/portfolio/details/projects"
-                scroll={false}
-                shallow
+          {!isPublic && (
+            <div className="flex">
+              <Dialog
+                open={isProjectDialogOpen}
+                onOpenChange={setProjectDialogOpen}
               >
-                <i className="fi fi-bs-pencil p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
-              </Link>
-            )}
-          </div>
+                <DialogTrigger>
+                  <i className="fi fi-br-plus p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
+                </DialogTrigger>
+                <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
+                  <DialogHeader>
+                    <DialogTitle>Add your Project</DialogTitle>
+                    <DialogDescription>
+                      Fill the details of yor project
+                    </DialogDescription>
+                  </DialogHeader>
+                  {portfolioData && (
+                    <AddProject
+                      data={portfolioData.data}
+                      updatePortfolioData={updatePortfolioData}
+                      closeDialog={closeEditDialog}
+                    />
+                  )}
+                </DialogContent>
+              </Dialog>
+              {portfolioData?.data.projects.length !== 0 && (
+                <Link
+                  href="/dashboard/portfolio/details/projects"
+                  scroll={false}
+                  shallow
+                >
+                  <i className="fi fi-bs-pencil p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
+                </Link>
+              )}
+            </div>
+          )}
         </div>
         {portfolioData?.data.projects.length !== 0 ? (
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -401,13 +408,15 @@ const Portfolio = ({ data }: PortfolioProps) => {
               width={200}
               className="md:hidden m-auto"
             />
-            <div
-              className="p-3 mt-4 h-full w-fit md:w-full mx-auto rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200 cursor-pointer"
-              onClick={() => setProjectDialogOpen(true)}
-            >
-              <p>Add your projects</p>
-              <i className="fi fi-bs-arrow-up-right"></i>
-            </div>
+            {!isPublic && (
+              <div
+                className="p-3 mt-4 h-full w-fit md:w-full mx-auto rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200 cursor-pointer"
+                onClick={() => setProjectDialogOpen(true)}
+              >
+                <p>Add your projects</p>
+                <i className="fi fi-bs-arrow-up-right"></i>
+              </div>
+            )}
           </>
         )}
         {/* {portfolioData?.data.projects.length !== 0 && (
@@ -424,13 +433,13 @@ const Portfolio = ({ data }: PortfolioProps) => {
       <hr className="w-full my-8" />
 
       <div className="mt-8">
-        <WorkExperience data={portfolioData} />
+        <WorkExperience data={portfolioData} isPublic={isPublic} />
       </div>
 
       <hr className="w-full my-8" />
 
       <div className="mt-8 ">
-        <Education data={portfolioData} />
+        <Education data={portfolioData} isPublic={isPublic} />
       </div>
     </div>
   );

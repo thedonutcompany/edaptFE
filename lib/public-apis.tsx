@@ -9,3 +9,12 @@ export const PublicProfileData = async (email: string) => {
     throw new Error("Failed to fetch profile data");
   }
 };
+export const PublicPortfolioData = async (email: string) => {
+  try {
+    const response = await publicGateway.get(`/portfolio/user/${email}/`);
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch profile data");
+  }
+};

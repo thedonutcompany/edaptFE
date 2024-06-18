@@ -25,7 +25,7 @@ const Pages = (props: Props) => {
   if (!portfolioData) {
     return <div>Loading...</div>;
   }
-  return <Portfolio data={portfolioData} />;
+  return <Portfolio data={portfolioData} isPublic={false} />;
 };
 
 export default Pages;

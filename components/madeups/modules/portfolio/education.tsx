@@ -12,12 +12,13 @@ import EducationForm from "./education-form";
 import Image from "next/image";
 
 type Props = {
-  data: PortfolioDataType | undefined;
+  data: PortfolioDataType | undefined | null;
+  isPublic: boolean;
 };
 
-const Education: React.FC<Props> = ({ data }) => {
+const Education: React.FC<Props> = ({ data, isPublic }) => {
   const [portfolioData, setPortfolioData] = useState<
-    PortfolioDataType | undefined
+    PortfolioDataType | undefined | null
   >(data);
   const [editable, setEditable] = useState(false);
   const [isEducationDialogOpen, setEducationDialogOpen] = useState(false);
@@ -42,40 +43,42 @@ const Education: React.FC<Props> = ({ data }) => {
     <>
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-bold">Education</h3>
-        <div className="flex">
-          <Dialog
-            open={isEducationDialogOpen}
-            onOpenChange={setEducationDialogOpen}
-          >
-            <DialogTrigger>
-              <i className="fi fi-br-plus p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
-            </DialogTrigger>
-            <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
-              <DialogHeader>
-                <DialogTitle>Add your Education</DialogTitle>
-                <DialogDescription>
-                  Fill the details of your Education
-                </DialogDescription>
-              </DialogHeader>
-              {data && (
-                <EducationForm
-                  data={data.data}
-                  updatePortfolioData={updateEducationData}
-                  closeDialog={closeEditDialog}
-                  isEdit={false}
-                />
-              )}
-            </DialogContent>
-          </Dialog>
-          {portfolioData?.data?.education.length !== 0 && (
-            <div
-              onClick={() => setEditable(!editable)}
-              className="h-10 w-10 flex flex-1 justify-center items-center rounded-full cursor-pointer hover:bg-zinc-100"
+        {!isPublic && (
+          <div className="flex">
+            <Dialog
+              open={isEducationDialogOpen}
+              onOpenChange={setEducationDialogOpen}
             >
-              <i className="fi fi-bs-pencil"></i>
-            </div>
-          )}
-        </div>
+              <DialogTrigger>
+                <i className="fi fi-br-plus p-3 leading-none rounded-full cursor-pointer hover:bg-gray-100"></i>
+              </DialogTrigger>
+              <DialogContent className="w-[90%] sm:max-w-[425px] rounded-md">
+                <DialogHeader>
+                  <DialogTitle>Add your Education</DialogTitle>
+                  <DialogDescription>
+                    Fill the details of your Education
+                  </DialogDescription>
+                </DialogHeader>
+                {data && (
+                  <EducationForm
+                    data={data.data}
+                    updatePortfolioData={updateEducationData}
+                    closeDialog={closeEditDialog}
+                    isEdit={false}
+                  />
+                )}
+              </DialogContent>
+            </Dialog>
+            {portfolioData?.data?.education.length !== 0 && (
+              <div
+                onClick={() => setEditable(!editable)}
+                className="h-10 w-10 flex flex-1 justify-center items-center rounded-full cursor-pointer hover:bg-zinc-100"
+              >
+                <i className="fi fi-bs-pencil"></i>
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <div className="mt-4 flex flex-col gap-4 rounded-md">
         {portfolioData?.data?.education.length !== 0 ? (
@@ -139,13 +142,15 @@ const Education: React.FC<Props> = ({ data }) => {
               width={200}
               className="md:hidden m-auto"
             />
-            <div
-              className="p-3 mt-4 h-full w-fit md:w-full mx-auto rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200 cursor-pointer"
-              onClick={() => setEducationDialogOpen(true)}
-            >
-              <p>Add your Education</p>
-              <i className="fi fi-bs-arrow-up-right"></i>
-            </div>
+            {!isPublic && (
+              <div
+                className="p-3 mt-4 h-full w-fit md:w-full mx-auto rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200 cursor-pointer"
+                onClick={() => setEducationDialogOpen(true)}
+              >
+                <p>Add your Education</p>
+                <i className="fi fi-bs-arrow-up-right"></i>
+              </div>
+            )}
           </>
         )}
       </div>

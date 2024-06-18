@@ -272,72 +272,78 @@ const Portfolio = ({ data, isPublic }: PortfolioProps) => {
             </div>
           </div>
         </div>
-        {!isPublic && portfolioData?.data?.projects.length === 0 && (
-          <div className="mt-4">
-            <div className="h-full flex flex-col">
-              {portfolioData?.data?.projects.length !== 0 ? (
-                <>
-                  {portfolioData?.data.projects.some(
-                    (project) => project.main_project
-                  ) ? (
-                    portfolioData?.data?.projects.map((project, index) => (
-                      <React.Fragment key={index}>
-                        {project.main_project ? (
-                          <>
-                            <div className="flex justify-between items-center">
-                              <h3 className="text-lg font-bold">
-                                Graduation Project
-                              </h3>
-                              <a
-                                href={project?.url}
-                                className="p-3 rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
-                                target="_blank"
-                              >
-                                Open in new tab{" "}
-                                <i className="fi fi-bs-arrow-up-right"></i>
-                              </a>
-                            </div>
-                            <div className="mt-4 h-full">
-                              <Image
-                                src={
-                                  project.banner_url ??
-                                  "/assets/images/pj_banner.png"
-                                }
-                                alt={project.title}
-                                priority={true}
-                                width={600}
-                                height={600}
-                                className="w-full h-full rounded-md object-cover"
-                              />
-                            </div>
-                          </>
-                        ) : null}
-                      </React.Fragment>
-                    ))
-                  ) : (
-                    <div className="h-full">
-                      <a
-                        href="#"
-                        className="p-3 h-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
-                      >
-                        Add your Main Project{" "}
-                        <i className="fi fi-bs-arrow-up-right"></i>
-                      </a>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div
-                  className="p-3 mt-4 h-full w-fit md:w-full mx-auto rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200 cursor-pointer"
-                  onClick={() => setProjectDialogOpen(true)}
-                >
-                  <p>Add your Graduation Project</p>
-                  <i className="fi fi-bs-arrow-up-right"></i>
-                </div>
-              )}
-            </div>
+        <div className="mt-4">
+          <div className="h-full flex flex-col">
+            {portfolioData?.data?.projects.length !== 0 ? (
+              <>
+                {portfolioData?.data.projects.some(
+                  (project) => project.main_project
+                ) ? (
+                  portfolioData?.data?.projects.map((project, index) => (
+                    <React.Fragment key={index}>
+                      {project.main_project ? (
+                        <>
+                          <div className="flex justify-between items-center">
+                            <h3 className="text-lg font-bold">
+                              Graduation Project
+                            </h3>
+                            <a
+                              href={project?.url}
+                              className="p-3 rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+                              target="_blank"
+                            >
+                              Open in new tab{" "}
+                              <i className="fi fi-bs-arrow-up-right"></i>
+                            </a>
+                          </div>
+                          <div className="mt-4 h-full">
+                            <Image
+                              src={
+                                project.banner_url ??
+                                "/assets/images/pj_banner.png"
+                              }
+                              alt={project.title}
+                              priority={true}
+                              width={600}
+                              height={600}
+                              className="w-full h-full rounded-md object-cover"
+                            />
+                          </div>
+                        </>
+                      ) : null}
+                    </React.Fragment>
+                  ))
+                ) : (
+                  <>
+                    {!isPublic ? (
+                      <div className="h-full">
+                        <a
+                          href="#"
+                          className="p-3 h-full rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200"
+                        >
+                          Add your Main Project{" "}
+                          <i className="fi fi-bs-arrow-up-right"></i>
+                        </a>
+                      </div>
+                    ) : (
+                      <div className="flex justify-center items-center h-full">
+                        <i>There is no graduation project uploaded</i>
+                      </div>
+                    )}
+                  </>
+                )}
+              </>
+            ) : (
+              <div
+                className="p-3 mt-4 h-full w-fit md:w-full mx-auto rounded-md bg-zinc-100 text-black flex gap-2 justify-center items-center leading-3 hover:bg-zinc-200 cursor-pointer"
+                onClick={() => setProjectDialogOpen(true)}
+              >
+                <p>Add your Graduation Project</p>
+                <i className="fi fi-bs-arrow-up-right"></i>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       <hr className="w-full my-8" />

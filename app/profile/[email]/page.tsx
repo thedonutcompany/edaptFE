@@ -3,8 +3,8 @@ import { PublicPortfolioData, PublicProfileData } from "@/lib/public-apis";
 import { type Metadata, type ResolvingMetadata } from "next";
 import Error from "./error";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Portfolio, { PortfolioDataType } from "@/components/madeups/portfolio";
+import ScrollTabsWrapper from "@/components/ui/ScrollTabsWrapper"; // Import the wrapper
 
 export async function generateMetadata(
   { params }: { params: { email: string } },
@@ -14,8 +14,6 @@ export async function generateMetadata(
 
   const profileData: profileDataType = await PublicProfileData(email);
 
-  // const id = params.id;
-  // const event = await getEventData(id);
   const previousImages = (await parent).openGraph?.images ?? [];
 
   if (!profileData) return {};
@@ -63,28 +61,17 @@ const ProfilePage = async ({ params }: { params: { email: string } }) => {
   }
 
   return (
-    <div className="bg-[#F3F5F9] min-h-screen max-w-screen">
-      <div className="p-4">
-        <div className="py-4 md:p-4 mt-3 mb-4 w-full">
-          {" "}
-          <Tabs
-            defaultValue="profile"
-            className="relative w-full flex justify-center"
-          >
-            <TabsList className="grid w-[300px] bg-[#07C553] text-white grid-cols-2 fixed bottom-2 m-auto z-10">
-              <TabsTrigger value="profile">Profile</TabsTrigger>
-              <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
-            </TabsList>
-            <TabsContent value="profile">
-              <Profile data={profileData} isPublic={true} />
-            </TabsContent>
-            <TabsContent value="portfolio">
-              <Portfolio data={portfolioData} isPublic={true} />
-            </TabsContent>
-          </Tabs>
+    <ScrollTabsWrapper profileData={profileData} portfolioData={portfolioData}>
+      <></>
+      {/* <div className="bg-[#F3F5F9] min-h-screen max-w-screen">
+        <div className="p-4">
+          <div className="py-4 md:p-4 mt-3 mb-4 w-full">
+            <Profile data={profileData} isPublic={true} />
+            <Portfolio data={portfolioData} isPublic={true} />
+          </div>
         </div>
-      </div>
-    </div>
+      </div> */}
+    </ScrollTabsWrapper>
   );
 };
 

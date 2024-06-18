@@ -1,13 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button"; // Adjust the import based on your setup
-import { Badge } from "@/components/ui/badge"; // Adjust the import based on your setup
-import { Pencil, Plus } from "lucide-react";
+import { useState } from "react";
 import Image from "next/image";
 import Verified from "@/public/assets/svgs/verified";
 import { Progress } from "../ui/progress";
-import { PortfolioData } from "@/lib/dasboard";
-import moment from "moment";
 import Link from "next/link";
 
 import {
@@ -90,21 +85,6 @@ const Portfolio = ({ data, isPublic }: PortfolioProps) => {
     setEditDialogOpen(false);
     setProjectDialogOpen(false);
   };
-  // useEffect(() => {
-  //   const fetchPortfolioData = async () => {
-  //     try {
-  //       const data = await PortfolioData();
-  //       // console.log(data);
-  //       setPortfolioData(data);
-  //     } catch (error) {
-  //       console.error(error);
-  //       // Handle error
-  //     }
-  //   };
-
-  //   fetchPortfolioData();
-  // }, []);
-  // console.log(portfolioData);
   const updatePortfolioData = (newData: any) => {
     setPortfolioData(newData);
     console.log(newData);

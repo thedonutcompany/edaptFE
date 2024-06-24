@@ -85,6 +85,13 @@ const Socials = ({ data, isPublic }: Props) => {
       setEdit(!edit);
     }
   };
+  const redirectToProfile = (platform: SocialPlatforms) => {
+    const profileUrl = socials[platform];
+    if (profileUrl && !edit) {
+      // Assuming profileUrl is the username or profile URL for the platform
+      window.open(profileUrl, "_blank"); // Open in a new tab
+    }
+  };
 
   return (
     <>
@@ -111,7 +118,14 @@ const Socials = ({ data, isPublic }: Props) => {
               {Object.keys(socials)
                 .filter((platform) => edit || socials[platform])
                 .map((platform) => (
-                  <TabsTrigger key={platform} value={platform} className="p-0">
+                  <TabsTrigger
+                    key={platform}
+                    value={platform}
+                    className="p-0"
+                    onClick={() =>
+                      redirectToProfile(platform as SocialPlatforms)
+                    }
+                  >
                     <div className="flex items-center justify-center h-12 w-12 bg-gray-200/10 text-[#585EFB] rounded-md text-3xl leading-none">
                       {platform === "upwork" ? (
                         <UpworkIcon />

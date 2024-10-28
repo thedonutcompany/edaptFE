@@ -36,12 +36,12 @@ const HeatmapComponent = (props: Props) => {
       const date = item.created_at.slice(0, 10);
       const existingItem = acc.find((el) => el.date === date);
       if (existingItem) {
-        existingItem.totalKarma += parseInt(item.point.toString());
+        existingItem.totalKarma += parseInt(item.point?.toString());
         existingItem.taskCount += 1;
       } else {
         acc.push({
           date,
-          totalKarma: parseInt(item.point.toString()),
+          totalKarma: parseInt(item.point?.toString()),
           taskCount: 1,
         });
       }

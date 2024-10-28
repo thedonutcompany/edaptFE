@@ -365,7 +365,7 @@ const Profile = ({ data, isPublic }: ProfileProps) => {
                         return (
                           <div
                             key={i}
-                            className="bg-white flex flex-col gap-8  justify-center text-center rounded-2xl p-4 border border-[#020897] h-72 w-56 min-w-56"
+                            className="bg-white flex flex-col gap-8  justify-start overflow-scroll text-center rounded-2xl p-4 border border-[#020897] h-72 w-56 min-w-56"
                           >
                             <h1>
                               {data.point} X <br />
